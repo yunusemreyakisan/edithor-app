@@ -13,7 +13,7 @@ Projeyi klonlayın (Bir sefer yapmanız yeterli)
 Proje dizinine gidin
 
 ```bash
-  cd my-project (proje adına ne koyduysanız)
+  cd edithor
 ```
 ## Branch oluşturma ve isimlendirme
 
