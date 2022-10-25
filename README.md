@@ -7,7 +7,7 @@
 Projeyi klonlayın (Bir sefer yapmanız yeterli)
 
 ```bash
-  git clone https://github.com/yunusemreyakisan/edithor-app.git
+  git clone https://github.com/edithor-app/edithor.git
 ```
 
 Proje dizinine gidin
