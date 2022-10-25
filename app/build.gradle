@@ -4,15 +4,15 @@ plugins {
 
 android {
     namespace 'com.app.edithormobile'
-    compileSdk 32
+    compileSdk 33
+
 
     defaultConfig {
         applicationId "com.app.edithormobile"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,5 +36,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.compose.material:material:1.2.1'
+    implementation 'androidx.compose.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout-solver:2.0.4'
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+
 }
