@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "904255794165",
+    "firebase_url": "https://edithor-6c9ff-default-rtdb.firebaseio.com",
+    "project_id": "edithor-6c9ff",
+    "storage_bucket": "edithor-6c9ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904255794165:android:872c2c36ba6b1b256f8ebc",
+        "android_client_info": {
+          "package_name": "com.app.edithormobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904255794165-sau2n66dbiq45eg7tq6jvb6uet7kgh5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBskAPDld-KE8LcEB1ON1tPtJ3egYQSp7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904255794165-sau2n66dbiq45eg7tq6jvb6uet7kgh5g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
