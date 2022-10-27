@@ -2,20 +2,24 @@ package com.app.edithormobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         databaseRef();
         notesEventChangeListener();
         noteEkleyeGit();
+
     }
+
 
     //DB Reference
     private void databaseRef() {
@@ -115,4 +121,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //Menu (Search)
+   //TODO: Search eklenecek.
 }

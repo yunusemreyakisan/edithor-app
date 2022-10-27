@@ -27,6 +27,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         this.notes = notes;
     }
 
+
     @NonNull
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,13 +47,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     }
 
     //ViewHolder
-    public static class NoteHolder extends RecyclerView.ViewHolder{
+    public static class NoteHolder extends RecyclerView.ViewHolder {
 
         TextView tvNote;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
-            tvNote =itemView.findViewById(R.id.tvNote);
+            tvNote = itemView.findViewById(R.id.tvNote);
 
         }
 
