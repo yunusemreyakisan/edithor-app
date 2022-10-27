@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:cardCornerRadius="10dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="10dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:cardCornerRadius="10dp"
-            android:layout_marginEnd="10dp"
-            app:cardBackgroundColor="@color/cardview_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="@color/cardview_color"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="0.5">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_height="match_parent">
-
-
-                        <TextView
-                            android:id="@+id/tvTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:textSize="20sp"
-                            android:textColor="@color/bg_color_dark"
-                            android:text="Başlık"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvNote"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:maxLength="10"
-                            android:text="notIcerigi"
-                            android:textColor="@color/bg_color_dark"
-                            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_color"
+            android:orientation="vertical">
 
 
-                </LinearLayout>
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNote"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:lines="2"
+                android:maxLength="15"
+                android:paddingHorizontal="15dp"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="20sp" />
 
 
-        </androidx.cardview.widget.CardView>
-
-
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

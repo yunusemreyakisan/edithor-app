@@ -3,6 +3,7 @@ package com.app.edithormobile.layouts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,7 +21,7 @@ import java.util.Random;
 
 public class AddNote extends AppCompatActivity {
 
-    Button btnNotuKaydet;
+    Button btnNotuKaydet, btnBack;
     EditText note;
     private DatabaseReference mDatabase;
 
@@ -33,12 +34,21 @@ public class AddNote extends AppCompatActivity {
 
         initComponents();
         notKaydetmeIslevi();
+        islemdenVazgec();
 
+    }
+
+    private void islemdenVazgec() {
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(AddNote.this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initComponents() {
         note = findViewById(R.id.txtNote);
         btnNotuKaydet = findViewById(R.id.btnNotuKaydet);
+        btnBack = findViewById(R.id.btnBack);
     }
 
 

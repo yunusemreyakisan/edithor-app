@@ -10,7 +10,7 @@
         android:id="@+id/tvBaslik"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="20dp"
         android:text="@string/txt_notlarim"
         android:textColor="@color/bg_color_dark"
@@ -29,23 +29,37 @@
         android:backgroundTint="@color/bg_color_dark"
         android:contentDescription="@string/add_fab_button"
         android:src="@android:drawable/ic_input_add"
-        android:tint="@color/bg_color_light"
         app:borderWidth="0dp"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@android:color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBaslik"
         app:layout_constraintVertical_bias="0.159" />
 
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:indeterminateTint="@color/bg_color_dark"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

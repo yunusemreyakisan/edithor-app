@@ -2,6 +2,8 @@ package com.app.edithormobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,29 +33,35 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
+    ProgressBar spinner;
 
     //TODO: Başlık ve tarih zamanı çekilecek.
-    //TODO:
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Methods
         initComponents();
+        notesViewRV();
+        databaseRef();
+        notesEventChangeListener();
+        noteEkleyeGit();
+    }
 
+    //DB Reference
+    private void databaseRef() {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("Kullanicilar").child("userID").child("notIcerigi");
+    }
+
+    //Recyclerview
+    private void notesViewRV() {
         notes = new ArrayList<NoteModel>();
         noteAdapter = new NoteAdapter(MainActivity.this, notes);
-
         rvNotes.setHasFixedSize(true);
         rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
         rvNotes.setAdapter(noteAdapter);
-
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("Kullanicilar").child("userID").child("notIcerigi");
-
-        NotesEventChangeListener();
-        noteEkleyeGit();
-
     }
 
     //init comp.
@@ -61,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         tvNote = findViewById(R.id.tvNote);
         rvNotes = findViewById(R.id.rvNotes);
         fabAddNote = findViewById(R.id.add_fab);
+        spinner = findViewById(R.id.progressBar);
     }
 
     //Back Pressed
@@ -71,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void NotesEventChangeListener() {
+    private void notesEventChangeListener() {
+        spinner.setVisibility(View.VISIBLE);
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -81,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                         assert model != null;
                         if (model.getNotIcerigi() != null) {
                             notes.add(model);
+                            spinner.setVisibility(View.GONE);
                         }
                     }
                 }

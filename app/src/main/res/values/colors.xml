@@ -11,5 +11,5 @@
     <color name="bg_color_dark">#000000</color>
     <color name="bg_color_light">#FFFFFF</color>
     <color name="button_active_color">#00d27b</color>
-    <color name="cardview_color">#B6B6B6</color>
+    <color name="cardview_color">#DADADA</color>
 </resources>

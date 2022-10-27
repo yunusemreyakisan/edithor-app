@@ -2,4 +2,7 @@
 <resources>
     <string name="add_fab_button">Add Fab Button</string>
     <string name="txt_notlarim">Notlarım</string>
+    <string name="type_something">Bir şeyler yazın...</string>
+    <string name="save">Kaydet</string>
+    <string name="title">Başlık</string>
 </resources>
