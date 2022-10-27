@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    //Degisiklik izleme
     private void notesEventChangeListener() {
         spinner.setVisibility(View.VISIBLE);
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -107,17 +107,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void noteEkleyeGit() {
         fabAddNote.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddNote.class);
             startActivity(intent);
         });
     }
-
-
-
-
 
 
 }
