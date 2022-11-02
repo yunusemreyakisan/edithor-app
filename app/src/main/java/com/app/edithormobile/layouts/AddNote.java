@@ -17,12 +17,16 @@ import com.app.edithormobile.models.NoteModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 public class AddNote extends AppCompatActivity {
 
     Button btnNotuKaydet, btnBack;
-    EditText note;
+    EditText note, title;
     private DatabaseReference mDatabase;
 
     //TODO: AddNot ekranı tasarıma uygun hale getirilecek.
@@ -49,6 +53,7 @@ public class AddNote extends AppCompatActivity {
         note = findViewById(R.id.txtNote);
         btnNotuKaydet = findViewById(R.id.btnNotuKaydet);
         btnBack = findViewById(R.id.btnBack);
+        title = findViewById(R.id.txtTitle);
     }
 
 
@@ -58,11 +63,19 @@ public class AddNote extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference("Kullanicilar").child("userID").child("notIcerigi");
             //Alan Tanımları
             String notIcerigi = note.getText().toString();
+            String notBaslik = title.getText().toString();
             if (TextUtils.isEmpty(notIcerigi)) {
-                Toast.makeText(AddNote.this, "Boş bırakılamaz.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNote.this, "Not içeriği giriniz.", Toast.LENGTH_SHORT).show();
+            }else if(TextUtils.isEmpty(notBaslik)){
+                Toast.makeText(AddNote.this, "Başlık boş bırakılamaz.", Toast.LENGTH_SHORT).show();
             } else {
+                //Olusturma zamanini al.
+                Calendar calendar = new GregorianCalendar();
+                int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
+                String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month + "/"
+                        + calendar.get(Calendar.YEAR) + " " +calendar.get(Calendar.HOUR_OF_DAY) + ":" +  calendar.get(Calendar.MINUTE) ;
 
-                NoteModel mNotes = new NoteModel(notIcerigi);
+                NoteModel mNotes = new NoteModel(notIcerigi, notBaslik, notOlusturmaTarihi);
                 mDatabase.push().setValue(mNotes);
                 Intent intent = new Intent(AddNote.this, MainActivity.class);
                 startActivity(intent);

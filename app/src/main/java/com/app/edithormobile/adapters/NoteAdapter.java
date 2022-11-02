@@ -38,7 +38,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteAdapter.NoteHolder holder, int position) {
         NoteModel mNote = notes.get(position);
+        holder.tvTitle.setText(mNote.getNotBaslik());
         holder.tvNote.setText(mNote.getNotIcerigi());
+        holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
     }
 
     @Override
@@ -49,11 +51,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     //ViewHolder
     public static class NoteHolder extends RecyclerView.ViewHolder {
 
-        TextView tvNote;
+        TextView tvNote, tvTitle, tvOlusturmaTarihi;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
             tvNote = itemView.findViewById(R.id.tvNote);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
 
         }
 
