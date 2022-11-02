@@ -1,17 +1,22 @@
 package com.app.edithormobile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +24,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.layouts.AddNote;
+import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.models.NoteModel;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
     ProgressBar spinner;
+    FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     //TODO: Başlık ve tarih zamanı çekilecek.
 
@@ -59,9 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
     //DB Reference
     private void databaseRef() {
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         mDatabaseReference = FirebaseDatabase.getInstance()
-                .getReference("Kullanicilar")
-                .child("userID").child("notIcerigi");
+                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
     }
 
     //Recyclerview
@@ -85,7 +98,45 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Toast.makeText(MainActivity.this, "Back pressed", Toast.LENGTH_SHORT).show();
-    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        // Pencere Baslik Tanımı
+        builder.setTitle("Emin misiniz?");
+        // Pencere Mesaj Tanımı
+        builder.setMessage("Çıkış yapmak istediğinizden emin misiniz?");
+
+        class AlertDialogClickListener implements DialogInterface.OnClickListener {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == AlertDialog.BUTTON_NEGATIVE) {
+                    Toast.makeText(MainActivity.this, "İşlem iptal edildi.",
+                            Toast.LENGTH_SHORT).show();
+                } else if (which == AlertDialog.BUTTON_POSITIVE) { // veya else
+                    Toast.makeText(MainActivity.this, "Çıkış başarıyla gerçekleştirildi.",
+                            Toast.LENGTH_SHORT).show();
+                    MainActivity.this.finish(); // Activity’nin sonlandırılması
+
+                    //Giriş ekranı için Pref. Kontrolü
+                    SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("Remember", "false");
+                    editor.apply();
+                    finish();
+
+                    //Giriş aktivitesine dönülmesi
+                    Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                    startActivity(intent);
+
+                }
+            }
+        }
+        // AlertDialog Builder
+        AlertDialogClickListener alertDialogClickListener = new AlertDialogClickListener();
+        builder.setPositiveButton("EVET", alertDialogClickListener);
+        builder.setNegativeButton("HAYIR", alertDialogClickListener);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+}
+
 
 
     //Degisiklik izleme
@@ -125,5 +176,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Menu (Search)
-   //TODO: Search eklenecek.
+    //TODO: Search eklenecek.
 }
