@@ -29,8 +29,6 @@ public class AddNote extends AppCompatActivity {
     EditText note, title;
     private DatabaseReference mDatabase;
 
-    //TODO: AddNot ekranı tasarıma uygun hale getirilecek.
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +70,8 @@ public class AddNote extends AppCompatActivity {
                 //Olusturma zamanini al.
                 Calendar calendar = new GregorianCalendar();
                 int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-                String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month + "/"
-                        + calendar.get(Calendar.YEAR) + " " +calendar.get(Calendar.HOUR_OF_DAY) + ":" +  calendar.get(Calendar.MINUTE) ;
+                String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month
+                        + " " +calendar.get(Calendar.HOUR_OF_DAY) + ":" +  calendar.get(Calendar.MINUTE) ;
 
                 NoteModel mNotes = new NoteModel(notIcerigi, notBaslik, notOlusturmaTarihi);
                 mDatabase.push().setValue(mNotes);
@@ -81,7 +79,6 @@ public class AddNote extends AppCompatActivity {
                 startActivity(intent);
                 Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
             }
-
         });
     }
 

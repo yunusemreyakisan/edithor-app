@@ -31,31 +31,35 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dp"
+                android:paddingTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="20sp"
+                android:maxLength="15"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvNote"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:lines="2"
                 android:maxLength="15"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tvOlusturmaTarihi"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:lines="1"
-                android:paddingHorizontal="15dp"
-                android:layout_gravity="bottom"
                 android:gravity="bottom"
+                android:paddingBottom="10dp"
+                android:paddingHorizontal="15dp"
                 android:textColor="@color/cardview_date_color"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

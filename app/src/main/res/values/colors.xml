@@ -13,4 +13,5 @@
     <color name="button_active_color">#00d27b</color>
     <color name="cardview_color">#DADADA</color>
     <color name="cardview_date_color">#777777</color>
+
 </resources>

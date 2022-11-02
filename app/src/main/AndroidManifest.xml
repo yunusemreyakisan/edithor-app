@@ -14,17 +14,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EdithorMobile"
         tools:targetApi="31">
+
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"/>
+
+        <activity
+            android:name=".layouts.AddNote"
+            android:exported="true" />
+
+        <activity
+            android:name=".layouts.login.SignIn"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+
         <activity
-            android:name=".layouts.AddNote"
+            android:name=".layouts.login.SignUp"
             android:exported="true" />
 
     </application>

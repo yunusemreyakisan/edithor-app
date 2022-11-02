@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.layouts.AddNote;
@@ -58,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
     //DB Reference
     private void databaseRef() {
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("Kullanicilar").child("userID").child("notIcerigi");
+        mDatabaseReference = FirebaseDatabase.getInstance()
+                .getReference("Kullanicilar")
+                .child("userID").child("notIcerigi");
     }
 
     //Recyclerview

@@ -5,4 +5,14 @@
     <string name="type_something">Bir şeyler yazın...</string>
     <string name="save">Kaydet</string>
     <string name="title">Başlık</string>
+    <string name="tekrar_hosgeldniz">Tekrar hoşgeldiniz.</string>
+    <string name="e_mail_hint">E-Mail</string>
+    <string name="sifre">Şifre</string>
+    <string name="beni_hatirla">Beni hatırla</string>
+    <string name="giris_yap">Giriş yap</string>
+    <string name="ya_da">ya da</string>
+    <string name="google_ile_giri_yap">Google ile giriş yap</string>
+    <string name="edithor_kayit_olun">Edithor\'a \nkayıt olun.</string>
+    <string name="ad_soyad">Ad-Soyad</string>
+    <string name="kayit_ol">Kayıt ol</string>
 </resources>
