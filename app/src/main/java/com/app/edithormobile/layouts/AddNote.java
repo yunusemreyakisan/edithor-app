@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.app.edithormobile.MainActivity;
 import com.app.edithormobile.R;
 import com.app.edithormobile.models.NoteModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +23,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import java.util.Random;
 
 public class AddNote extends AppCompatActivity {
@@ -28,6 +31,9 @@ public class AddNote extends AppCompatActivity {
     Button btnNotuKaydet, btnBack;
     EditText note, title;
     private DatabaseReference mDatabase;
+    FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,9 +62,14 @@ public class AddNote extends AppCompatActivity {
 
 
     private void notKaydetmeIslevi() {
+        mAuth = FirebaseAuth.getInstance();
         btnNotuKaydet.setOnClickListener(view -> {
             //Veritabanına Canlı Kayıt Etme (Realtime Database)
-            mDatabase = FirebaseDatabase.getInstance().getReference("Kullanicilar").child("userID").child("notIcerigi");
+            String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+            mUser = mAuth.getCurrentUser();
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+
+
             //Alan Tanımları
             String notIcerigi = note.getText().toString();
             String notBaslik = title.getText().toString();
