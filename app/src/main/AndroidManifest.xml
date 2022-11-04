@@ -18,14 +18,17 @@
 
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true"/>
 
         <activity
             android:name=".layouts.AddNote"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true" />
 
         <activity
             android:name=".layouts.login.SignIn"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +39,7 @@
 
         <activity
             android:name=".layouts.login.SignUp"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true" />
 
     </application>
