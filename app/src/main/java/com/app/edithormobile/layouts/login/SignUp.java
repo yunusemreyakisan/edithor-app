@@ -42,10 +42,16 @@ public class SignUp extends AppCompatActivity {
 
         //Methods
         initComponents();
-        geriGonder();
         btnKayitOlIslevi();
 
 
+    }
+
+    //Geri gonderme
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SignUp.this, SignIn.class);
+        startActivity(intent);
     }
 
     //init
@@ -55,15 +61,6 @@ public class SignUp extends AppCompatActivity {
         emailadresi = findViewById(R.id.txtKayitEmail);
         sifre = findViewById(R.id.txtKayitSifre);
         back = findViewById(R.id.btnBack);
-    }
-
-
-    //geri gonder
-    private void geriGonder() {
-        back.setOnClickListener(view -> {
-            Intent intent = new Intent(SignUp.this, SignIn.class);
-            startActivity(intent);
-        });
     }
 
 

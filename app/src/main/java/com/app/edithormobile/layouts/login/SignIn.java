@@ -43,6 +43,11 @@ public class SignIn extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+       //nothing
+    }
+
     //init
     private void initComponents() {
     emailadresi = findViewById(R.id.txtGrsEmail);
