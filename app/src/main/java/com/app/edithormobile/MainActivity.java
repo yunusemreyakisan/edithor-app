@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mDatabaseReference;
     ProgressBar spinner;
     FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+    FirebaseUser mUser;
 
     //TODO: Başlık ve tarih zamanı çekilecek.
 

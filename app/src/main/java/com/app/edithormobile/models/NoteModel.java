@@ -9,7 +9,7 @@ public class NoteModel {
     public NoteModel() {
     }
 
-    public NoteModel(String notIcerigi, String notBaslik, String notOlusturmaTarihi) {
+    public NoteModel( String notIcerigi, String notBaslik, String notOlusturmaTarihi) {
         this.notIcerigi = notIcerigi;
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
