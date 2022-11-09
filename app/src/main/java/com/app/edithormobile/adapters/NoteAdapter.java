@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.edithormobile.R;
 import com.app.edithormobile.models.NoteModel;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
