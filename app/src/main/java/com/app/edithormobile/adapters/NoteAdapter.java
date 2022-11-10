@@ -62,13 +62,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        removeRef = (DatabaseReference) FirebaseDatabase.getInstance()
+        removeRef = FirebaseDatabase.getInstance()
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(mNote.getNoteID());
 
         holder.itemView.setOnLongClickListener(v -> {
             removeRef.setValue(null);
-
-
+            notes.remove(position);
+            notifyItemRemoved(position);
             return false;
         });
 
