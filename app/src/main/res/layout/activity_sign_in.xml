@@ -92,26 +92,68 @@
 
 
     <!-- Buttons -->
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGirisYap"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:text="@string/giris_yap"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="@color/purple_500"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_200sdp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGirisYap"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:text="@string/giris_yap"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/purple_500"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnKayitOl"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:text="@string/kayit_ol"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/cardview_date_color"
+            app:layout_constraintTop_toBottomOf="@+id/btnGirisYap"
+            tools:layout_editor_absoluteX="20dp" />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:alpha="0.5"
+        android:text="@string/ya_da"
+        android:textColor="@color/ya_da_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.783" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoogle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
         android:layout_marginTop="20dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/google_sign_button"
@@ -131,31 +173,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnKayitOl"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:text="@string/kayit_ol"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="@color/cardview_date_color"
-        app:layout_constraintTop_toBottomOf="@+id/btnGirisYap"
-        tools:layout_editor_absoluteX="20dp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:alpha="0.5"
-        android:text="@string/ya_da"
-        android:textColor="@color/ya_da_text_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnKayitOl" />
-
-
+        app:layout_constraintVertical_bias="0.01" />
 </androidx.constraintlayout.widget.ConstraintLayout>
