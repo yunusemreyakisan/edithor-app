@@ -66,9 +66,17 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(mNote.getNoteID());
 
         holder.itemView.setOnLongClickListener(v -> {
-            removeRef.setValue(null);
-            notes.remove(position);
-            notifyItemRemoved(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Emin misiniz?");
+                builder.setMessage("Notu silmek istediğinize emin misiniz?");
+                builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
+                builder.setPositiveButton("Evet", (dialogInterface, i) -> {
+                    removeRef.setValue(null);
+                    notes.remove(position);
+                    notifyItemRemoved(position);
+                    Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+                });
+                builder.show();
             return false;
         });
 
