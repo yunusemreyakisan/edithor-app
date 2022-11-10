@@ -177,9 +177,8 @@ public class MainActivity extends AppCompatActivity {
             });
     }
 
-
+//elleme dursun
 /*
-
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -205,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
  */
-
 
 
     private void noteEkleyeGit() {
