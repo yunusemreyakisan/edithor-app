@@ -30,6 +30,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -142,6 +143,43 @@ public class MainActivity extends AppCompatActivity {
     //Degisiklik izleme
     private void notesEventChangeListener() {
         spinner.setVisibility(View.VISIBLE);
+            mDatabaseReference.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                    NoteModel model = dataSnapshot.getValue(NoteModel.class);
+                    notes.add(model);
+                    noteAdapter.notifyItemInserted(notes.size());
+                    spinner.setVisibility(View.GONE);
+                }
+
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                    //Update
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    notes.remove(dataSnapshot.getValue(NoteModel.class));
+                    noteAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+                    //Updated
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
+                }
+            });
+    }
+
+
+/*
+
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -165,6 +203,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+ */
+
 
 
     private void noteEkleyeGit() {
