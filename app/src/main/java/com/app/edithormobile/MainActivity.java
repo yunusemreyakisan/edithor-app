@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     //Back Pressed
     @Override
     public void onBackPressed() {
-        Toast.makeText(MainActivity.this, "Back pressed", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, "Back pressed", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         // Pencere Baslik Tanımı
         builder.setTitle("Emin misiniz?");
