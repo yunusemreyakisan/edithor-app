@@ -83,8 +83,11 @@ public class AddNote extends AppCompatActivity {
                 //Olusturma zamanini al.
                 Calendar calendar = new GregorianCalendar();
                 int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
+                int hours = calendar.get(Calendar.HOUR);
+                int minutes = calendar.get(Calendar.MINUTE);
+                String time = String.format("%02d:%02d", hours, minutes);
                 String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month
-                        + " " +calendar.get(Calendar.HOUR_OF_DAY) + ":" +  calendar.get(Calendar.MINUTE) ;
+                        + " " + time ;
 
                 //unique getKey()
                 String id = mDatabase.push().getKey();
