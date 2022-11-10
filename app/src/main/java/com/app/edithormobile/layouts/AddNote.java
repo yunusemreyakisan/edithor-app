@@ -86,10 +86,11 @@ public class AddNote extends AppCompatActivity {
                 String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month
                         + " " +calendar.get(Calendar.HOUR_OF_DAY) + ":" +  calendar.get(Calendar.MINUTE) ;
 
-                //Essiz anahtar gerekiyor. (for remove)
+                //unique getKey()
                 String id = mDatabase.push().getKey();
                 NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
-                mDatabase.push().setValue(mNotes);
+                assert id != null;
+                mDatabase.child(id).setValue(mNotes);
 
                 Intent intent = new Intent(AddNote.this, MainActivity.class);
                 startActivity(intent);
