@@ -87,7 +87,7 @@ public class AddNote extends AppCompatActivity {
                         + " " +calendar.get(Calendar.HOUR_OF_DAY) + ":" +  calendar.get(Calendar.MINUTE) ;
 
                 //Essiz anahtar gerekiyor. (for remove)
-                String id = notBaslik + notOlusturmaTarihi;
+                String id = mDatabase.push().getKey();
                 NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
                 mDatabase.push().setValue(mNotes);
 
