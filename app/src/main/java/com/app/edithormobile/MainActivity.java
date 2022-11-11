@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -144,8 +145,17 @@ public class MainActivity extends AppCompatActivity {
 
     //Degisiklik izleme
     private void notesEventChangeListener() {
-            spinner.setVisibility(View.INVISIBLE);
-            noData.setVisibility(View.VISIBLE);
+        //empty control
+        if(notes.size() == 0){
+            //Visibility delay
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                spinner.setVisibility(View.GONE);
+                noData.setVisibility(View.VISIBLE);
+            }, 2000);
+        }
+        //Child Listener
+        spinner.setVisibility(View.VISIBLE);
             mDatabaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
