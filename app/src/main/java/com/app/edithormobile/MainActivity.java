@@ -152,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
             handler.postDelayed(() -> {
                 spinner.setVisibility(View.GONE);
                 noData.setVisibility(View.VISIBLE);
-            }, 2000);
+            }, 5000);
+        }else{
+            noData.setVisibility(View.INVISIBLE);
         }
         //Child Listener
         spinner.setVisibility(View.VISIBLE);
