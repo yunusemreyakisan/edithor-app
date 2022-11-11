@@ -54,7 +54,6 @@
         android:text="@string/save"
         android:textAllCaps="false"
         android:textStyle="bold"
-        android:alpha="0.5"
         app:backgroundTint="@color/bg_color_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -74,7 +73,7 @@
         app:icon="@android:drawable/ic_menu_revert"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
-        app:iconTint="@color/black"
+        app:iconTint="@color/cardview_date_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="" />
