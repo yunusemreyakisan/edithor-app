@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +43,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView tvNote;
+    TextView tvNote, noData;
     RecyclerView rvNotes;
     FloatingActionButton fabAddNote;
     ArrayList<NoteModel> notes;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         rvNotes = findViewById(R.id.rvNotes);
         fabAddNote = findViewById(R.id.add_fab);
         spinner = findViewById(R.id.progressBar);
+        noData = findViewById(R.id.no_data);
     }
 
     //Back Pressed
@@ -142,13 +144,15 @@ public class MainActivity extends AppCompatActivity {
 
     //Degisiklik izleme
     private void notesEventChangeListener() {
-        spinner.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.INVISIBLE);
+            noData.setVisibility(View.VISIBLE);
             mDatabaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     NoteModel model = dataSnapshot.getValue(NoteModel.class);
                     notes.add(model);
                     noteAdapter.notifyItemInserted(notes.size());
+                    noData.setVisibility(View.INVISIBLE);
                     spinner.setVisibility(View.GONE);
                 }
 
@@ -162,6 +166,15 @@ public class MainActivity extends AppCompatActivity {
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                     notes.remove(dataSnapshot.getValue(NoteModel.class));
                     noteAdapter.notifyDataSetChanged();
+                    //empty control
+                    if(!notes.isEmpty()) {
+                        noData.setVisibility(View.INVISIBLE);
+                        noteAdapter.notifyDataSetChanged();
+                    }else{
+                        noData.setVisibility(View.VISIBLE);
+                    }
+
+                    Log.d("note size", String.valueOf(notes.size()));
 
                 }
 
@@ -176,6 +189,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
     }
+
+
+
 
 //elleme dursun
 /*
