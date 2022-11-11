@@ -145,17 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Degisiklik izleme
     private void notesEventChangeListener() {
-        //empty control
-        if(notes.size() == 0){
-            //Visibility delay
-            final Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                spinner.setVisibility(View.GONE);
-                noData.setVisibility(View.VISIBLE);
-            }, 5000);
-        }else{
-            noData.setVisibility(View.INVISIBLE);
-        }
         //Child Listener
         spinner.setVisibility(View.VISIBLE);
             mDatabaseReference.addChildEventListener(new ChildEventListener() {
@@ -200,6 +189,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
                 }
             });
+
+        //empty control
+        if(notes.size() == 0) {
+            spinner.setVisibility(View.GONE);
+            noData.setVisibility(View.VISIBLE);
+        }else{
+            noData.setVisibility(View.INVISIBLE);
+        }
     }
 
 
