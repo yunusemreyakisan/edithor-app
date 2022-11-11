@@ -44,8 +44,11 @@ public class AddNote extends AppCompatActivity {
         notKaydetmeIslevi();
         islemdenVazgec();
 
-    }
+        //deger alma (update first step)
+        title.setText(getIntent().getStringExtra("baslik"));
+        note.setText(getIntent().getStringExtra("icerik"));
 
+    }
     private void islemdenVazgec() {
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(AddNote.this, MainActivity.class);
