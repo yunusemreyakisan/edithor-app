@@ -3,6 +3,7 @@ package com.app.edithormobile.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.edithormobile.R;
+import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -65,6 +67,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         removeRef = FirebaseDatabase.getInstance()
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(mNote.getNoteID());
 
+        //long delete
         holder.itemView.setOnLongClickListener(v -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Emin misiniz?");
@@ -78,6 +81,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 });
                 builder.show();
             return false;
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddNote.class);
+            intent.putExtra("baslik", mNote.getNotBaslik());
+            intent.putExtra("icerik", mNote.getNotIcerigi());
+            context.startActivity(intent);
         });
 
     }
