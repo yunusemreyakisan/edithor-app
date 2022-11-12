@@ -3,32 +3,24 @@ package com.app.edithormobile;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.models.NoteModel;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,12 +29,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class NotePage extends AppCompatActivity {
 
     TextView tvNote, noData;
     RecyclerView rvNotes;
@@ -58,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -83,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     //Recyclerview
     private void notesViewRV() {
         notes = new ArrayList<NoteModel>();
-        noteAdapter = new NoteAdapter(MainActivity.this, notes);
+        noteAdapter = new NoteAdapter(NotePage.this, notes);
         rvNotes.setHasFixedSize(true);
         rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
         rvNotes.setAdapter(noteAdapter);
@@ -102,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Toast.makeText(MainActivity.this, "Back pressed", Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(NotePage.this);
         // Pencere Baslik Tanımı
         builder.setTitle("Emin misiniz?");
         // Pencere Mesaj Tanımı
@@ -112,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == AlertDialog.BUTTON_NEGATIVE) {
-                    Toast.makeText(MainActivity.this, "İşlem iptal edildi.",
+                    Toast.makeText(NotePage.this, "İşlem iptal edildi.",
                             Toast.LENGTH_SHORT).show();
                 } else if (which == AlertDialog.BUTTON_POSITIVE) { // veya else
-                    Toast.makeText(MainActivity.this, "Çıkış başarıyla gerçekleştirildi.",
+                    Toast.makeText(NotePage.this, "Çıkış başarıyla gerçekleştirildi.",
                             Toast.LENGTH_SHORT).show();
-                    MainActivity.this.finish(); // Activity’nin sonlandırılması
+                    NotePage.this.finish(); // Activity’nin sonlandırılması
 
                     //Giriş ekranı için Pref. Kontrolü
                     SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
@@ -139,7 +131,10 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("HAYIR", alertDialogClickListener);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-}
+
+
+
+    }
 
 
 
@@ -233,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void noteEkleyeGit() {
         fabAddNote.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddNote.class);
+            Intent intent = new Intent(NotePage.this, AddNote.class);
             startActivity(intent);
         });
     }

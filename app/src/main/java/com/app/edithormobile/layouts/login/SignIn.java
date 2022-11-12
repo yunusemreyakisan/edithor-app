@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
-import com.app.edithormobile.MainActivity;
+import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,11 +28,13 @@ public class SignIn extends AppCompatActivity {
     private FirebaseUser mUser;
     TextInputEditText emailadresi, sifre;
     CheckBox hatirla;
-    Button giris, googleGiris, kayitOl;
+    Button giris, googleGiris;
+    TextView kayitOl;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
@@ -74,7 +78,7 @@ public class SignIn extends AppCompatActivity {
         String checkbox = preferences.getString("Remember", "");
 
         if (checkbox.equals("true")) {
-            Intent intent = new Intent(SignIn.this, MainActivity.class);
+            Intent intent = new Intent(SignIn.this, NotePage.class);
             startActivity(intent);
         }
 
@@ -142,7 +146,7 @@ public class SignIn extends AppCompatActivity {
 
                                 // Eğer giriş bilgileri doğruysa:
                                 // Anasayfaya geç.
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                Intent intent = new Intent(getApplicationContext(), NotePage.class);
                                 startActivity(intent);
 
 

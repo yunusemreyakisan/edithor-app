@@ -11,8 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
-import com.app.edithormobile.MainActivity;
+import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +38,7 @@ public class SignUp extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -106,7 +108,7 @@ public class SignUp extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                Intent intent = new Intent(SignUp.this, MainActivity.class);
+                                                Intent intent = new Intent(SignUp.this, NotePage.class);
                                                 startActivity(intent);
                                                 Toast.makeText(SignUp.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
                                             }
