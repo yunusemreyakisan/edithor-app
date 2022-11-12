@@ -16,4 +16,5 @@
     <string name="ad_soyad">Ad-Soyad</string>
     <string name="kayit_ol">Kayıt ol</string>
     <string name="google_sign_button">google sign</string>
+    <string name="upload_file">upload file</string>
 </resources>
