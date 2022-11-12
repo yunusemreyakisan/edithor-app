@@ -15,6 +15,11 @@
         android:theme="@style/LightTheme.EdithorMobile"
         tools:targetApi="31">
 
+        <activity
+            android:name=".layouts.upload.UploadFile"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true"/>
+
 
         <activity
             android:name=".NotePage"
