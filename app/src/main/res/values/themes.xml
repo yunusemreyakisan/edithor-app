@@ -1,12 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.EdithorMobile" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="LightTheme.EdithorMobile" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/bg_color_dark</item>
         <item name="colorPrimaryDark">@color/bg_color_light</item>
         <item name="colorAccent">@color/button_active_color</item>
         <!-- Light mode icin asagiya color ekleyin. -->
-
 
     </style>
 </resources>
