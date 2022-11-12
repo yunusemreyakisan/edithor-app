@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_color_light"
     android:paddingHorizontal="20dp">
 
 
@@ -11,13 +12,13 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="24dp"
         android:text="@string/edithor_kayit_olun"
         android:textColor="@color/bg_color_dark"
-        android:textSize="54sp"
+        android:textSize="@dimen/_40ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.037"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,12 +26,11 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_marginTop="@dimen/_60sdp"
         android:layout_weight="0.5"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintBottom_toTopOf="@+id/btnKayitOl"
+        tools:layout_editor_absoluteX="20dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/adWrapper"
@@ -49,9 +49,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/cardview_color"
                 android:hint="@string/ad_soyad"
                 android:inputType="text"
                 android:minHeight="48dp"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="@color/cardview_date_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,11 +62,11 @@
             android:id="@+id/emailWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/adWrapper"
             android:layout_centerHorizontal="true"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
-            android:layout_below="@id/adWrapper"
             app:boxCornerRadiusTopStart="10dp"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp">
@@ -74,9 +76,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/cardview_color"
                 android:hint="@string/e_mail_hint"
                 android:inputType="textEmailAddress"
                 android:minHeight="48dp"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="@color/cardview_date_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/emailWrapper"
+            android:backgroundTint="@color/cardview_color"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
@@ -96,10 +101,12 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtKayitSifre"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/cardview_color"
                 android:hint="@string/sifre"
                 android:inputType="textPassword"
                 android:minHeight="48dp"
+                android:textColor="@color/input_text_color"
                 android:textColorHint="@color/cardview_date_color" />
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
@@ -110,16 +117,15 @@
         android:id="@+id/btnKayitOl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/_50sdp"
         android:text="@string/kayit_ol"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:backgroundTint="@color/purple_500"
+        app:backgroundTint="@color/button_active_color"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
-
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

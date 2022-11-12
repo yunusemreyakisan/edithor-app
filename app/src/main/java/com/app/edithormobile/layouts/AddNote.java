@@ -3,15 +3,15 @@ package com.app.edithormobile.layouts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
-import com.app.edithormobile.MainActivity;
+import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.models.NoteModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,12 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Objects;
-import java.util.Random;
 
 public class AddNote extends AppCompatActivity {
 
@@ -37,6 +34,7 @@ public class AddNote extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
@@ -51,7 +49,7 @@ public class AddNote extends AppCompatActivity {
     }
     private void islemdenVazgec() {
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(AddNote.this, MainActivity.class);
+            Intent intent = new Intent(AddNote.this, NotePage.class);
             startActivity(intent);
         });
     }
@@ -98,7 +96,7 @@ public class AddNote extends AppCompatActivity {
                 assert id != null;
                 mDatabase.child(id).setValue(mNotes);
 
-                Intent intent = new Intent(AddNote.this, MainActivity.class);
+                Intent intent = new Intent(AddNote.this, NotePage.class);
                 startActivity(intent);
                 Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
             }

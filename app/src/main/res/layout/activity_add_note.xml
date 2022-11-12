@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp">
+    android:background="@color/bg_color_light">
 
 
     <EditText
@@ -16,6 +16,9 @@
         android:ems="10"
         android:hint="@string/title"
         android:inputType="textPersonName"
+        android:textColor="@color/bg_color_dark"
+        android:textColorHint="@color/bg_color_dark"
+        android:alpha="0.5"
         android:maxLength="20"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,6 +37,9 @@
         android:background="@android:color/transparent"
         android:ems="10"
         android:gravity="top|start"
+        android:textColorHint="@color/bg_color_dark"
+        android:alpha="0.5"
+        android:textColor="@color/bg_color_dark"
         android:hint="@string/type_something"
         android:inputType="textMultiLine"
         android:textSize="20sp"
@@ -53,6 +59,7 @@
         android:background="@drawable/button_bg"
         android:text="@string/save"
         android:textAllCaps="false"
+        android:textColor="@color/bg_color_light"
         android:textStyle="bold"
         app:backgroundTint="@color/bg_color_dark"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +80,8 @@
         app:icon="@android:drawable/ic_menu_revert"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
-        app:iconTint="@color/cardview_date_color"
+        app:iconTint="@color/bg_color_dark"
+        android:alpha="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="" />
