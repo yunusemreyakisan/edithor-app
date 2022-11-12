@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="bg_color_dark">#FFFFFF</color>
+    <color name="bg_color_light">#252525</color>
+    <color name="input_text_color">#ffffff</color>
+    <color name="button_active_color">#00d27b</color>
+    <color name="cardview_color">#4d4d4d</color>
+    <color name="cardview_date_color">#777777</color>
+    <color name="text_hint_color">#ffffff</color>
     <color name="ya_da_text_color">#757575</color>
+    <color name="fab_color">#757575</color>
 </resources>
