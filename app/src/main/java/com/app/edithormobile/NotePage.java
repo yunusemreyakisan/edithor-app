@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
+import com.app.edithormobile.layouts.upload.UploadFile;
 import com.app.edithormobile.models.NoteModel;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,15 +37,17 @@ import java.util.Objects;
 
 public class NotePage extends AppCompatActivity {
 
-    TextView tvNote, noData;
+    TextView tvNote, tvNoData, tvAddNoteFab, tvUploadFab;
     RecyclerView rvNotes;
-    FloatingActionButton fabAddNote;
+    FloatingActionButton fabAddNote, fabUploadFile;
+    ExtendedFloatingActionButton fabActions;
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
     ProgressBar spinner;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    Boolean isAllFabsVisible;
 
     //TODO: Başlık ve tarih zamanı çekilecek.
 
@@ -51,14 +55,68 @@ public class NotePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_note_page);
 
         //Methods
         initComponents();
         notesViewRV();
         databaseRef();
         notesEventChangeListener();
-        noteEkleyeGit();
+        fabControl();
+
+    }
+
+    private void fabControl() {
+        fabAddNote.setVisibility(View.GONE);
+        tvAddNoteFab.setVisibility(View.GONE);
+        fabUploadFile.setVisibility(View.GONE);
+        tvUploadFab.setVisibility(View.GONE);
+
+        isAllFabsVisible = false;
+        //Baslarken kucuk gosterir.
+        fabActions.shrink();
+        //extendable click listener
+        fabActions.setOnClickListener(
+               view -> {
+                   if (!isAllFabsVisible) {
+                       //fab icerigi goster.
+                       fabAddNote.show();
+                       fabUploadFile.show();
+                       tvAddNoteFab.setVisibility(View.VISIBLE);
+                       tvUploadFab.setVisibility(View.VISIBLE);
+                       //fab genislesin
+                       fabActions.extend();
+
+                       isAllFabsVisible = true;
+                   } else {
+                       fabAddNote.hide();
+                       fabUploadFile.hide();
+                       tvAddNoteFab.setVisibility(View.GONE);
+                       tvUploadFab.setVisibility(View.GONE);
+
+                       //fab kucultme
+                       fabActions.shrink();
+
+                       isAllFabsVisible = false;
+                   }
+               });
+
+
+        //Not ekleme FAB
+        fabAddNote.setOnClickListener(
+                view -> {
+                    Intent intent = new Intent(NotePage.this, AddNote.class);
+                    startActivity(intent);
+                });
+
+        //Fotograf Yukleme
+        fabUploadFile.setOnClickListener(
+                view -> {
+                    Intent intent = new Intent(NotePage.this, UploadFile.class);
+                    startActivity(intent);
+                    Toast.makeText(NotePage.this, "Under Cons.", Toast.LENGTH_SHORT).show();
+                });
+
 
     }
 
@@ -83,11 +141,18 @@ public class NotePage extends AppCompatActivity {
 
     //init comp.
     private void initComponents() {
+        //TV's
+        tvAddNoteFab = findViewById(R.id.add_note_tv);
+        tvUploadFab = findViewById(R.id.add_file_tv);
         tvNote = findViewById(R.id.tvNote);
+        //RV's
         rvNotes = findViewById(R.id.rvNotes);
-        fabAddNote = findViewById(R.id.add_fab);
         spinner = findViewById(R.id.progressBar);
-        noData = findViewById(R.id.no_data);
+        tvNoData = findViewById(R.id.no_data);
+        //Fabs
+        fabAddNote = findViewById(R.id.add_note);
+        fabActions = findViewById(R.id.extended_fab);
+        fabUploadFile = findViewById(R.id.add_file);
     }
 
     //Back Pressed
@@ -148,7 +213,7 @@ public class NotePage extends AppCompatActivity {
                     NoteModel model = dataSnapshot.getValue(NoteModel.class);
                     notes.add(model);
                     noteAdapter.notifyItemInserted(notes.size());
-                    noData.setVisibility(View.INVISIBLE);
+                    tvNoData.setVisibility(View.INVISIBLE);
                     spinner.setVisibility(View.GONE);
                 }
 
@@ -164,10 +229,10 @@ public class NotePage extends AppCompatActivity {
                     noteAdapter.notifyDataSetChanged();
                     //empty control
                     if(!notes.isEmpty()) {
-                        noData.setVisibility(View.INVISIBLE);
+                        tvNoData.setVisibility(View.INVISIBLE);
                         noteAdapter.notifyDataSetChanged();
                     }else{
-                        noData.setVisibility(View.VISIBLE);
+                        tvNoData.setVisibility(View.VISIBLE);
                     }
 
                     Log.d("note size", String.valueOf(notes.size()));
@@ -188,9 +253,9 @@ public class NotePage extends AppCompatActivity {
         //empty control
         if(notes.size() == 0) {
             spinner.setVisibility(View.GONE);
-            noData.setVisibility(View.VISIBLE);
+            tvNoData.setVisibility(View.VISIBLE);
         }else{
-            noData.setVisibility(View.INVISIBLE);
+            tvNoData.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -224,14 +289,6 @@ public class NotePage extends AppCompatActivity {
     }
 
  */
-
-
-    private void noteEkleyeGit() {
-        fabAddNote.setOnClickListener(view -> {
-            Intent intent = new Intent(NotePage.this, AddNote.class);
-            startActivity(intent);
-        });
-    }
 
 
     //Menu (Search)
