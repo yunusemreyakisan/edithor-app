@@ -2,9 +2,7 @@ package com.app.edithormobile.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.edithormobile.R;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -69,25 +61,27 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
         //long delete
         holder.itemView.setOnLongClickListener(v -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Emin misiniz?");
-                builder.setMessage("Notu silmek istediğinize emin misiniz?");
-                builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
-                builder.setPositiveButton("Evet", (dialogInterface, i) -> {
-                    removeRef.setValue(null);
-                    notes.remove(position);
-                    notifyItemRemoved(position);
-                    Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
-                });
-                builder.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Emin misiniz?");
+            builder.setMessage("Notu silmek istediğinize emin misiniz?");
+            builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
+            builder.setPositiveButton("Evet", (dialogInterface, i) -> {
+                removeRef.setValue(null);
+                notes.remove(position);
+                notifyItemRemoved(position);
+                Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+            });
+            builder.show();
             return false;
         });
 
+        //Veri alma
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddNote.class);
             intent.putExtra("baslik", mNote.getNotBaslik());
             intent.putExtra("icerik", mNote.getNotIcerigi());
             context.startActivity(intent);
+
         });
 
     }

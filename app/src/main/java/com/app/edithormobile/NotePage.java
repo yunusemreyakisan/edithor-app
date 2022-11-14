@@ -49,8 +49,6 @@ public class NotePage extends AppCompatActivity {
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
 
-    //TODO: Başlık ve tarih zamanı çekilecek.
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);

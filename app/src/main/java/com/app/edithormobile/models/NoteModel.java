@@ -6,8 +6,8 @@ public class NoteModel {
     String notIcerigi, notBaslik, notOlusturmaTarihi, noteID;
     boolean isSelected = false;
 
+    public NoteModel(){
 
-    public NoteModel() {
     }
 
     public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, boolean isSelected) {
