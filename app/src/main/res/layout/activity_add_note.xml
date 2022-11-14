@@ -26,7 +26,8 @@
         app:layout_constraintHorizontal_bias="0.248"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.236" />
+        app:layout_constraintVertical_bias="0.236"
+        android:autofillHints="" />
 
 
     <EditText
@@ -48,7 +49,8 @@
         app:layout_constraintHorizontal_bias="0.248"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        app:layout_constraintVertical_bias="0.065" />
+        app:layout_constraintVertical_bias="0.065"
+        android:autofillHints="" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNotuKaydet"
@@ -69,9 +71,11 @@
         android:id="@+id/btnBack"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:alpha="0.5"
         android:background="@android:color/transparent"
+        android:contentDescription=""
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -81,10 +85,28 @@
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconTint="@color/bg_color_dark"
-        android:alpha="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/optionBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:weightSum="1"
+        android:background="@drawable/upload_layout_bg"
+        android:backgroundTint="@color/bg_color_dark"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNote">
+
+
+
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
