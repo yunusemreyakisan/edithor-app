@@ -21,24 +21,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
         android:layout_margin="@dimen/_10sdp"
         android:background="@drawable/upload_layout_bg"
         android:backgroundTint="@color/cardview_color"
-        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
+
+        <ProgressBar
+            android:id="@+id/bar"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/upload_file"
-            android:layout_marginBottom="@dimen/_20sdp"
-            app:tint="@color/bg_color_light"
-            android:contentDescription="@string/upload_file" />
+            android:layout_marginVertical="@dimen/_20ssp"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/bg_color_dark"
+            android:text="Yükle"
+            />
+
 
     </LinearLayout>
 
