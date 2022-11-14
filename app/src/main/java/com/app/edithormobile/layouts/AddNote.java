@@ -67,7 +67,6 @@ public class AddNote extends AppCompatActivity {
         btnNotuKaydet.setOnClickListener(view -> {
             //Veritabanına Canlı Kayıt Etme (Realtime Database)
             String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            //TODO:Silme islemi yapilacak.
             mUser = mAuth.getCurrentUser();
             mDatabase = FirebaseDatabase.getInstance().getReference()
                     .child("Kullanicilar").child(user_id).child("Notlarim");
