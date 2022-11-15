@@ -127,33 +127,48 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bold_icon"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:layout_weight="1"
-                app:tint="@color/bg_color_light"/>
+                android:clickable="true"
+                app:tint="@color/bg_color_light"
+                android:focusable="true" />
             <ImageView
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/italic_icon"
-                app:tint="@color/bg_color_light"/>
+                android:clickable="true"
+                app:tint="@color/bg_color_light"
+                android:focusable="true" />
             <ImageView
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:src="@drawable/underline_icon"
-                app:tint="@color/bg_color_light"/>
+                app:tint="@color/bg_color_light"
+                android:focusable="true" />
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:src="@drawable/copy_icon"
-                app:tint="@color/bg_color_light"/>
+                app:tint="@color/bg_color_light"
+                android:focusable="true" />
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:clickable="true"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:src="@drawable/indir_icon"
-                app:tint="@color/bg_color_light"/>
+                app:tint="@color/bg_color_light"
+                android:focusable="true" />
 
 
         </LinearLayout>
@@ -178,6 +193,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:clickable="true"
             android:src="@drawable/indir_icon"
             app:tint="@color/bg_color_light"/>
 
