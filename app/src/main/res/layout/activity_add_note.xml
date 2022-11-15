@@ -124,6 +124,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txtNote">
 
             <ImageView
+                android:id="@+id/btnbold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bold_icon"
@@ -133,6 +134,7 @@
                 app:tint="@color/bg_color_light"
                 android:focusable="true" />
             <ImageView
+                android:id="@+id/btnitalic"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -142,6 +144,7 @@
                 app:tint="@color/bg_color_light"
                 android:focusable="true" />
             <ImageView
+                android:id="@+id/btnunderline"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -151,6 +154,7 @@
                 app:tint="@color/bg_color_light"
                 android:focusable="true" />
             <ImageView
+                android:id="@+id/btncopy"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -161,12 +165,13 @@
                 android:focusable="true" />
 
             <ImageView
+                android:id="@+id/btncolor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:src="@drawable/indir_icon"
+                android:src="@drawable/color_icon"
                 app:tint="@color/bg_color_light"
                 android:focusable="true" />
 
@@ -190,11 +195,12 @@
 
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/btnUploadImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
-            android:src="@drawable/indir_icon"
+            android:src="@drawable/upload_image"
             app:tint="@color/bg_color_light"/>
 
 

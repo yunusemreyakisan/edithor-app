@@ -1,10 +1,13 @@
 package com.app.edithormobile.layouts;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,6 +29,7 @@ import java.util.Objects;
 public class AddNote extends AppCompatActivity {
 
     Button btnNotuKaydet, btnBack;
+    ImageView btnBold, btnItalic, btnUnderline, btnCopy, btnColor, btnUploadImage;
     EditText note, title;
     private DatabaseReference mDatabase;
     FirebaseAuth mAuth;
@@ -37,7 +41,7 @@ public class AddNote extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-
+        //optionsbarIslevi();
         initComponents();
         notKaydetmeIslevi();
         islemdenVazgec();
@@ -47,6 +51,9 @@ public class AddNote extends AppCompatActivity {
         note.setText(getIntent().getStringExtra("icerik"));
 
     }
+
+
+
     private void islemdenVazgec() {
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(AddNote.this, NotePage.class);
@@ -58,6 +65,12 @@ public class AddNote extends AppCompatActivity {
         note = findViewById(R.id.txtNote);
         btnNotuKaydet = findViewById(R.id.btnNotuKaydet);
         btnBack = findViewById(R.id.btnBack);
+        btnBold =findViewById(R.id.btnbold);
+        btnItalic =findViewById(R.id.btnitalic);
+        btnUnderline =findViewById(R.id.btnunderline);
+        btnCopy =findViewById(R.id.btncopy);
+        btnColor =findViewById(R.id.btncolor);
+        btnUploadImage =findViewById(R.id.btnUploadImage);
         title = findViewById(R.id.txtTitle);
     }
 
@@ -101,6 +114,57 @@ public class AddNote extends AppCompatActivity {
             }
         });
     }
+    /*private void optionsbarIslevi() {
+        //bold yapar
+        btnBold.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+            }
+        });
+        //italic yapar
+        btnItalic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note.setTypeface(note.getTypeface(), Typeface.ITALIC);
+            }
+        });
+        //altini cizer
+        btnUnderline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+            }
+        });
+        //texti kopyalar
+        btnCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+            }
+        });
+        //renk degistirir
+        btnColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+
+            }
+        });
+        //resim ekler
+        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+            }
+        });
+
+    }
+
+
+     */
+
 
 
 
