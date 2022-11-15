@@ -11,15 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.edithormobile.R;
-import com.app.edithormobile.models.NoteModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.Objects;
 
 public class UploadFile extends AppCompatActivity {
 
@@ -38,7 +33,7 @@ public class UploadFile extends AppCompatActivity {
         setContentView(R.layout.activity_upload_file);
         //Methods
         initComponents();
-        dbRef();
+        //dbRef();
         //fotografYukle();
 
         //Default
@@ -52,7 +47,7 @@ public class UploadFile extends AppCompatActivity {
         image = findViewById(R.id.image);
     }
 
-
+/*
     private void dbRef() {
         mAuth = FirebaseAuth.getInstance();
             //Veritabanına Canlı Kayıt Etme (Realtime Database)
