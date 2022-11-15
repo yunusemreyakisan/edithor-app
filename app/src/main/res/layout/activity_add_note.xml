@@ -88,15 +88,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
     <LinearLayout
-        android:id="@+id/optionBar"
+        android:id="@+id/generalBar"
         android:layout_width="0dp"
         android:layout_height="@dimen/_50sdp"
-        android:weightSum="1"
-        android:background="@drawable/upload_layout_bg"
-        android:backgroundTint="@color/bg_color_dark"
+        android:weightSum="6"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
         android:orientation="horizontal"
-        android:paddingHorizontal="30dp"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,41 +106,86 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNote">
 
+
+        <LinearLayout
+            android:id="@+id/optionBar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="4.75"
+            android:weightSum="5"
+            android:background="@drawable/upload_layout_bg"
+            android:backgroundTint="@color/bg_color_dark"
+            android:orientation="horizontal"
+            android:paddingHorizontal="30dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNote">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bold_icon"
+                android:layout_weight="1"
+                app:tint="@color/bg_color_light"/>
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/italic_icon"
+                app:tint="@color/bg_color_light"/>
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/underline_icon"
+                app:tint="@color/bg_color_light"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/copy_icon"
+                app:tint="@color/bg_color_light"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/indir_icon"
+                app:tint="@color/bg_color_light"/>
+
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/uploadBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_weight="1.25"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:background="@drawable/upload_layout_bg"
+        android:backgroundTint="@color/bg_color_dark"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNote">
+
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/bold_icon"
-            app:tint="@color/bg_color_light"/>
-        <ImageView
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/italic_icon"
-            app:tint="@color/bg_color_light"/>
-        <ImageView
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/underline_icon"
-            app:tint="@color/bg_color_light"/>
-        <ImageView
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/copy_icon"
-            app:tint="@color/bg_color_light"/>
-        <ImageView
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:src="@drawable/indir_icon"
             app:tint="@color/bg_color_light"/>
 
 
-
-
+    </LinearLayout>
 
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
