@@ -95,13 +95,45 @@
         android:weightSum="1"
         android:background="@drawable/upload_layout_bg"
         android:backgroundTint="@color/bg_color_dark"
-        android:gravity="center"
         android:orientation="horizontal"
+        android:paddingHorizontal="30dp"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNote">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bold_icon"
+            app:tint="@color/bg_color_light"/>
+        <ImageView
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/italic_icon"
+            app:tint="@color/bg_color_light"/>
+        <ImageView
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/underline_icon"
+            app:tint="@color/bg_color_light"/>
+        <ImageView
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/copy_icon"
+            app:tint="@color/bg_color_light"/>
+        <ImageView
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/indir_icon"
+            app:tint="@color/bg_color_light"/>
+
 
 
 
