@@ -114,7 +114,7 @@
             android:layout_weight="4.75"
             android:weightSum="5"
             android:background="@drawable/upload_layout_bg"
-            android:backgroundTint="@color/bg_color_dark"
+            android:backgroundTint="@color/cardview_color"
             android:orientation="horizontal"
             android:paddingHorizontal="30dp"
             android:gravity="center_vertical"
@@ -185,7 +185,7 @@
         android:layout_weight="1.25"
         android:layout_marginStart="@dimen/_5sdp"
         android:background="@drawable/upload_layout_bg"
-        android:backgroundTint="@color/bg_color_dark"
+        android:backgroundTint="@color/cardview_color"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -201,7 +201,8 @@
             android:layout_weight="1"
             android:clickable="true"
             android:src="@drawable/upload_image"
-            app:tint="@color/bg_color_light"/>
+            app:tint="@color/bg_color_light"
+            android:focusable="true" />
 
 
     </LinearLayout>
