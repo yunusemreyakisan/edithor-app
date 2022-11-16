@@ -33,7 +33,7 @@
 
         <activity
             android:name=".layouts.AddNote"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true" />
 
         <activity
