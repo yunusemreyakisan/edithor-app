@@ -3,11 +3,13 @@ package com.app.edithormobile.layouts;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.view.View;
+import android.text.style.CharacterStyle;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -29,8 +31,10 @@ import java.util.Objects;
 public class AddNote extends AppCompatActivity {
 
     Button btnNotuKaydet, btnBack;
-    ImageView btnBold, btnItalic, btnUnderline, btnCopy, btnColor, btnUploadImage;
+    Button btnBold, btnItalic, btnUnderline, btnCopy, btnColor, btnUploadImage;
     EditText note, title;
+    CharacterStyle styleBold  , styleItalic, styleNormal, underLine;
+    boolean bold, underline ,italic = false;
     private DatabaseReference mDatabase;
     FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -41,14 +45,21 @@ public class AddNote extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-        //optionsbarIslevi();
+
         initComponents();
         notKaydetmeIslevi();
         islemdenVazgec();
+        optionsbarIslevi();
 
         //deger alma (update first step)
         title.setText(getIntent().getStringExtra("baslik"));
         note.setText(getIntent().getStringExtra("icerik"));
+
+        //Styles
+        styleBold = new StyleSpan(Typeface.BOLD);
+        styleNormal = new StyleSpan(Typeface.NORMAL);
+        styleItalic = new StyleSpan(Typeface.ITALIC);
+        underLine = new UnderlineSpan();
 
     }
 
@@ -114,36 +125,77 @@ public class AddNote extends AppCompatActivity {
             }
         });
     }
-    /*private void optionsbarIslevi() {
+    private void optionsbarIslevi() {
         //bold yapar
-        btnBold.setOnClickListener(new View.OnClickListener() {
+        btnBold.setOnClickListener(v -> {
+            // Toast.makeText(AddNote.this, "Tıklandı Bold", Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onClick(View v) {
-                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+            bold = !bold;
+            String wholeText = note.getText().toString();
+            int start = note.getSelectionStart();
+            int end = note.getSelectionEnd();
+
+            CharacterStyle passedStyle;
+            SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
+
+            if (bold) {
+                passedStyle = styleNormal;
+
+            } else {
+                passedStyle = styleBold;
             }
+            sb.setSpan(passedStyle, start, end, 0);
+            note.setText(sb);
         });
+
+
         //italic yapar
-        btnItalic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                note.setTypeface(note.getTypeface(), Typeface.ITALIC);
+        btnItalic.setOnClickListener(v -> {
+
+            italic = !italic;
+            String wholeText = note.getText().toString();
+            int start = note.getSelectionStart();
+            int end = note.getSelectionEnd();
+
+            CharacterStyle passedStyle;
+            SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
+            if (italic) {
+                passedStyle = styleNormal;
+
+            } else {
+                passedStyle = styleItalic;
+
             }
+            sb.setSpan(passedStyle, start, end, 0);
+            note.setText(sb);
+
         });
+
         //altini cizer
-        btnUnderline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+        btnUnderline.setOnClickListener(v -> {
+            underline = !underline;
+            String wholeText = note.getText().toString();
+            int start = note.getSelectionStart();
+            int end = note.getSelectionEnd();
+
+            CharacterStyle passedStyle;
+            SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
+            if (underline) {
+                passedStyle = styleNormal;
+
+            } else {
+                passedStyle = underLine;
+
             }
+            sb.setSpan(passedStyle, start, end, 0);
+            note.setText(sb);
+
         });
+
         //texti kopyalar
-        btnCopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                note.setTypeface(note.getTypeface(), Typeface.BOLD);
-            }
-        });
+        btnCopy.setOnClickListener(v -> note.getText().toString());
+    }
+    /*
         //renk degistirir
         btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +216,7 @@ public class AddNote extends AppCompatActivity {
 
 
      */
+
 
 
 
