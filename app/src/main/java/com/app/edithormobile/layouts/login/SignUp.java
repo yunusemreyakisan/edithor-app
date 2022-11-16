@@ -24,7 +24,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SignUp extends AppCompatActivity {
 
@@ -91,30 +94,37 @@ public class SignUp extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     //Veritabanına Canlı Kayıt Etme (Realtime Database)
-                                    String user_id = mAuth.getCurrentUser().getUid();
+                                    String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                                     mUser = mAuth.getCurrentUser();
                                     mDatabase = FirebaseDatabase.getInstance().getReference()
                                             .child("Kullanicilar")
                                             .child(user_id)
                                             .child("Kullanıcı Bilgileri");
+                                    //Olusturma zamanini al.
+                                    Calendar calendar = new GregorianCalendar();
+                                    int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
+                                    int hours = calendar.get(Calendar.HOUR);
+                                    int minutes = calendar.get(Calendar.MINUTE);
+                                    String time = String.format("%02d:%02d", hours, minutes);
+                                    String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month
+                                            + " " + time ;
 
                                     HashMap<String, String> mData = new HashMap<>();
-                                    mData.put("E-Mail", email);
-                                    mData.put("Password", password);
-                                    mData.put("Name", name);
+                                    mData.put("mail", email);
+                                    mData.put("password", password);
+                                    mData.put("name", name);
+                                    mData.put("id", user_id);
+                                    mData.put("olusturma_tarihi", notOlusturmaTarihi);
 
                                     //Realtime Database
-                                    mDatabase.setValue(mData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Intent intent = new Intent(SignUp.this, NotePage.class);
-                                                startActivity(intent);
-                                                Toast.makeText(SignUp.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
-                                            }
-                                            else {
-                                                Toast.makeText(SignUp.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
-                                            }
+                                    mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            Intent intent = new Intent(SignUp.this, NotePage.class);
+                                            startActivity(intent);
+                                            Toast.makeText(SignUp.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+                                            Toast.makeText(SignUp.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
