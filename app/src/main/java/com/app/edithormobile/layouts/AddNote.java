@@ -55,7 +55,7 @@ public class AddNote extends AppCompatActivity {
         title.setText(getIntent().getStringExtra("baslik"));
         note.setText(getIntent().getStringExtra("icerik"));
 
-        //Styles
+        //Styless
         styleBold = new StyleSpan(Typeface.BOLD);
         styleNormal = new StyleSpan(Typeface.NORMAL);
         styleItalic = new StyleSpan(Typeface.ITALIC);
