@@ -72,6 +72,7 @@ public class AddNote extends AppCompatActivity {
         });
     }
 
+    //bilesen baslatma
     private void initComponents() {
         note = findViewById(R.id.txtNote);
         btnNotuKaydet = findViewById(R.id.btnNotuKaydet);
