@@ -33,7 +33,7 @@ public class AddNote extends AppCompatActivity {
     Button btnNotuKaydet, btnBack;
     Button btnBold, btnItalic, btnUnderline, btnCopy, btnColor, btnUploadImage;
     EditText note, title;
-    CharacterStyle styleBold  , styleItalic, styleNormal, underLine;
+    CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline ,italic = false;
     private DatabaseReference mDatabase;
     FirebaseAuth mAuth;
@@ -214,7 +214,6 @@ public class AddNote extends AppCompatActivity {
         });
 
     }
-
 
      */
 

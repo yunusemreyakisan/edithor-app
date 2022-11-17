@@ -89,13 +89,13 @@ public class SignIn extends AppCompatActivity {
                 SharedPreferences.Editor editor = preferences1.edit();
                 editor.putString("Remember", "true");
                 editor.apply();
-                Toast.makeText(getApplicationContext(), "Beni hatırla açık!", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), "Beni hatırla açık!", Toast.LENGTH_SHORT).show();
             } else if (!compoundButton.isChecked()) {
                 SharedPreferences preferences1 = getSharedPreferences("checkbox", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences1.edit();
                 editor.putString("Remember", "false");
                 editor.apply();
-                Toast.makeText(getApplicationContext(), "Beni hatırla kapalı!", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), "Beni hatırla kapalı!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -139,10 +139,12 @@ public class SignIn extends AppCompatActivity {
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(),
+                              /*  Toast.makeText(getApplicationContext(),
                                                 "Giriş Başarılı!",
                                                 Toast.LENGTH_LONG)
                                         .show();
+
+                               */
 
                                 // Eğer giriş bilgileri doğruysa:
                                 // Anasayfaya geç.
@@ -153,10 +155,12 @@ public class SignIn extends AppCompatActivity {
                             } else {
 
                                 // Giriş hatalı ise:
-                                Toast.makeText(getApplicationContext(),
+                              /*  Toast.makeText(getApplicationContext(),
                                                 "E-Mail veya Şifre Hatalı!",
                                                 Toast.LENGTH_LONG)
                                         .show();
+
+                               */
 
                             }
                         });
