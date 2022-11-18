@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -98,6 +99,21 @@ public class NotePage extends AppCompatActivity {
                        isAllFabsVisible = false;
                    }
                });
+
+        //fab shrink anywhere in screen
+        rvNotes.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                fabAddNote.setVisibility(View.GONE);
+                tvAddNoteFab.setVisibility(View.GONE);
+                fabUploadFile.setVisibility(View.GONE);
+                tvUploadFab.setVisibility(View.GONE);
+
+                isAllFabsVisible = false;
+                fabActions.shrink();
+                return false;
+            }
+        });
 
 
         //Not ekleme FAB
@@ -194,6 +210,10 @@ public class NotePage extends AppCompatActivity {
         builder.setNegativeButton("HAYIR", alertDialogClickListener);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
+        alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
+
+
 
 
 
