@@ -2,7 +2,6 @@ package com.app.edithormobile.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.edithormobile.R;
-import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -77,10 +76,30 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
         //Veri alma
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AddNote.class);
+           /* Intent intent = new Intent(context, AddNote.class);
             intent.putExtra("baslik", mNote.getNotBaslik());
             intent.putExtra("icerik", mNote.getNotIcerigi());
             context.startActivity(intent);
+
+            */
+
+            holder.card.setChecked(!holder.card.isChecked());
+
+            //card secilenler dizisi yapma
+            ArrayList<String> cardDizisi = new ArrayList<>();
+
+            if(holder.card.isChecked()){
+                for (int i = 0; i <cardDizisi.size(); i++) {
+                    String cardID = mNote.getNotBaslik();
+                        cardDizisi.add(String.valueOf(i) + cardID);
+
+                }
+            }
+            Toast.makeText(context, "Secilenler: " + cardDizisi, Toast.LENGTH_SHORT).show();
+
+
+               // Toast.makeText(context, mNote.getNoteID(), Toast.LENGTH_SHORT).show();
+
 
         });
 
@@ -96,9 +115,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     public static class NoteHolder extends RecyclerView.ViewHolder {
 
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
+        MaterialCardView card;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.card);
             tvNote = itemView.findViewById(R.id.tvNote);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
