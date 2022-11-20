@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.firebaseui:firebase-ui-database:8.0.0'
     implementation 'com.android.support:multidex:2.0.1'
+    implementation "androidx.cardview:cardview:1.0.0"
 
     //ssp sdp
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
