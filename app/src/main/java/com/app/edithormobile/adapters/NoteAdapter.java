@@ -2,6 +2,7 @@ package com.app.edithormobile.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.edithormobile.R;
+import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,52 +61,42 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(mNote.getNoteID());
 
         //long delete
-        holder.itemView.setOnLongClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Emin misiniz?");
-            builder.setMessage("Notu silmek istediğinize emin misiniz?");
-            builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
-            builder.setPositiveButton("Evet", (dialogInterface, i) -> {
-                removeRef.setValue(null);
-                notes.remove(position);
-                notifyItemRemoved(position);
-                Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
-            });
-            builder.show();
-            return false;
+        holder.card.setOnLongClickListener(v -> {
+
+            holder.card.setChecked(!holder.card.isChecked());
+
+            // HashSet<String> dizi = new HashSet<>();
+
+           if (holder.card.isChecked()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Emin misiniz?");
+                builder.setMessage("Notu silmek istediğinize emin misiniz?");
+                builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
+                builder.setPositiveButton("Evet", (dialogInterface, i) -> {
+                    removeRef.setValue(null);
+                    notes.remove(position);
+                    notifyItemRemoved(position);
+                    Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+                });
+               builder.show();
+            }
+
+
+            return true;
         });
 
         //Veri alma
-        holder.itemView.setOnClickListener(v -> {
-           /* Intent intent = new Intent(context, AddNote.class);
+        holder.card.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddNote.class);
             intent.putExtra("baslik", mNote.getNotBaslik());
             intent.putExtra("icerik", mNote.getNotIcerigi());
             context.startActivity(intent);
 
-            */
-
-            holder.card.setChecked(!holder.card.isChecked());
-
-            //card secilenler dizisi yapma
-            ArrayList<String> cardDizisi = new ArrayList<>();
-
-            if(holder.card.isChecked()){
-                for (int i = 0; i <cardDizisi.size(); i++) {
-                    String cardID = mNote.getNotBaslik();
-                        cardDizisi.add(String.valueOf(i) + cardID);
-
-                }
-            }
-            Toast.makeText(context, "Secilenler: " + cardDizisi, Toast.LENGTH_SHORT).show();
-
-
-               // Toast.makeText(context, mNote.getNoteID(), Toast.LENGTH_SHORT).show();
-
+            //Update
 
         });
 
     }
-
 
     @Override
     public int getItemCount() {
