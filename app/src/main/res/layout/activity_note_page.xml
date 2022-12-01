@@ -7,18 +7,31 @@
     android:layout_height="match_parent"
     tools:context=".NotePage">
 
-    <TextView
-        android:id="@+id/tvBaslik"
-        android:layout_width="wrap_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/rvNotes"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
-        android:text="@string/txt_notlarim"
-        android:textColor="@color/bg_color_dark"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
+
+
+        <TextView
+            android:id="@+id/tvBaslik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@string/txt_notlarim"
+            android:textColor="@color/bg_color_dark"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/extended_fab"
@@ -110,7 +123,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBaslik"
         app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
