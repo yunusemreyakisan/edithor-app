@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,7 +80,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
                 });
                builder.show();
-            }
+           }
 
 
             return true;
@@ -108,6 +109,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
         MaterialCardView card;
+        ImageView imageUri;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
@@ -115,6 +117,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             tvNote = itemView.findViewById(R.id.tvNote);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
+            imageUri = itemView.findViewById(R.id.imageUri);
 
         }
 
