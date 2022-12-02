@@ -3,6 +3,8 @@ package com.app.edithormobile.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.edithormobile.R;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
+import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
-
+//TODO: iki çeşit gösterim olacak. (with images and without images)
     Context context;
     ArrayList<NoteModel> notes;
     DatabaseReference removeRef;
@@ -53,6 +56,15 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         holder.tvTitle.setText(mNote.getNotBaslik());
         holder.tvNote.setText(mNote.getNotIcerigi());
         holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
+       // holder.imageUri.setImageURI(Uri.parse(mNote.getImageUri()));
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mNote.getImageUri());
+        holder.imageUri.setImageBitmap(bitmap);
+
+
+        Glide.with(context)
+                .load(mNote.getImageUri())
+                .into(holder.imageUri);
 
         //Long press remove item
         mAuth = FirebaseAuth.getInstance();
@@ -91,6 +103,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             Intent intent = new Intent(context, AddNote.class);
             intent.putExtra("baslik", mNote.getNotBaslik());
             intent.putExtra("icerik", mNote.getNotIcerigi());
+            intent.putExtra("image", mNote.getImageUri());
             context.startActivity(intent);
 
             //Update
@@ -104,7 +117,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return notes.size();
     }
 
-    //ViewHolder
+    //ViewHolder with images
     public static class NoteHolder extends RecyclerView.ViewHolder {
 
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
@@ -122,6 +135,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         }
 
     }
+
 
 
 }
