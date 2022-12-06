@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,10 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.NotePage;
-import com.app.edithormobile.R;
-import com.google.android.material.textfield.TextInputEditText;
+import com.app.edithormobile.databinding.ActivitySignInBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -25,47 +21,31 @@ import java.util.Objects;
 public class SignIn extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-    private FirebaseUser mUser;
-    TextInputEditText emailadresi, sifre;
-    CheckBox hatirla;
-    Button giris, googleGiris;
-    TextView kayitOl;
-
+    ActivitySignInBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        View v = binding.getRoot();
+        setContentView(v);
 
         //Methods
-        initComponents();
         kayitOlGonder();
         girisIslemi();
         beniHatirla();
-
 
     }
 
     @Override
     public void onBackPressed() {
-       //nothing
+        //nothing
     }
-
-    //init
-    private void initComponents() {
-    emailadresi = findViewById(R.id.txtGrsEmail);
-    sifre = findViewById(R.id.txtGrsSifre);
-    hatirla = findViewById(R.id.beniHatirlaCheckbox);
-    giris = findViewById(R.id.btnGirisYap);
-    googleGiris = findViewById(R.id.btnGoogle);
-    kayitOl = findViewById(R.id.btnKayitOl);
-    }
-
 
     //kayit ol'a gonder
     private void kayitOlGonder() {
-        kayitOl.setOnClickListener(view -> {
+        binding.btnKayitOl.setOnClickListener(view -> {
             Intent intent = new Intent(SignIn.this, SignUp.class);
             startActivity(intent);
         });
@@ -83,39 +63,35 @@ public class SignIn extends AppCompatActivity {
         }
 
 
-        hatirla.setOnCheckedChangeListener((compoundButton, b) -> {
+        binding.beniHatirlaCheckbox.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isChecked()) {
                 SharedPreferences preferences1 = getSharedPreferences("checkbox", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences1.edit();
                 editor.putString("Remember", "true");
                 editor.apply();
-              //  Toast.makeText(getApplicationContext(), "Beni hatırla açık!", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getApplicationContext(), "Beni hatırla açık!", Toast.LENGTH_SHORT).show();
             } else if (!compoundButton.isChecked()) {
                 SharedPreferences preferences1 = getSharedPreferences("checkbox", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences1.edit();
                 editor.putString("Remember", "false");
                 editor.apply();
-              //  Toast.makeText(getApplicationContext(), "Beni hatırla kapalı!", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getApplicationContext(), "Beni hatırla kapalı!", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
-
-
 
     //E-Mail ve Şifre ile Giriş İşlemi
     private void girisIslemi() {
         //Kaydolunan şifre ve ad soyad şartlanacak.
         mAuth = FirebaseAuth.getInstance();
-        giris.setOnClickListener(v -> kayitliKullaniciGirisi());
+        binding.btnGirisYap.setOnClickListener(v -> kayitliKullaniciGirisi());
     }
 
     private void kayitliKullaniciGirisi() {
         // Firebase üzerinden email ve şifre alınması
         String email, password;
-        email = Objects.requireNonNull(emailadresi.getText()).toString();
-        password = Objects.requireNonNull(sifre.getText()).toString();
+        email = Objects.requireNonNull(binding.txtGrsEmail.getText()).toString();
+        password = Objects.requireNonNull(binding.txtGrsSifre.getText()).toString();
 
         // Email ve Şifre Giriş Kontrolü (Dolu-Boş)
         if (TextUtils.isEmpty(email)) {

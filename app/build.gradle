@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace 'com.app.edithormobile'
+    buildToolsVersion "30.0.3"
     compileSdk 33
 
     defaultConfig {
@@ -22,6 +23,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    viewBinding{
+        enabled = true
+    }
+
     compileOptions {
         //Version 11
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -56,9 +66,13 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.firebaseui:firebase-ui-database:8.0.0'
     implementation 'com.android.support:multidex:2.0.1'
+    implementation "androidx.cardview:cardview:1.0.0"
 
     //ssp sdp
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
 }

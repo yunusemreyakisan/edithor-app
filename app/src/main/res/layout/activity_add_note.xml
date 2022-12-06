@@ -7,6 +7,19 @@
     android:background="@color/bg_color_light">
 
 
+    <ImageView
+        android:id="@+id/imageNote"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNote"
+        app:layout_constraintVertical_bias="0.098"
+        android:contentDescription="TODO" />
+
     <EditText
         android:id="@+id/txtTitle"
         android:layout_width="match_parent"
@@ -33,7 +46,7 @@
     <EditText
         android:id="@+id/txtNote"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_marginHorizontal="30dp"
         android:alpha="0.5"
         android:autofillHints=""

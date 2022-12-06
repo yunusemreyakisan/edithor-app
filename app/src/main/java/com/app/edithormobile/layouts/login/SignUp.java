@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,10 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.NotePage;
-import com.app.edithormobile.R;
+import com.app.edithormobile.databinding.ActivitySignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,25 +30,21 @@ import java.util.Objects;
 
 public class SignUp extends AppCompatActivity {
 
+    ActivitySignUpBinding binding;
     FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mDatabase;
-    private HashMap<String, Object> mData;
-    TextInputEditText ad, emailadresi, sifre;
-    Button kayitOl, back;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        binding = ActivitySignUpBinding.inflate(getLayoutInflater());
+        View v = binding.getRoot();
+        setContentView(v);
 
         //Methods
-        initComponents();
-        btnKayitOlIslevi();
-
-
+        kayitOl();
     }
 
     //Geri gonderme
@@ -59,22 +54,13 @@ public class SignUp extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //init
-    private void initComponents() {
-        kayitOl = findViewById(R.id.btnKayitOl);
-        ad = findViewById(R.id.txtKayitAd);
-        emailadresi = findViewById(R.id.txtKayitEmail);
-        sifre = findViewById(R.id.txtKayitSifre);
-        back = findViewById(R.id.btnBack);
-    }
-
-
-    private void btnKayitOlIslevi() {
+    //kayit ol
+    private void kayitOl() {
         mAuth = FirebaseAuth.getInstance();
-        kayitOl.setOnClickListener(view -> {
-            String name = ad.getText().toString();
-            String email = emailadresi.getText().toString();
-            String password = sifre.getText().toString();
+        binding.btnKayitOl.setOnClickListener(view -> {
+            String name = Objects.requireNonNull(binding.txtKayitAd.getText()).toString();
+            String email = Objects.requireNonNull(binding.txtKayitEmail.getText()).toString();
+            String password = Objects.requireNonNull(binding.txtKayitSifre.getText()).toString();
 
             //E-Mail Validation
             String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -106,8 +92,8 @@ public class SignUp extends AppCompatActivity {
                                     int hours = calendar.get(Calendar.HOUR);
                                     int minutes = calendar.get(Calendar.MINUTE);
                                     String time = String.format("%02d:%02d", hours, minutes);
-                                    String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" +  month
-                                            + " " + time ;
+                                    String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
+                                            + " " + time;
 
                                     HashMap<String, String> mData = new HashMap<>();
                                     mData.put("mail", email);
@@ -122,8 +108,7 @@ public class SignUp extends AppCompatActivity {
                                             Intent intent = new Intent(SignUp.this, NotePage.class);
                                             startActivity(intent);
                                             Toast.makeText(SignUp.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else {
+                                        } else {
                                             Toast.makeText(SignUp.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -133,11 +118,5 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
-
 
 }

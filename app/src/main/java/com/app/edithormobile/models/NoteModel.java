@@ -3,19 +3,27 @@ package com.app.edithormobile.models;
 
 public class NoteModel {
 
-    String notIcerigi, notBaslik, notOlusturmaTarihi, noteID;
+    String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri;
     boolean isSelected = false;
 
     public NoteModel(){
-
     }
 
-    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, boolean isSelected) {
+    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
+        this.imageUri = imageUri;
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public String getNoteID() {

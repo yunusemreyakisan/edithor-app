@@ -3,9 +3,12 @@ package com.app.edithormobile.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.edithormobile.R;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.models.NoteModel;
+import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
-
+//TODO: iki çeşit gösterim olacak. (with images and without images)
     Context context;
     ArrayList<NoteModel> notes;
     DatabaseReference removeRef;
@@ -51,6 +56,15 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         holder.tvTitle.setText(mNote.getNotBaslik());
         holder.tvNote.setText(mNote.getNotIcerigi());
         holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
+       // holder.imageUri.setImageURI(Uri.parse(mNote.getImageUri()));
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mNote.getImageUri());
+        holder.imageUri.setImageBitmap(bitmap);
+
+
+        Glide.with(context)
+                .load(mNote.getImageUri())
+                .into(holder.imageUri);
 
         //Long press remove item
         mAuth = FirebaseAuth.getInstance();
@@ -60,52 +74,68 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(mNote.getNoteID());
 
         //long delete
-        holder.itemView.setOnLongClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Emin misiniz?");
-            builder.setMessage("Notu silmek istediğinize emin misiniz?");
-            builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
-            builder.setPositiveButton("Evet", (dialogInterface, i) -> {
-                removeRef.setValue(null);
-                notes.remove(position);
-                notifyItemRemoved(position);
-                Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
-            });
-            builder.show();
-            return false;
+        holder.card.setOnLongClickListener(v -> {
+
+            holder.card.setChecked(!holder.card.isChecked());
+
+            // HashSet<String> dizi = new HashSet<>();
+
+           if (holder.card.isChecked()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Emin misiniz?");
+                builder.setMessage("Notu silmek istediğinize emin misiniz?");
+                builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(context, "Vazgeçildi.", Toast.LENGTH_SHORT).show());
+                builder.setPositiveButton("Evet", (dialogInterface, i) -> {
+                    removeRef.setValue(null);
+                    notes.remove(position);
+                    notifyItemRemoved(position);
+                    Toast.makeText(context, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+                });
+               builder.show();
+           }
+
+
+            return true;
         });
 
         //Veri alma
-        holder.itemView.setOnClickListener(v -> {
+        holder.card.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddNote.class);
             intent.putExtra("baslik", mNote.getNotBaslik());
             intent.putExtra("icerik", mNote.getNotIcerigi());
+            intent.putExtra("image", mNote.getImageUri());
             context.startActivity(intent);
+
+            //Update
 
         });
 
     }
-
 
     @Override
     public int getItemCount() {
         return notes.size();
     }
 
-    //ViewHolder
+    //ViewHolder with images
     public static class NoteHolder extends RecyclerView.ViewHolder {
 
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
+        MaterialCardView card;
+        ImageView imageUri;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.card);
             tvNote = itemView.findViewById(R.id.tvNote);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
+            imageUri = itemView.findViewById(R.id.imageUri);
 
         }
 
     }
+
 
 
 }
