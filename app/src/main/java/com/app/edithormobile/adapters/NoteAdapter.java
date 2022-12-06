@@ -42,6 +42,24 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         this.notes = notes;
     }
 
+    //ViewHolder with images
+    public static class NoteHolder extends RecyclerView.ViewHolder {
+
+        TextView tvNote, tvTitle, tvOlusturmaTarihi;
+        MaterialCardView card;
+        ImageView imageUri;
+
+        public NoteHolder(@NonNull View itemView) {
+            super(itemView);
+            card = itemView.findViewById(R.id.card);
+            tvNote = itemView.findViewById(R.id.tvNote);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
+            imageUri = itemView.findViewById(R.id.imageUri);
+
+        }
+
+    }
 
     @NonNull
     @Override
@@ -117,24 +135,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return notes.size();
     }
 
-    //ViewHolder with images
-    public static class NoteHolder extends RecyclerView.ViewHolder {
-
-        TextView tvNote, tvTitle, tvOlusturmaTarihi;
-        MaterialCardView card;
-        ImageView imageUri;
-
-        public NoteHolder(@NonNull View itemView) {
-            super(itemView);
-            card = itemView.findViewById(R.id.card);
-            tvNote = itemView.findViewById(R.id.tvNote);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
-            imageUri = itemView.findViewById(R.id.imageUri);
-
-        }
-
+    // method for filtering our recyclerview items.
+    public void filterList(ArrayList<NoteModel> filterlist) {
+        // below line is to add our filtered
+        // list in our course array list.
+        notes = filterlist;
+        // below line is to notify our adapter
+        // as change in recycler view data.
+        notifyDataSetChanged();
     }
+
+
+
 
 
 
