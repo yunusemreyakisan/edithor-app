@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,6 +20,13 @@
         app:cardBackgroundColor="@color/button_active_color"
         app:cardCornerRadius="4dp">
 
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="TODO" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +36,7 @@
             android:padding="8dp">
 
             <TextView
+                android:id="@+id/bilgi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
@@ -36,6 +44,7 @@
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
             <TextView
+                android:id="@+id/aciklama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
@@ -43,4 +52,30 @@
                 android:textAppearance="?attr/textAppearanceBody2" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card"
+        android:layout_alignEnd="@+id/card"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="122dp"
+        android:layout_marginEnd="36dp"
+        android:textAllCaps="false"
+        android:layout_weight="1"
+        android:text="Seç" />
+
+    <Button
+        android:id="@+id/upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card"
+        android:layout_alignEnd="@+id/card"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="215dp"
+        android:layout_marginEnd="36dp"
+        android:layout_weight="1"
+        android:text="Yükle"
+        android:textAllCaps="false" />
+</RelativeLayout>
