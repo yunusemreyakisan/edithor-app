@@ -9,9 +9,12 @@
 
     <ImageView
         android:id="@+id/imageNote"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:scaleType="centerCrop"
+        android:backgroundTint="@color/bg_color_dark"
+        android:background="@drawable/image"
+        android:alpha="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.086"
@@ -99,7 +102,8 @@
         app:iconPadding="0dp"
         app:iconTint="@color/bg_color_dark"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
     <LinearLayout
@@ -115,7 +119,8 @@
         android:layout_marginBottom="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:baselineAligned="false">
 
 
         <LinearLayout
@@ -139,22 +144,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="@dimen/_20sdp"
                 android:background="@android:color/transparent"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
-                app:rippleColor="@android:color/transparent"
+                android:focusable="true"
                 android:insetLeft="0dp"
-                android:shadowColor="@android:color/transparent"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
+                android:shadowColor="@android:color/transparent"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/bold_icon_svg"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:tint="@color/bg_color_light"
-                android:focusable="true" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnitalic"
@@ -164,17 +170,18 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:clickable="true"
-                android:padding="@dimen/_20sdp"
                 android:focusable="true"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/italic_icon_svg"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:tint="@color/bg_color_light" />
+                app:tint="@color/bg_color_light"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnunderline"
@@ -185,16 +192,17 @@
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="@dimen/_20sdp"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/underline_icon_svg"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:tint="@color/bg_color_light" />
+                app:tint="@color/bg_color_light"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btncopy"
@@ -208,13 +216,14 @@
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
-                android:padding="@dimen/_20sdp"
                 android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/copy_icon"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:tint="@color/bg_color_light" />
+                app:tint="@color/bg_color_light"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btncolor"
@@ -228,13 +237,14 @@
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
-                android:padding="@dimen/_20sdp"
                 android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/color_filter_icon_svg"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:tint="@color/bg_color_light" />
+                app:tint="@color/bg_color_light"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
 
         </LinearLayout>
@@ -266,13 +276,14 @@
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
-                android:padding="@dimen/_20sdp"
                 android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
                 app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/upload_image"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:tint="@color/bg_color_light" />
+                app:tint="@color/bg_color_light"
+                tools:ignore="SpeakableTextPresentCheck" />
 
 
         </LinearLayout>
