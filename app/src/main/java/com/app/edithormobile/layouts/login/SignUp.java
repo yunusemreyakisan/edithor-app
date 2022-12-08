@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.app.edithormobile.NotePage;
 import com.app.edithormobile.databinding.ActivitySignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -79,6 +78,7 @@ public class SignUp extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    binding.pBar.setVisibility(View.VISIBLE);
                                     //Veritabanına Canlı Kayıt Etme (Realtime Database)
                                     String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                                     mUser = mAuth.getCurrentUser();
@@ -105,10 +105,12 @@ public class SignUp extends AppCompatActivity {
                                     //Realtime Database
                                     mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            Intent intent = new Intent(SignUp.this, NotePage.class);
+                                            binding.pBar.setVisibility(View.GONE);
+                                            Intent intent = new Intent(SignUp.this, SignIn.class);
                                             startActivity(intent);
                                             Toast.makeText(SignUp.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
                                         } else {
+                                            binding.pBar.setVisibility(View.GONE);
                                             Toast.makeText(SignUp.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
                                         }
                                     });
