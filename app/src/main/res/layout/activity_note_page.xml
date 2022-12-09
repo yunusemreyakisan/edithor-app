@@ -3,173 +3,191 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/bg_color_light"
     android:layout_height="match_parent"
+    android:background="@color/bg_color_light"
     tools:context=".NotePage">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/rvNotes"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/rvNotes"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+
+            <TextView
+                android:id="@+id/tvBaslik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/txt_notlarim"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.widget.SearchView
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:autofillHints=""
+                android:gravity="end"
+                android:layoutDirection="rtl"
+                android:queryBackground="@drawable/search_bg"
+                android:queryHint="Not ara..."
+                android:theme="@style/AppSearchView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/tvBaslik"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/extended_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="@color/fab_color"
+            android:text="İşlemler"
+            android:textAllCaps="false"
+            android:textColor="@color/bg_color_light"
+            app:icon="@android:drawable/ic_menu_edit"
+            app:iconTint="@color/bg_color_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:backgroundTint="@color/fab_color"
+            android:contentDescription="@string/add_fab_button"
+            android:src="@android:drawable/ic_menu_add"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toTopOf="@+id/extended_fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/bg_color_light" />
 
 
         <TextView
-            android:id="@+id/tvBaslik"
+            android:id="@+id/add_note_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/txt_notlarim"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:alpha="0.5"
+            android:text="Not ekle"
             android:textColor="@color/bg_color_dark"
-            android:textSize="40sp"
-            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/extended_fab"
+            app:layout_constraintEnd_toStartOf="@+id/add_note"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/add_note"
+            app:layout_constraintVertical_bias="0.36" />
 
-        <android.widget.SearchView
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="10dp"
-            android:autofillHints=""
-            android:background="@android:color/transparent"
-            android:gravity="end"
-            android:layoutDirection="rtl"
-            android:queryBackground="@color/cardview_color"
-            android:queryHint="Not ara..."
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:backgroundTint="@color/fab_color"
+            android:contentDescription="@string/add_fab_button"
+            android:src="@android:drawable/ic_menu_upload"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toTopOf="@+id/add_note"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/bg_color_light" />
+
+        <TextView
+            android:id="@+id/add_file_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:text="Dosya yükle"
             android:textColor="@color/bg_color_dark"
-            android:textColorHint="@color/bg_color_dark"
+            app:layout_constraintBottom_toTopOf="@+id/add_note"
+            app:layout_constraintEnd_toStartOf="@+id/add_file"
+            app:layout_constraintHorizontal_bias="0.976"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/add_file"
+            app:layout_constraintVertical_bias="0.4" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvNotes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/tvBaslik"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:indeterminateTint="@color/bg_color_dark"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
+
+
+        <ImageView
+            android:id="@+id/not_found"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:alpha="0.5"
+            android:src="@drawable/not_found"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/rvNotes"
+            app:layout_constraintEnd_toEndOf="@+id/rvNotes"
+            app:layout_constraintStart_toStartOf="@+id/rvNotes"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.493"
+            app:tint="@color/bg_color_dark" />
+
+        <TextView
+            android:id="@+id/no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:text="Not eklemek için alttaki butona tıkla"
+            android:textColor="@color/bg_color_dark"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.564" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/extended_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="20dp"
-        android:textColor="@color/bg_color_light"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/fab_color"
-        android:text="İşlemler"
-        app:icon="@android:drawable/ic_menu_edit"
-        android:textAllCaps="false"
-        app:iconTint="@color/bg_color_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_note"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:backgroundTint="@color/fab_color"
-        android:contentDescription="@string/add_fab_button"
-        android:src="@android:drawable/ic_menu_add"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/extended_fab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/bg_color_light" />
-
-
-    <TextView
-        android:id="@+id/add_note_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_5sdp"
-        android:alpha="0.5"
-        android:text="Not ekle"
-        android:textColor="@color/bg_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/extended_fab"
-        app:layout_constraintEnd_toStartOf="@+id/add_note"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_note"
-        app:layout_constraintVertical_bias="0.36" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/fab_color"
-        android:contentDescription="@string/add_fab_button"
-        android:src="@android:drawable/ic_menu_upload"
-        android:layout_marginBottom="@dimen/_10sdp"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/add_note"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/bg_color_light" />
-
-    <TextView
-        android:id="@+id/add_file_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:text="Dosya yükle"
-        android:textColor="@color/bg_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/add_note"
-        app:layout_constraintEnd_toStartOf="@+id/add_file"
-        app:layout_constraintHorizontal_bias="0.976"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_file"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvNotes"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="90dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:indeterminateTint="@color/bg_color_dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
-
-    <TextView
-        android:id="@+id/no_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Veri yok"
-        android:textColor="@color/bg_color_dark"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
