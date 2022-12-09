@@ -110,11 +110,14 @@ public class SignIn extends AppCompatActivity {
             return;
         }
 
+        binding.pBarGiris.setVisibility(View.VISIBLE);
+
         // Kayıtlı Kullanıcı Girişi
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
+                                binding.pBarGiris.setVisibility(View.GONE);
                               /*  Toast.makeText(getApplicationContext(),
                                                 "Giriş Başarılı!",
                                                 Toast.LENGTH_LONG)

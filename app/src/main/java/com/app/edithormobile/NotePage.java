@@ -1,14 +1,13 @@
 package com.app.edithormobile;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,15 +15,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.edithormobile.adapters.NoteAdapter;
+import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.layouts.upload.UploadFile;
 import com.app.edithormobile.models.NoteModel;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -38,93 +35,92 @@ import java.util.Objects;
 
 public class NotePage extends AppCompatActivity {
 
-    TextView tvNote, tvNoData, tvAddNoteFab, tvUploadFab;
-    RecyclerView rvNotes;
-    FloatingActionButton fabAddNote, fabUploadFile;
-    ExtendedFloatingActionButton fabActions;
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
-    ProgressBar spinner;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
+
+    ActivityNotePageBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note_page);
+
+        binding = ActivityNotePageBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
 
         //Methods
-        initComponents();
         notesViewRV();
         databaseRef();
         notesEventChangeListener();
         fabControl();
+        search(view);
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void fabControl() {
-        fabAddNote.setVisibility(View.GONE);
-        tvAddNoteFab.setVisibility(View.GONE);
-        fabUploadFile.setVisibility(View.GONE);
-        tvUploadFab.setVisibility(View.GONE);
+        binding.addNote.setVisibility(View.GONE);
+        binding.addNoteTv.setVisibility(View.GONE);
+        binding.addFile.setVisibility(View.GONE);
+        binding.addFileTv.setVisibility(View.GONE);
 
         isAllFabsVisible = false;
         //Baslarken kucuk gosterir.
-        fabActions.shrink();
+        binding.extendedFab.shrink();
         //extendable click listener
-        fabActions.setOnClickListener(
+        binding.extendedFab.setOnClickListener(
                view -> {
                    if (!isAllFabsVisible) {
                        //fab icerigi goster.
-                       fabAddNote.show();
-                       fabUploadFile.show();
-                       tvAddNoteFab.setVisibility(View.VISIBLE);
-                       tvUploadFab.setVisibility(View.VISIBLE);
+                       binding.addNote.show();
+                       binding.addFile.show();
+                       binding.addNoteTv.setVisibility(View.VISIBLE);
+                       binding.addFileTv.setVisibility(View.VISIBLE);
                        //fab genislesin
-                       fabActions.extend();
+                       binding.extendedFab.extend();
 
                        isAllFabsVisible = true;
                    } else {
-                       fabAddNote.hide();
-                       fabUploadFile.hide();
-                       tvAddNoteFab.setVisibility(View.GONE);
-                       tvUploadFab.setVisibility(View.GONE);
+                       binding.addNote.hide();
+                       binding.addFile.hide();
+                       binding.addNoteTv.setVisibility(View.GONE);
+                       binding.addFileTv.setVisibility(View.GONE);
 
                        //fab kucultme
-                       fabActions.shrink();
+                       binding.extendedFab.shrink();
 
                        isAllFabsVisible = false;
                    }
                });
 
         //fab shrink anywhere in screen
-        rvNotes.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                fabAddNote.setVisibility(View.GONE);
-                tvAddNoteFab.setVisibility(View.GONE);
-                fabUploadFile.setVisibility(View.GONE);
-                tvUploadFab.setVisibility(View.GONE);
+        binding.rvNotes.setOnTouchListener((view, motionEvent) -> {
+            binding.addNote.setVisibility(View.GONE);
+            binding.addNoteTv.setVisibility(View.GONE);
+            binding.addFile.setVisibility(View.GONE);
+            binding.addFileTv.setVisibility(View.GONE);
 
-                isAllFabsVisible = false;
-                fabActions.shrink();
-                return false;
-            }
+            isAllFabsVisible = false;
+            binding.extendedFab.shrink();
+            return false;
         });
 
 
         //Not ekleme FAB
-        fabAddNote.setOnClickListener(
+        binding.addNote.setOnClickListener(
                 view -> {
                     Intent intent = new Intent(NotePage.this, AddNote.class);
                     startActivity(intent);
                 });
 
         //Fotograf Yukleme
-        fabUploadFile.setOnClickListener(
+        binding.addFile.setOnClickListener(
                 view -> {
                     Intent intent = new Intent(NotePage.this, UploadFile.class);
                     startActivity(intent);
@@ -148,26 +144,11 @@ public class NotePage extends AppCompatActivity {
     private void notesViewRV() {
         notes = new ArrayList<NoteModel>();
         noteAdapter = new NoteAdapter(NotePage.this, notes);
-        rvNotes.setHasFixedSize(true);
-        rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
-        rvNotes.setAdapter(noteAdapter);
+        binding.rvNotes.setHasFixedSize(true);
+        binding.rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.rvNotes.setAdapter(noteAdapter);
     }
 
-    //init comp.
-    private void initComponents() {
-        //TV's
-        tvAddNoteFab = findViewById(R.id.add_note_tv);
-        tvUploadFab = findViewById(R.id.add_file_tv);
-        tvNote = findViewById(R.id.tvNote);
-        //RV's
-        rvNotes = findViewById(R.id.rvNotes);
-        spinner = findViewById(R.id.progressBar);
-        tvNoData = findViewById(R.id.no_data);
-        //Fabs
-        fabAddNote = findViewById(R.id.add_note);
-        fabActions = findViewById(R.id.extended_fab);
-        fabUploadFile = findViewById(R.id.add_file);
-    }
 
     //Back Pressed
     @Override
@@ -213,32 +194,30 @@ public class NotePage extends AppCompatActivity {
         alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
         alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
 
-
-
-
-
     }
-
 
 
     //Degisiklik izleme
     private void notesEventChangeListener() {
         //Child Listener
-        spinner.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
             mDatabaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     NoteModel model = dataSnapshot.getValue(NoteModel.class);
                     notes.add(model);
                     noteAdapter.notifyItemInserted(notes.size());
-                    tvNoData.setVisibility(View.INVISIBLE);
-                    spinner.setVisibility(View.GONE);
+                    noteAdapter.notifyDataSetChanged();
+                    binding.noData.setVisibility(View.INVISIBLE);
+                    binding.notFound.setVisibility(View.INVISIBLE);
+                    binding.progressBar.setVisibility(View.GONE);
                 }
 
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
                     //Update
+
                 }
 
                 @Override
@@ -247,10 +226,13 @@ public class NotePage extends AppCompatActivity {
                     noteAdapter.notifyDataSetChanged();
                     //empty control
                     if(!notes.isEmpty()) {
-                        tvNoData.setVisibility(View.INVISIBLE);
+                        binding.progressBar.setVisibility(View.GONE);
                         noteAdapter.notifyDataSetChanged();
                     }else{
-                        tvNoData.setVisibility(View.VISIBLE);
+                        binding.noData.setVisibility(View.VISIBLE);
+                        binding.notFound.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                        noteAdapter.notifyDataSetChanged();
                     }
 
                     Log.d("note size", String.valueOf(notes.size()));
@@ -268,47 +250,57 @@ public class NotePage extends AppCompatActivity {
                 }
             });
 
+            //TODO: note.size() methodu yerine yeni bir method olusturulacak. Sıfır not halinde ekrana toast basacak.
+
         //empty control
-        if(notes.size() == 0) {
-            spinner.setVisibility(View.GONE);
-            tvNoData.setVisibility(View.VISIBLE);
+        if(!notes.isEmpty()) {
+            binding.progressBar.setVisibility(View.GONE);
+            noteAdapter.notifyDataSetChanged();
         }else{
-            tvNoData.setVisibility(View.INVISIBLE);
+            binding.noData.setVisibility(View.VISIBLE);
+            binding.notFound.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            noteAdapter.notifyDataSetChanged();
+        }
+    }
+
+    //Menu (Search)
+    //TODO: Search eklenecek.
+
+    private boolean search(View view){
+        //arama islemi
+        binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    private void filter(String text) {
+        // creating a new array list to filter our data.
+        ArrayList<NoteModel> filteredlist = new ArrayList<>();
+
+        // running a for loop to compare elements.
+        for (NoteModel item : notes) {
+            // checking if the entered string matched with any item of our recycler view.
+            if (item.getNotBaslik().toLowerCase().contains(text.toLowerCase())) {
+                filteredlist.add(item);
+            }
+        }
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(this, "Veri bulunamadı.", Toast.LENGTH_SHORT).show();
+        } else {
+            noteAdapter.filterList(filteredlist);
         }
     }
 
 
-
-
-//elleme dursun
-/*
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot != null) {
-                        NoteModel model = dataSnapshot.getValue(NoteModel.class);
-                        assert model != null;
-                        if (model.getNotIcerigi() != null) {
-                            notes.add(model);
-                            spinner.setVisibility(View.GONE);
-                        }
-                    }
-                }
-                noteAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-
- */
-
-
-    //Menu (Search)
-    //TODO: Search eklenecek.
 }
