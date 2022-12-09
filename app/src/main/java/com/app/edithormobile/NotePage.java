@@ -54,6 +54,9 @@ public class NotePage extends AppCompatActivity {
         setContentView(view);
 
 
+        binding.noData.setVisibility(View.INVISIBLE);
+        binding.notFound.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
         //Methods
         notesViewRV();
         databaseRef();
@@ -135,7 +138,7 @@ public class NotePage extends AppCompatActivity {
     private void databaseRef() {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-        String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        String user_id = Objects.requireNonNull(mUser).getUid();
         mDatabaseReference = FirebaseDatabase.getInstance()
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
     }
@@ -208,15 +211,24 @@ public class NotePage extends AppCompatActivity {
                     notes.add(model);
                     noteAdapter.notifyItemInserted(notes.size());
                     noteAdapter.notifyDataSetChanged();
-                    binding.noData.setVisibility(View.INVISIBLE);
-                    binding.notFound.setVisibility(View.INVISIBLE);
-                    binding.progressBar.setVisibility(View.GONE);
+
+                    //empty control
+                    if(!notes.isEmpty()) {
+                        binding.progressBar.setVisibility(View.GONE);
+                        noteAdapter.notifyDataSetChanged();
+                    }else{
+                        binding.noData.setVisibility(View.VISIBLE);
+                        binding.notFound.setVisibility(View.VISIBLE);
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                        noteAdapter.notifyDataSetChanged();
+                    }
                 }
 
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
                     //Update
+
 
                 }
 
@@ -251,17 +263,6 @@ public class NotePage extends AppCompatActivity {
             });
 
             //TODO: note.size() methodu yerine yeni bir method olusturulacak. Sıfır not halinde ekrana toast basacak.
-
-        //empty control
-        if(!notes.isEmpty()) {
-            binding.progressBar.setVisibility(View.GONE);
-            noteAdapter.notifyDataSetChanged();
-        }else{
-            binding.noData.setVisibility(View.VISIBLE);
-            binding.notFound.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-            noteAdapter.notifyDataSetChanged();
-        }
     }
 
     //Menu (Search)
