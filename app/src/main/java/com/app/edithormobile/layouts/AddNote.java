@@ -13,7 +13,6 @@ import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -46,8 +45,6 @@ import java.util.UUID;
 
 public class AddNote extends AppCompatActivity {
 
-    Button btnNotuKaydet, btnBack;
-    Button btnBold, btnItalic, btnUnderline, btnCopy, btnColor, btnUploadImage;
     EditText note, title;
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline, italic = false;
@@ -57,7 +54,6 @@ public class AddNote extends AppCompatActivity {
     private StorageReference storageRef;
     private Uri imageUri;
     ImageView imageNote;
-
 
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
@@ -72,15 +68,20 @@ public class AddNote extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
-       // view binding
+        // view binding
         binding = ActivityAddNoteBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
 
         notKaydetmeIslevi();
         islemdenVazgec();
         optionsbarIslevi();
         btnUploadImageIslevi();
+
+        //share text
+        binding.btnUploadImage.setOnClickListener(v -> shareNotes());
+        
 
 
         // get the Firebase  storage reference
@@ -100,6 +101,22 @@ public class AddNote extends AppCompatActivity {
         styleItalic = new StyleSpan(Typeface.ITALIC);
         underLine = new UnderlineSpan();
 
+    }
+    
+    
+    //share notes
+    private void shareNotes(){
+        //Alan Tanımları
+        String notIcerigi = binding.txtNote.getText().toString();
+        String notBaslik = binding.txtTitle.getText().toString();
+        /*Create an ACTION_SEND Intent*/
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        /*Applying information Subject and Body.*/
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, notBaslik);
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, notIcerigi);
+        /*Fire!*/
+        startActivity(Intent.createChooser(intent, "Paylaş"));
     }
 
 
@@ -124,6 +141,7 @@ public class AddNote extends AppCompatActivity {
             String notIcerigi = binding.txtNote.getText().toString();
             String notBaslik = binding.txtTitle.getText().toString();
 
+
             if (TextUtils.isEmpty(notIcerigi)) {
                 Toast.makeText(AddNote.this, "Not içeriği giriniz.", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(notBaslik)) {
@@ -137,14 +155,15 @@ public class AddNote extends AppCompatActivity {
                 String time = String.format("%02d:%02d", hours, minutes);
                 String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
                         + " " + time;
-
-
+                //yuklenen fotorafin storage adresi
                 String uri = imageUri.toString();
 
+
+                //model
                 //unique getKey()
                 String id = mDatabase.push().getKey();
-                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, uri, false);
                 assert id != null;
+                NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, uri, false);
                 mDatabase.child(id).setValue(mNotes);
 
                 Intent intent = new Intent(AddNote.this, NotePage.class);
@@ -155,20 +174,14 @@ public class AddNote extends AppCompatActivity {
     }
 
 
-
     //resim yukle
     private void btnUploadImageIslevi() {
-        binding.btnUploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectImage();
-            }
-        });
+        binding.imageNote.setOnClickListener(this::SelectImage);
     }
 
 
     //resim sec
-    private void SelectImage() {
+    private void SelectImage(View view) {
         //Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -178,7 +191,7 @@ public class AddNote extends AppCompatActivity {
                         intent,
                         "Select Image from here..."),
                 PICK_IMAGE_REQUEST);
-        uploadImage();
+       uploadImage();
     }
 
     // Override onActivityResult method
@@ -192,9 +205,6 @@ public class AddNote extends AppCompatActivity {
                 data);
 
         // checking request code and result code
-        // if request code is PICK_IMAGE_REQUEST and
-        // resultCode is RESULT_OK
-        // then set image in the image view
         if (requestCode == PICK_IMAGE_REQUEST
                 && resultCode == RESULT_OK
                 && data != null
@@ -292,7 +302,6 @@ public class AddNote extends AppCompatActivity {
     }
 
 
-
     private void optionsbarIslevi() {
         //bold yapar
         binding.btnbold.setOnClickListener(v -> {
@@ -383,7 +392,5 @@ public class AddNote extends AppCompatActivity {
     }
 
      */
-
-
 
 }
