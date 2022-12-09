@@ -307,7 +307,7 @@ public class AddNote extends AppCompatActivity {
             SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
 
             if (bold) {
-                passedStyle = styleNormal;
+                passedStyle = styleBold;
 
             } else {
                 passedStyle = styleBold;
@@ -328,7 +328,7 @@ public class AddNote extends AppCompatActivity {
             CharacterStyle passedStyle;
             SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
             if (italic) {
-                passedStyle = styleNormal;
+                passedStyle = styleItalic;
 
             } else {
                 passedStyle = styleItalic;
@@ -349,7 +349,7 @@ public class AddNote extends AppCompatActivity {
             CharacterStyle passedStyle;
             SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
             if (underline) {
-                passedStyle = styleNormal;
+                passedStyle = underLine;
 
             } else {
                 passedStyle = underLine;
@@ -361,7 +361,7 @@ public class AddNote extends AppCompatActivity {
         });
 
         //texti kopyalar
-        binding.btncopy.setOnClickListener(v -> note.getText().toString());
+        binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
     }
     /*
         //renk degistirir
