@@ -9,6 +9,7 @@ public class NoteModel {
     public NoteModel(){
     }
 
+    //with images
     public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
@@ -17,6 +18,16 @@ public class NoteModel {
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
     }
+
+    //without images
+    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi,Boolean isSelected) {
+        this.notIcerigi = notIcerigi;
+        this.isSelected = isSelected;
+        this.noteID = noteID;
+        this.notBaslik = notBaslik;
+        this.notOlusturmaTarihi = notOlusturmaTarihi;
+    }
+
 
     public String getImageUri() {
         return imageUri;
@@ -34,7 +45,7 @@ public class NoteModel {
         this.noteID = noteID;
     }
 
-    public boolean isSelected() {
+    public boolean getIsSelected() {
         return isSelected;
     }
 
@@ -65,4 +76,18 @@ public class NoteModel {
     public void setNotIcerigi(String notIcerigi) {
         this.notIcerigi = notIcerigi;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null)
+            return false;
+
+        NoteModel itemCompare = (NoteModel) obj;
+        if(itemCompare.getNoteID().equals(this.getNoteID()))
+            return true;
+
+        return false;
+    }
+
 }
+
