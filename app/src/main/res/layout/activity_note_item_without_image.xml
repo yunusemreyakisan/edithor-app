@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:backgroundTint="@android:color/transparent"
+    android:checkable="true"
+    android:focusable="true"
+    android:clickable="true"
+    app:cardBackgroundColor="@color/cardview_color"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp"
+    app:cardElevation="0dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:background="@color/cardview_color"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:maxLength="15"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="15dp"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:maxLength="30"
+                android:paddingHorizontal="15dp"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvOlusturmaTarihi"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginVertical="5dp"
+        android:paddingHorizontal="15dp"
+        android:layout_gravity="bottom"
+        android:textColor="@color/cardview_date_color"
+        android:textSize="13sp" />
+
+    </com.google.android.material.card.MaterialCardView>
