@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,20 +69,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     @NonNull
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       /*if (viewType == 1) {
+       if (viewType == TYPE_IMAGE) {
             return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.activity_note_item, parent, false));
         } else {
             return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.activity_note_item_without_image, parent, false));
         }
 
-        */
 
 
 
 
+/*
         View view = LayoutInflater.from(context).inflate(R.layout.activity_note_item, parent, false);
         return new NoteHolder(view);
 
+
+ */
 
 
 
@@ -109,11 +110,25 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
         NoteModel mNote = notes.get(position);
-        holder.tvTitle.setText(mNote.getNotBaslik());
-        holder.tvNote.setText(mNote.getNotIcerigi());
-        holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
-        Bitmap bitmap = BitmapFactory.decodeFile(mNote.getImageUri());
-        holder.imageUri.setImageBitmap(bitmap);
+
+        if(getItemViewType(position) == TYPE_IMAGE){
+            holder.tvTitle.setText(mNote.getNotBaslik());
+            holder.tvNote.setText(mNote.getNotIcerigi());
+            holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
+            Bitmap bitmap = BitmapFactory.decodeFile(mNote.getImageUri());
+            holder.imageUri.setImageBitmap(bitmap);
+
+            //glide
+            Glide.with(context)
+                    .load(mNote.getImageUri())
+                    .into(holder.imageUri);
+        }else{
+            holder.tvTitle.setText(mNote.getNotBaslik());
+            holder.tvNote.setText(mNote.getNotIcerigi());
+            holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
+        }
+
+
 
 /*
         NoteHolder noteHolder = (NoteHolder) holder;
@@ -126,10 +141,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
  */
 
-
-        Glide.with(context)
-                .load(mNote.getImageUri())
-                .into(holder.imageUri);
 
         //Long press remove item
         mAuth = FirebaseAuth.getInstance();
@@ -188,7 +199,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.isEmpty(notes.get(position).getImageUri())) {
+        if (notes.get(position).getImageUri() != null) {
             return TYPE_IMAGE;
         } else {
             return TYPE_TEXT;
