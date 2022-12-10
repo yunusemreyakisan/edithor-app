@@ -156,15 +156,22 @@ public class AddNote extends AppCompatActivity {
                 String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
                         + " " + time;
                 //yuklenen fotorafin storage adresi
-                String uri = imageUri.toString();
-
+                final String image = imageUri != null ? imageUri.toString() : null;
 
                 //model
-                //unique getKey()
-                String id = mDatabase.push().getKey();
-                assert id != null;
-                NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, uri, false);
-                mDatabase.child(id).setValue(mNotes);
+                if(image != null){
+                    //unique getKey()
+                    String id = mDatabase.push().getKey();
+                    assert id != null;
+                    NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false);
+                    mDatabase.child(id).setValue(mNotes);
+                }else{
+                    //unique getKey()
+                    String id = mDatabase.push().getKey();
+                    assert id != null;
+                    NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
+                    mDatabase.child(id).setValue(mNotes);
+                }
 
                 Intent intent = new Intent(AddNote.this, NotePage.class);
                 startActivity(intent);
