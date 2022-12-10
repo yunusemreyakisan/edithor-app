@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.app.edithormobile'
-    buildToolsVersion "30.0.3"
+    buildToolsVersion '33.0.0'
     compileSdk 33
 
     defaultConfig {
@@ -64,15 +64,18 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
-    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
     implementation 'com.android.support:multidex:2.0.1'
     implementation "androidx.cardview:cardview:1.0.0"
 
     //ssp sdp
-    implementation 'com.intuit.ssp:ssp-android:1.0.6'
-    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.intuit.ssp:ssp-android:1.1.0'
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+
+    //text recognation
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
 
 }
