@@ -75,35 +75,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.activity_note_item_without_image, parent, false));
         }
 
-
-
-
-
-/*
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_note_item, parent, false);
-        return new NoteHolder(view);
-
-
- */
-
-
-
-
-       /*
-        View view = null;
-        // check here the viewType and return RecyclerView.ViewHolder based on view type
-        if (viewType == ITEM_TYPE_TWO) {
-            view = LayoutInflater.from(context).inflate(R.layout.activity_note_item, parent, false);
-            return new NoteHolder(view);
-        } else if (viewType == ITEM_TYPE_ONE) {
-            view = LayoutInflater.from(context).inflate(R.layout.button_two, parent, false);
-            return new NoteHolderWithoutImages(view);
-        }else {
-            return  null;
-        }
-
-        */
-
     }
 
 
@@ -127,20 +98,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             holder.tvNote.setText(mNote.getNotIcerigi());
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
         }
-
-
-
-/*
-        NoteHolder noteHolder = (NoteHolder) holder;
-        noteHolder.
-                noteHolder.tvNote.setText(mNote.getNotIcerigi());
-        noteHolder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
-
-
-        // holder.imageUri.setImageURI(Uri.parse(mNote.getImageUri()));
-
- */
-
 
         //Long press remove item
         mAuth = FirebaseAuth.getInstance();
@@ -209,11 +166,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
     // method for filtering our recyclerview items.
     public void filterList(ArrayList<NoteModel> filterlist) {
-        // below line is to add our filtered
-        // list in our course array list.
         notes = filterlist;
-        // below line is to notify our adapter
-        // as change in recycler view data.
         notifyDataSetChanged();
     }
 
