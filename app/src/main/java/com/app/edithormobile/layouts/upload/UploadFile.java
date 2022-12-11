@@ -1,47 +1,58 @@
 package com.app.edithormobile.layouts.upload;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.app.edithormobile.databinding.ActivityUploadFileBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.google.android.gms.tasks.Task;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class UploadFile extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
-    FirebaseAuth mAuth;
-    private FirebaseUser mUser;
-    private StorageReference storageRef;
-    private Uri imageUri;
+    private Uri imageUri = null;
 
-    // request code
-    private final int PICK_IMAGE_REQUEST = 22;
-    // instance for firebase storage and StorageReference
-    FirebaseStorage storage;
-    StorageReference storageReference;
+    //Requests Code
+    static final int REQUEST_IMAGE_CODE = 100;
+    static final int STORAGE_REQUEST_CODE = 101;
 
     ActivityUploadFileBinding binding;
+
+    //Text Recognizer
+    private TextRecognizer recognizer;
+
+    //Permissions
+    private String[] cameraPermission;
+    private String[] storagePermission;
+
+    //Progress Dialog
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,162 +61,203 @@ public class UploadFile extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        //methods
-        sec(view);
-        yukle(view);
+        //Permission
+        cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        //Default
+        //progress
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Lütfen bekleyin");
+        progressDialog.setCanceledOnTouchOutside(false);
 
-        // get the Firebase  storage reference
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        //init TextRecognizer
+        recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-    }
-
-    private void sec(View view) {
-        binding.button.setOnClickListener(new View.OnClickListener() {
+        //Handle Click
+        binding.ocrCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage();
+                showInputImageDialog();
             }
         });
+
+        //recognize text
+        binding.ocrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imageUri == null){
+                    Toast.makeText(UploadFile.this, "Lütfen resim seçiniz", Toast.LENGTH_SHORT).show();
+                }else{
+                    recognizeTextFromImage();
+                }
+            }
+        });
+
     }
 
-    private void SelectImage() {
-        //Defining Implicit Intent to mobile gallery
-        Intent intent = new Intent();
+
+    //recognize text
+    private void recognizeTextFromImage() {
+        progressDialog.setMessage("Resim hazırlanıyor...");
+        progressDialog.show();
+
+        try {
+            InputImage inputImage = InputImage.fromFilePath(this, imageUri);
+            progressDialog.setMessage("Resim çözülüyor...");
+
+            Task<Text> textTaskResult = recognizer.process(inputImage).addOnSuccessListener(text -> {
+                progressDialog.dismiss();
+
+                String recognized = text.getText();
+                binding.textData.setText(recognized);
+            }).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                Toast.makeText(UploadFile.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            });
+        }catch (IOException e) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Failed prepairing image.."+ e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    //Popup Menu ile seceneklerin sorulması
+    private void showInputImageDialog() {
+        PopupMenu popupMenu = new PopupMenu(this, binding.ocrCaptureButton);
+
+        popupMenu.getMenu().add(Menu.NONE, 1, 1, "Fotoğraf çek");
+        popupMenu.getMenu().add(Menu.NONE, 2,2, "Galeriden seç");
+
+        popupMenu.show();
+
+        //listener
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+
+            if(id ==1 ){
+                if(checkCameraPermission()){
+                    pickImageCamera();
+                }else {
+                    requestCameraPermission();
+                }
+            }else if(id == 2){
+                if(checkStoragePermission()){
+                    pickImageGallery();
+                }else{
+                    requestStoragePermission();
+                }
+            }
+            return false;
+        });
+
+    }
+
+
+    //Galeriden fotograf secmek
+    private void pickImageGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(
-                Intent.createChooser(
-                        intent,
-                        "Select Image from here..."),
-                PICK_IMAGE_REQUEST);
+        galleryActivityResultLauncher.launch(intent);
     }
 
-    // Override onActivityResult method
+    private final ActivityResultLauncher<Intent> galleryActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                imageUri = result.getData().getData();
+                //set img view
+                binding.image.setImageURI(imageUri);
+            } else {
+                Toast.makeText(UploadFile.this, "Cancelled...", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+    //Kameradan fotograf cekimi
+    private void pickImageCamera() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "Ornek baslik");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "Ornek aciklama");
+
+        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraActivityResultLauncher.launch(intent);
+    }
+
+    private final ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                binding.image.setImageURI(imageUri);
+            } else {
+                Toast.makeText(UploadFile.this, "Cancelled...", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+    //Galeri Erisim İzni Kontrolü
+    private boolean checkStoragePermission() {
+        boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
+
+    //Galeri Erisim İzni İsteği
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
+    }
+
+    //Kamera Erisim İzni Kontrolü
+    private boolean checkCameraPermission() {
+        boolean cameraResult = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        boolean storageResult = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        return cameraResult == storageResult;
+    }
+
+    //Kamera Erisim İzni İsteği
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, cameraPermission, REQUEST_IMAGE_CODE);
+    }
+
+    //İzin istegi sonucunun kontrolu
     @Override
-    protected void onActivityResult(int requestCode,
-                                    int resultCode,
-                                    Intent data) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        super.onActivityResult(requestCode,
-                resultCode,
-                data);
+        switch (requestCode) {
+            case REQUEST_IMAGE_CODE: {
 
-        // checking request code and result code
-        // if request code is PICK_IMAGE_REQUEST and
-        // resultCode is RESULT_OK
-        // then set image in the image view
-        if (requestCode == PICK_IMAGE_REQUEST
-                && resultCode == RESULT_OK
-                && data != null
-                && data.getData() != null) {
+                if (grantResults.length > 0) {
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
-            // Get the Uri of data
-            imageUri = data.getData();
-            try {
+                    if (cameraAccepted && storageAccepted) {
+                        pickImageCamera();
+                    } else {
+                        Toast.makeText(this, "Kamera ve Depolama izni gerekli.", Toast.LENGTH_SHORT).show();
+                    }
 
-                // Setting image on image view using Bitmap
-                Bitmap bitmap = MediaStore
-                        .Images
-                        .Media
-                        .getBitmap(
-                                getContentResolver(),
-                                imageUri);
-                binding.image.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                // Log the exception
-                e.printStackTrace();
+                }
+
+            }
+            case STORAGE_REQUEST_CODE: {
+
+                if(grantResults.length>0){
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if(storageAccepted){
+                        pickImageGallery();
+                    }else{
+                        Toast.makeText(this, "Depolama izni gerekli", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
         }
-    }
-
-
-    // on pressing btnUpload uploadImage() is called
-    private void yukle(View view){
-        binding.upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
-            }
-        });
-    }
-
-
-    // UploadImage method
-    private void uploadImage() {
-        if (imageUri != null) {
-
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog
-                    = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            // Defining the child of storageReference
-            StorageReference ref
-                    = storageReference
-                    .child(
-                            "images/"
-                                    + UUID.randomUUID().toString());
-
-            // adding listeners on upload
-            // or failure of image
-            ref.putFile(imageUri)
-                    .addOnSuccessListener(
-                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                                @Override
-                                public void onSuccess(
-                                        UploadTask.TaskSnapshot taskSnapshot) {
-
-                                    // Image uploaded successfully
-                                    // Dismiss dialog
-                                    progressDialog.dismiss();
-                                    Toast
-                                            .makeText(UploadFile.this,
-                                                    "Image Uploaded!!",
-                                                    Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                            })
-
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                            // Error, Image not uploaded
-                            progressDialog.dismiss();
-                            Toast
-                                    .makeText(UploadFile.this,
-                                            "Failed " + e.getMessage(),
-                                            Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    })
-                    .addOnProgressListener(
-                            new OnProgressListener<UploadTask.TaskSnapshot>() {
-
-                                // Progress Listener for loading
-                                // percentage on the dialog box
-                                @Override
-                                public void onProgress(
-                                        UploadTask.TaskSnapshot taskSnapshot) {
-                                    double progress
-                                            = (100.0
-                                            * taskSnapshot.getBytesTransferred()
-                                            / taskSnapshot.getTotalByteCount());
-                                    progressDialog.setMessage(
-                                            "Uploaded "
-                                                    + (int) progress + "%");
-                                }
-                            });
-        }
-
-
 
     }
-
-
 }
