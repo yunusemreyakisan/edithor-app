@@ -5,83 +5,102 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:layout_marginBottom="5dp"
     android:backgroundTint="@android:color/transparent"
     android:checkable="true"
-    android:focusable="true"
     android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/cardview_color"
     app:cardCornerRadius="10dp"
-    android:layout_margin="5dp"
     app:cardElevation="0dp">
 
 
     <LinearLayout
+        android:id="@+id/card_layout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/_200sdp"
         android:orientation="vertical"
-        android:weightSum="2"
-        >
+        android:weightSum="2">
 
         <LinearLayout
             android:id="@+id/imageContainer"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_gravity="top"
-            android:layout_weight="1"
-            android:layout_height="0dp">
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imageUri"
-                android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
 
 
         <LinearLayout
+            android:id="@+id/text_card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/cardview_color"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="bottom"
-                android:background="@color/cardview_color"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:maxLength="15"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="15dp"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:maxLength="15"
-                        android:paddingHorizontal="15dp"
-                        android:paddingTop="15dp"
-                        android:textColor="@color/bg_color_dark"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="2"
+                android:maxLength="30"
+                android:paddingHorizontal="15dp"
+                android:textColor="@color/bg_color_dark"
+                android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/tvNote"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lines="2"
-                        android:maxLength="30"
-                        android:paddingHorizontal="15dp"
-                        android:textColor="@color/bg_color_dark"
-                        android:textSize="15sp" />
+            <LinearLayout
+                android:id="@+id/checkBoxLayout"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvOlusturmaTarihi"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/cardview_date_color"
+                    android:textSize="13sp" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxCard"
+                    android:layout_width="80dp"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:checked="false"
+                     />
 
 
-                    <TextView
-                        android:id="@+id/tvOlusturmaTarihi"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginVertical="5dp"
-                        android:paddingHorizontal="15dp"
-                        android:textColor="@color/cardview_date_color"
-                        android:textSize="13sp" />
+            </LinearLayout>
 
 
-                </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
