@@ -6,6 +6,8 @@ public class NoteModel {
     String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri;
     boolean isSelected = false;
 
+
+
     public NoteModel(){
     }
 
@@ -37,20 +39,19 @@ public class NoteModel {
         this.imageUri = imageUri;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
     public String getNoteID() {
         return noteID;
     }
 
     public void setNoteID(String noteID) {
         this.noteID = noteID;
-    }
-
-    public boolean getIsSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
     }
 
     public String getNotOlusturmaTarihi() {
