@@ -11,17 +11,17 @@
         android:id="@+id/imageNote"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="centerCrop"
-        android:backgroundTint="@color/bg_color_dark"
-        android:background="@drawable/image"
         android:alpha="0.5"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/image"
+        android:backgroundTint="@color/bg_color_dark"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/generalBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.086"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNote"
-        app:layout_constraintVertical_bias="0.098"
-        android:contentDescription="TODO" />
+        app:layout_constraintVertical_bias="0.098" />
 
     <EditText
         android:id="@+id/txtTitle"
@@ -49,7 +49,7 @@
     <EditText
         android:id="@+id/txtNote"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_marginHorizontal="30dp"
         android:alpha="0.5"
         android:autofillHints=""
@@ -133,7 +133,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:weightSum="5"
+            android:weightSum="4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -224,28 +224,6 @@
                 app:iconPadding="0dp"
                 app:tint="@color/bg_color_light"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btncolor"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/color_filter_icon_svg"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:tint="@color/bg_color_light"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
 
         </LinearLayout>
 
