@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:background="@color/bg_color_light">
+
+
+    <ImageView
+        android:id="@+id/imageNote"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:alpha="0.5"
+        android:background="@drawable/image"
+        android:backgroundTint="@color/bg_color_dark"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNote"
+        app:layout_constraintVertical_bias="0.098" />
+
+
+    <EditText
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:alpha="0.5"
+        android:autofillHints=""
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:hint="@string/title"
+        android:inputType="textPersonName"
+        android:maxLength="20"
+        android:textColor="@color/bg_color_dark"
+        android:textColorHint="@color/bg_color_dark"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.082" />
+
+    <EditText
+        android:id="@+id/txtNote"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="30dp"
+        android:alpha="0.5"
+        android:autofillHints=""
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="@string/type_something"
+        android:inputType="textMultiLine"
+        android:textColor="@color/bg_color_dark"
+        android:textColorHint="@color/bg_color_dark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.248"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        app:layout_constraintVertical_bias="0.065" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNotuGuncelle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/button_bg"
+        android:text="Güncelle"
+        android:textAllCaps="false"
+        android:textColor="@color/bg_color_light"
+        android:textStyle="bold"
+        app:backgroundTint="@color/bg_color_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageNote"
+        app:layout_constraintVertical_bias="0.181" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
