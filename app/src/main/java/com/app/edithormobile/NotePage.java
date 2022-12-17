@@ -1,5 +1,7 @@
 package com.app.edithormobile;
 
+import static java.util.Objects.requireNonNull;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class NotePage extends AppCompatActivity {
 
@@ -58,13 +59,17 @@ public class NotePage extends AppCompatActivity {
         binding.notFound.setVisibility(View.INVISIBLE);
         binding.progressBar.setVisibility(View.VISIBLE);
         //Methods
-        notesViewRV();
         databaseRef();
+        notesViewRV();
         notesEventChangeListener();
         fabControl();
         search(view);
 
+        //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
+
     }
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void fabControl() {
@@ -127,7 +132,6 @@ public class NotePage extends AppCompatActivity {
                 view -> {
                     Intent intent = new Intent(NotePage.this, UploadFile.class);
                     startActivity(intent);
-                    Toast.makeText(NotePage.this, "Under Cons.", Toast.LENGTH_SHORT).show();
                 });
 
 
@@ -138,7 +142,7 @@ public class NotePage extends AppCompatActivity {
     private void databaseRef() {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-        String user_id = Objects.requireNonNull(mUser).getUid();
+        String user_id = requireNonNull(mUser).getUid();
         mDatabaseReference = FirebaseDatabase.getInstance()
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
     }
@@ -204,24 +208,14 @@ public class NotePage extends AppCompatActivity {
     private void notesEventChangeListener() {
         //Child Listener
         binding.progressBar.setVisibility(View.VISIBLE);
-            mDatabaseReference.addChildEventListener(new ChildEventListener() {
+        mDatabaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     NoteModel model = dataSnapshot.getValue(NoteModel.class);
                     notes.add(model);
                     noteAdapter.notifyItemInserted(notes.size());
                     noteAdapter.notifyDataSetChanged();
-
-                    //empty control
-                    if(!notes.isEmpty()) {
-                        binding.progressBar.setVisibility(View.GONE);
-                        noteAdapter.notifyDataSetChanged();
-                    }else{
-                        binding.noData.setVisibility(View.VISIBLE);
-                        binding.notFound.setVisibility(View.VISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                        noteAdapter.notifyDataSetChanged();
-                    }
+                    bosKontrolu();
                 }
 
 
@@ -230,22 +224,14 @@ public class NotePage extends AppCompatActivity {
                     //Update
 
 
+
                 }
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                     notes.remove(dataSnapshot.getValue(NoteModel.class));
                     noteAdapter.notifyDataSetChanged();
-                    //empty control
-                    if(!notes.isEmpty()) {
-                        binding.progressBar.setVisibility(View.GONE);
-                        noteAdapter.notifyDataSetChanged();
-                    }else{
-                        binding.noData.setVisibility(View.VISIBLE);
-                        binding.notFound.setVisibility(View.VISIBLE);
-                        binding.progressBar.setVisibility(View.INVISIBLE);
-                        noteAdapter.notifyDataSetChanged();
-                    }
+                    bosKontrolu();
 
                     Log.d("note size", String.valueOf(notes.size()));
 
@@ -262,8 +248,25 @@ public class NotePage extends AppCompatActivity {
                 }
             });
 
+
+
             //TODO: note.size() methodu yerine yeni bir method olusturulacak. Sıfır not halinde ekrana toast basacak.
+
     }
+
+    private void bosKontrolu(){
+        //empty control
+        if(!notes.isEmpty()) {
+            binding.progressBar.setVisibility(View.GONE);
+            noteAdapter.notifyDataSetChanged();
+        }else{
+            binding.noData.setVisibility(View.VISIBLE);
+            binding.notFound.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
 
     //Menu (Search)
     //TODO: Search eklenecek.
