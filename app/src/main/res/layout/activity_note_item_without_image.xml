@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/_150sdp"
             android:layout_weight="1"
             android:gravity="top"
             android:background="@color/cardview_color"
@@ -46,18 +46,21 @@
                 android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />
 
+
+            <TextView
+                android:id="@+id/tvOlusturmaTarihi"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginVertical="30dp"
+                android:paddingHorizontal="15dp"
+                android:layout_gravity="bottom"
+                android:textColor="@color/cardview_date_color"
+                android:textSize="13sp" />
+
         </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/tvOlusturmaTarihi"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_20sdp"
-        android:layout_marginVertical="5dp"
-        android:paddingHorizontal="15dp"
-        android:layout_gravity="bottom"
-        android:textColor="@color/cardview_date_color"
-        android:textSize="13sp" />
+
 
 
 </androidx.cardview.widget.CardView>
