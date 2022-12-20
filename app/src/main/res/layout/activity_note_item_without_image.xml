@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="5"
-                android:maxLength="50"
+                android:maxLength="40"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />
@@ -54,7 +54,6 @@
                 android:layout_marginVertical="@dimen/_20sdp"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="15dp"
-                android:layout_gravity="bottom"
                 android:textColor="@color/cardview_date_color"
                 android:textSize="13sp" />
 
