@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
@@ -70,7 +70,6 @@ public class NotePage extends AppCompatActivity {
     }
 
 
-
     @SuppressLint("ClickableViewAccessibility")
     private void fabControl() {
         binding.addNote.setVisibility(View.GONE);
@@ -83,29 +82,33 @@ public class NotePage extends AppCompatActivity {
         binding.extendedFab.shrink();
         //extendable click listener
         binding.extendedFab.setOnClickListener(
-               view -> {
-                   if (!isAllFabsVisible) {
-                       //fab icerigi goster.
-                       binding.addNote.show();
-                       binding.addFile.show();
-                       binding.addNoteTv.setVisibility(View.VISIBLE);
-                       binding.addFileTv.setVisibility(View.VISIBLE);
-                       //fab genislesin
-                       binding.extendedFab.extend();
+                view -> {
+                    if (!isAllFabsVisible) {
+                        binding.addNoteTv.bringToFront();
+                        binding.addFileTv.bringToFront();
+                        //fab icerigi goster.
+                        binding.addNote.show();
+                        binding.addFile.show();
+                        binding.addNoteTv.setVisibility(View.VISIBLE);
+                        binding.addFileTv.setVisibility(View.VISIBLE);
+                        //fab genislesin
+                        binding.extendedFab.extend();
 
-                       isAllFabsVisible = true;
-                   } else {
-                       binding.addNote.hide();
-                       binding.addFile.hide();
-                       binding.addNoteTv.setVisibility(View.GONE);
-                       binding.addFileTv.setVisibility(View.GONE);
+                       //TODO: FAB açıldığında arkaplanın solması gerekiyor.
 
-                       //fab kucultme
-                       binding.extendedFab.shrink();
+                        isAllFabsVisible = true;
+                    } else{
+                        binding.addNote.hide();
+                        binding.addFile.hide();
+                        binding.addNoteTv.setVisibility(View.GONE);
+                        binding.addFileTv.setVisibility(View.GONE);
 
-                       isAllFabsVisible = false;
-                   }
-               });
+                        //fab kucultme
+                        binding.extendedFab.shrink();
+
+                        isAllFabsVisible = false;
+                    }
+                });
 
         //fab shrink anywhere in screen
         binding.rvNotes.setOnTouchListener((view, motionEvent) -> {
@@ -152,7 +155,8 @@ public class NotePage extends AppCompatActivity {
         notes = new ArrayList<NoteModel>();
         noteAdapter = new NoteAdapter(NotePage.this, notes);
         binding.rvNotes.setHasFixedSize(true);
-        binding.rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
+        //binding.rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.rvNotes.setAdapter(noteAdapter);
     }
 
@@ -192,6 +196,8 @@ public class NotePage extends AppCompatActivity {
                 }
             }
         }
+
+        //TODO: Resmi upload etmediği için resimsiz görünüyor. uploadImage() yaz.
         // AlertDialog Builder
         AlertDialogClickListener alertDialogClickListener = new AlertDialogClickListener();
         builder.setPositiveButton("EVET", alertDialogClickListener);
@@ -200,7 +206,8 @@ public class NotePage extends AppCompatActivity {
         alertDialog.show();
         alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
         alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-
+        alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
+        alertDialog.getWindow().setLayout(900, 450);
     }
 
 
@@ -209,57 +216,58 @@ public class NotePage extends AppCompatActivity {
         //Child Listener
         binding.progressBar.setVisibility(View.VISIBLE);
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                    NoteModel model = dataSnapshot.getValue(NoteModel.class);
-                    notes.add(model);
-                    noteAdapter.notifyItemInserted(notes.size());
-                    noteAdapter.notifyDataSetChanged();
-                    bosKontrolu();
-                }
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                NoteModel model = dataSnapshot.getValue(NoteModel.class);
+                notes.add(model);
+                noteAdapter.notifyItemInserted(notes.size());
+                noteAdapter.notifyDataSetChanged();
+                bosKontrolu();
+            }
 
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
-                    //Update
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                //Update
+                bosKontrolu();
+                noteAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                //Intent
+                bosKontrolu();
+
+                Log.d("note size", String.valueOf(notes.size()));
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+                //Updated
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    notes.remove(dataSnapshot.getValue(NoteModel.class));
-                    noteAdapter.notifyDataSetChanged();
-                    bosKontrolu();
-
-                    Log.d("note size", String.valueOf(notes.size()));
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
-                    //Updated
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-
-            //TODO: note.size() methodu yerine yeni bir method olusturulacak. Sıfır not halinde ekrana toast basacak.
+        //TODO: note.size() methodu yerine yeni bir method olusturulacak. Sıfır not halinde ekrana toast basacak.
 
     }
 
-    private void bosKontrolu(){
+
+    //bos kontrolu
+    private void bosKontrolu() {
         //empty control
-        if(!notes.isEmpty()) {
+        if (!notes.isEmpty()) {
             binding.progressBar.setVisibility(View.GONE);
             noteAdapter.notifyDataSetChanged();
-        }else{
+        } else {
             binding.noData.setVisibility(View.VISIBLE);
             binding.notFound.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.INVISIBLE);
@@ -271,7 +279,7 @@ public class NotePage extends AppCompatActivity {
     //Menu (Search)
     //TODO: Search eklenecek.
 
-    private boolean search(View view){
+    private void search(View view) {
         //arama islemi
         binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -285,7 +293,6 @@ public class NotePage extends AppCompatActivity {
                 return false;
             }
         });
-        return true;
     }
 
     private void filter(String text) {
