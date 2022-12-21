@@ -201,8 +201,7 @@ public class UploadFile extends AppCompatActivity {
 
     //Galeri Erisim İzni Kontrolü
     private boolean checkStoragePermission() {
-        boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result;
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
     }
 
     //Galeri Erisim İzni İsteği
