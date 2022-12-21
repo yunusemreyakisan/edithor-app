@@ -3,29 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
+    android:layout_height="300dp"
     android:background="@color/bg_color_light">
 
-
-    <ImageView
-        android:id="@+id/imageNote"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:alpha="0.5"
-        android:background="@drawable/image"
-        android:backgroundTint="@color/bg_color_dark"
-        android:contentDescription="TODO"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.086"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNote"
-        app:layout_constraintVertical_bias="0.098" />
-
-
     <EditText
-        android:id="@+id/txtTitle"
+        android:id="@+id/dialogTxtTitle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="30dp"
@@ -46,7 +28,7 @@
         app:layout_constraintVertical_bias="0.082" />
 
     <EditText
-        android:id="@+id/txtNote"
+        android:id="@+id/dialogTxtNote"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginHorizontal="30dp"
@@ -64,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.248"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        app:layout_constraintTop_toBottomOf="@+id/dialogTxtTitle"
         app:layout_constraintVertical_bias="0.065" />
 
     <com.google.android.material.button.MaterialButton
@@ -82,7 +64,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageNote"
         app:layout_constraintVertical_bias="0.181" />
 
 
