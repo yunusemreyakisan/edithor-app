@@ -217,7 +217,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.button_active_color));
             alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.button_active_color));
             alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
-            alertDialog.getWindow().setLayout(900, 450);
 
             return true;
         });

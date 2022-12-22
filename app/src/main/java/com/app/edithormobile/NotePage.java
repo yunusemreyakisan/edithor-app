@@ -207,7 +207,6 @@ public class NotePage extends AppCompatActivity {
         alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
         alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
         alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
-        alertDialog.getWindow().setLayout(900, 450);
     }
 
 
