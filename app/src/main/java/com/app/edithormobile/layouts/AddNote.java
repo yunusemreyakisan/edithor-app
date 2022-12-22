@@ -20,8 +20,6 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -62,7 +60,6 @@ import java.util.UUID;
 
 public class AddNote extends AppCompatActivity {
 
-    EditText note, title;
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline, italic = false;
     private DatabaseReference mDatabase;
@@ -70,7 +67,6 @@ public class AddNote extends AppCompatActivity {
     private FirebaseUser mUser;
     private StorageReference storageRef;
     private Uri imageUri;
-    ImageView imageNote;
 
     //Requests Code
     static final int REQUEST_IMAGE_CODE = 100;
@@ -287,7 +283,7 @@ public class AddNote extends AppCompatActivity {
             alertDialog.show();
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
             alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-
+            alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
 
 
         }
