@@ -34,6 +34,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+/**
+ @author yunusemreyakisan
+  */
+
 public class NotePage extends AppCompatActivity {
 
     ArrayList<NoteModel> notes;
