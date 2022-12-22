@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_height="120dp"
             android:layout_weight="1"
             android:gravity="top"
             android:background="@color/cardview_color"
@@ -40,8 +40,8 @@
                 android:id="@+id/tvNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="5"
-                android:maxLength="40"
+                android:lines="2"
+                android:maxLength="50"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />
@@ -50,9 +50,8 @@
             <TextView
                 android:id="@+id/tvOlusturmaTarihi"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:gravity="bottom"
-                android:paddingBottom="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/cardview_date_color"
                 android:textSize="13sp" />

@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -158,17 +159,20 @@ public class AddNote extends AppCompatActivity {
     
     //share notes
     private void shareNotes(){
-        //Alan Tanımları
+       //Alan Tanımları
+
         String notIcerigi = binding.txtNote.getText().toString();
         String notBaslik = binding.txtTitle.getText().toString();
-        /*Create an ACTION_SEND Intent*/
+
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
-        /*Applying information Subject and Body.*/
+
         intent.putExtra(android.content.Intent.EXTRA_SUBJECT, notBaslik);
         intent.putExtra(android.content.Intent.EXTRA_TEXT, notIcerigi);
-        /*Fire!*/
+
         startActivity(Intent.createChooser(intent, "Paylaş"));
+
+
     }
 
 
@@ -217,17 +221,30 @@ public class AddNote extends AppCompatActivity {
                     assert id != null;
                     NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false);
                     mDatabase.child(id).setValue(mNotes);
+
+                    //intent
+                    Intent intent = new Intent(AddNote.this, NotePage.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                    Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
+
+
                 }else{
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
                     NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
                     mDatabase.child(id).setValue(mNotes);
+
+                    //intent
+                    Intent intent = new Intent(AddNote.this, NotePage.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                    Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
+
+
                 }
 
-                Intent intent = new Intent(AddNote.this, NotePage.class);
-                startActivity(intent);
-                Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -323,6 +340,7 @@ public class AddNote extends AppCompatActivity {
                 imageUri = result.getData().getData();
                 //set img view
                 binding.imageNote.setImageURI(imageUri);
+                uploadImage();
                 recognizeTextFromImage();
             } else {
                 Toast.makeText(AddNote.this, "Cancelled...", Toast.LENGTH_SHORT).show();
@@ -348,6 +366,7 @@ public class AddNote extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 binding.imageNote.setImageURI(imageUri);
+                uploadImage();
                 recognizeTextFromImage();
             } else {
                 Toast.makeText(AddNote.this, "Cancelled...", Toast.LENGTH_SHORT).show();
@@ -469,9 +488,9 @@ public class AddNote extends AppCompatActivity {
             // or failure of image
             ref.putFile(imageUri)
                     .addOnSuccessListener(
-                            taskSnapshot -> Toast.makeText(AddNote.this, "Fotograf yukleme basarılı", Toast.LENGTH_SHORT).show())
+                            taskSnapshot -> Log.d("Upload_Success", "Fotograf basarıyla yuklendi"))
 
-                    .addOnFailureListener(e -> Toast.makeText(AddNote.this, "Failed", Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Log.d("Upload_Failed", "Fotograf yuklenemedi"));
         }
     }
 

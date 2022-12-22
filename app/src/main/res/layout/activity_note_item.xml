@@ -19,7 +19,7 @@
     <LinearLayout
         android:id="@+id/card_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="250dp"
         android:orientation="vertical"
         android:weightSum="2">
 
@@ -34,7 +34,8 @@
                 android:id="@+id/imageUri"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:contentDescription="TODO" />
 
         </LinearLayout>
 
@@ -64,7 +65,7 @@
                 android:id="@+id/tvNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="1"
+                android:lines="2"
                 android:maxLength="30"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
@@ -74,18 +75,12 @@
                     android:id="@+id/tvOlusturmaTarihi"
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_weight="1"
+                    android:layout_height="@dimen/_25sdp"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="15dp"
                     android:textColor="@color/cardview_date_color"
                     android:textSize="13sp" />
 
-
-
-
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

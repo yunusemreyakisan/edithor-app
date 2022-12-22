@@ -27,7 +27,7 @@
                 android:layout_marginStart="20dp"
                 android:text="@string/txt_notlarim"
                 android:textColor="@color/bg_color_dark"
-                android:textSize="40sp"
+                android:textSize="@dimen/_30ssp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
