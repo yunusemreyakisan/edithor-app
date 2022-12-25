@@ -3,7 +3,6 @@ package com.app.edithormobile.layouts;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -72,8 +71,6 @@ public class AddNote extends AppCompatActivity {
     static final int REQUEST_IMAGE_CODE = 100;
     static final int STORAGE_REQUEST_CODE = 101;
 
-    //Progress Dialog
-    private ProgressDialog progressDialog;
 
     //Text Recognizer
     private TextRecognizer recognizer;
@@ -106,15 +103,10 @@ public class AddNote extends AppCompatActivity {
         islemdenVazgec();
         optionsbarIslevi();
 
-
         //Permission
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        //progress
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Lütfen bekleyin");
-        progressDialog.setCanceledOnTouchOutside(false);
 
         //init TextRecognizer
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
@@ -151,11 +143,11 @@ public class AddNote extends AppCompatActivity {
         //TODO: imageNote özelinde uzun basıldığında resmi önizleme özelliği olmalı.
 
     }
-    
-    
+
+
     //share notes
-    private void shareNotes(){
-       //Alan Tanımları
+    private void shareNotes() {
+        //Alan Tanımları
 
         String notIcerigi = binding.txtNote.getText().toString();
         String notBaslik = binding.txtTitle.getText().toString();
@@ -193,7 +185,7 @@ public class AddNote extends AppCompatActivity {
             String notIcerigi = binding.txtNote.getText().toString();
             String notBaslik = binding.txtTitle.getText().toString();
 
-
+            //Bos-Dolu Kontrolu
             if (TextUtils.isEmpty(notIcerigi)) {
                 Toast.makeText(AddNote.this, "Not içeriği giriniz.", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(notBaslik)) {
@@ -211,11 +203,11 @@ public class AddNote extends AppCompatActivity {
                 final String image = imageUri != null ? imageUri.toString() : null;
 
                 //model
-                if(image != null){
+                if (image != null) {
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
-                    NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false);
+                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false);
                     mDatabase.child(id).setValue(mNotes);
 
                     //intent
@@ -225,11 +217,11 @@ public class AddNote extends AppCompatActivity {
                     Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
 
 
-                }else{
+                } else {
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
-                    NoteModel mNotes = new NoteModel( id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
+                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
                     mDatabase.child(id).setValue(mNotes);
 
                     //intent
@@ -246,57 +238,48 @@ public class AddNote extends AppCompatActivity {
     }
 
 
-    //recognize text
+    //Recognize text
     private void recognizeTextFromImage() {
-        progressDialog.setMessage("Resim hazırlanıyor...");
-        progressDialog.show();
-
-        if(imageUri == null){
+        //Eger uri degeri bos degilse:
+        if (imageUri == null) {
             Toast.makeText(AddNote.this, "Lütfen resim seçiniz", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
+            InputImage inputImage = null;
+            try {
+                inputImage = InputImage.fromFilePath(this, imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Not bulundu");
-            builder.setMessage("Seçtiğiniz fotoğraf üzerinde not bulundu, eklemek ister misiniz?");
-            builder.setNegativeButton("Hayır", (dialog, which) ->   progressDialog.dismiss());
-            builder.setPositiveButton("Evet", (dialogInterface, i) -> {
-                try {
-                    InputImage inputImage = InputImage.fromFilePath(this, imageUri);
-                    progressDialog.setMessage("Resim çözülüyor...");
-
-                    Task<Text> textTaskResult = recognizer.process(inputImage).addOnSuccessListener(text -> {
-                        progressDialog.dismiss();
-
-                        String recognized = text.getText();
+            assert inputImage != null;
+            Task<Text> result = recognizer.process(inputImage);
+            result.addOnSuccessListener(text -> {
+                String recognized = text.getText();
+                if (!recognized.equals("")) {
+                    //Alert ile uyarı belirt.
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNote.this);
+                    builder.setTitle("Not Taraması");
+                    builder.setMessage("Fotoğrafta not bulundu, notunuza eklensin mi?");
+                    builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(this, "İçerik alınmadı", Toast.LENGTH_SHORT).show());
+                    builder.setPositiveButton("Evet", (dialogInterface, i) -> {
                         binding.txtNote.setText(recognized);
-                    }).addOnFailureListener(e -> {
-                        progressDialog.dismiss();
-                        Toast.makeText(AddNote.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-
                     });
-                }catch (IOException e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(this, "Failed prepairing image.."+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
+                    alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
+                    alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
                 }
+
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
-            alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-            alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
-
-
         }
-
-
     }
 
     //Popup Menu ile seceneklerin sorulması
     private void showInputImageDialog() {
         PopupMenu popupMenu = new PopupMenu(this, binding.imageNote);
-
         popupMenu.getMenu().add(Menu.NONE, 1, 1, "Fotoğraf çek");
-        popupMenu.getMenu().add(Menu.NONE, 2,2, "Galeriden seç");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "Galeriden seç");
 
         popupMenu.show();
 
@@ -304,16 +287,16 @@ public class AddNote extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
 
-            if(id ==1 ){
-                if(checkCameraPermission()){
+            if (id == 1) {
+                if (checkCameraPermission()) {
                     pickImageCamera();
-                }else {
+                } else {
                     requestCameraPermission();
                 }
-            }else if(id == 2){
-                if(checkStoragePermission()){
+            } else if (id == 2) {
+                if (checkStoragePermission()) {
                     pickImageGallery();
-                }else{
+                } else {
                     requestStoragePermission();
                 }
             }
@@ -333,6 +316,7 @@ public class AddNote extends AppCompatActivity {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
+                assert result.getData() != null;
                 imageUri = result.getData().getData();
                 //set img view
                 binding.imageNote.setImageURI(imageUri);
@@ -431,7 +415,6 @@ public class AddNote extends AppCompatActivity {
         }
 
     }
-
 
 
     // Override onActivityResult method
