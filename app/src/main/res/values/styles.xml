@@ -8,5 +8,8 @@
         <!-- Icon Color -->
         <item name="android:tint">@color/bg_color_dark</item>
     </style>
+    <style name="SplasTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/edithor</item>
+    </style>
 
 </resources>
