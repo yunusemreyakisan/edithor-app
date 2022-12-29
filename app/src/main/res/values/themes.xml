@@ -5,7 +5,8 @@
         <item name="colorPrimary">@color/bg_color_dark</item>
         <item name="colorPrimaryDark">@color/bg_color_light</item>
         <item name="colorAccent">@color/button_active_color</item>
-        <!-- Light mode icin asagiya color ekleyin. -->
-
+        <item name="android:navigationBarColor">@color/bg_color_light</item>
     </style>
+
+    
 </resources>
