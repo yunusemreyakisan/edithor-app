@@ -13,6 +13,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -31,12 +32,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 /**
- @author yunusemreyakisan
-  */
+ * @author yunusemreyakisan
+ */
 
 public class NotePage extends AppCompatActivity {
 
@@ -46,6 +48,7 @@ public class NotePage extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
+    DataSnapshot snapshot;
 
     ActivityNotePageBinding binding;
 
@@ -68,6 +71,7 @@ public class NotePage extends AppCompatActivity {
         notesEventChangeListener();
         fabControl();
         search(view);
+
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
 
@@ -98,10 +102,10 @@ public class NotePage extends AppCompatActivity {
                         //fab genislesin
                         binding.extendedFab.extend();
 
-                       //TODO: FAB açıldığında arkaplanın solması gerekiyor.
+                        //TODO: FAB açıldığında arkaplanın solması gerekiyor.
 
                         isAllFabsVisible = true;
-                    } else{
+                    } else {
                         binding.addNote.hide();
                         binding.addFile.hide();
                         binding.addNoteTv.setVisibility(View.GONE);
@@ -201,7 +205,6 @@ public class NotePage extends AppCompatActivity {
             }
         }
 
-        //TODO: Resmi upload etmediği için resimsiz görünüyor. uploadImage() yaz.
         // AlertDialog Builder
         AlertDialogClickListener alertDialogClickListener = new AlertDialogClickListener();
         builder.setPositiveButton("EVET", alertDialogClickListener);
@@ -217,6 +220,7 @@ public class NotePage extends AppCompatActivity {
     //Degisiklik izleme
     private void notesEventChangeListener() {
         //Child Listener
+        bosKontrolu();
         binding.progressBar.setVisibility(View.VISIBLE);
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -257,31 +261,45 @@ public class NotePage extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        //TODO: note.size() methodu yerine yeni bir method olusturulacak. Sıfır not halinde ekrana toast basacak.
-
     }
 
 
     //bos kontrolu
     private void bosKontrolu() {
-        //empty control
-        if (!notes.isEmpty()) {
-            binding.progressBar.setVisibility(View.GONE);
-            noteAdapter.notifyDataSetChanged();
-        } else {
-            binding.noData.setVisibility(View.VISIBLE);
-            binding.notFound.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.INVISIBLE);
-        }
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String user_id = requireNonNull(mUser).getUid();
+        mDatabaseReference = FirebaseDatabase.getInstance()
+                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get NoteModel object
+                NoteModel model = dataSnapshot.getValue(NoteModel.class);
+
+                if (model != null) {
+                    binding.progressBar.setVisibility(View.GONE);
+                    noteAdapter.notifyDataSetChanged();
+                } else {
+                    binding.noData.setVisibility(View.VISIBLE);
+                    binding.notFound.setVisibility(View.VISIBLE);
+                    binding.progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //Handle-Error
+            }
+
+        };
+        mDatabaseReference.addValueEventListener(postListener);
 
     }
 
 
     //Menu (Search)
-    //TODO: Search eklenecek.
-
     private void search(View view) {
         //arama islemi
         binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
