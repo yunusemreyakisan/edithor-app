@@ -13,7 +13,6 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -25,6 +24,9 @@ import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.layouts.upload.UploadFile;
 import com.app.edithormobile.models.NoteModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -40,17 +42,20 @@ import java.util.ArrayList;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity {
+public class NotePage extends AppCompatActivity{
 
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
+    DatabaseReference removeRef;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
-    DataSnapshot snapshot;
+
+    NoteAdapter.ClickListener clickListener;
 
     ActivityNotePageBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,12 +165,67 @@ public class NotePage extends AppCompatActivity {
 
     //Recyclerview
     private void notesViewRV() {
+        //Remove reference
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
+        removeRef = FirebaseDatabase.getInstance()
+                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+
         notes = new ArrayList<NoteModel>();
-        noteAdapter = new NoteAdapter(NotePage.this, notes);
+        noteAdapter = new NoteAdapter(NotePage.this, notes,  new NoteAdapter.ClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Toast.makeText(NotePage.this, "Kısa basıldı", Toast.LENGTH_SHORT).show();
+
+
+
+            }
+
+            @Override
+            public void onItemLongClick(View v, int position) {
+                String id = notes.get(position).getNoteID();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(NotePage.this);
+                builder.setTitle("Emin misiniz?");
+                builder.setMessage("Notu silmek istediğinizden emin misiniz?");
+                builder.setPositiveButton("EVET", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeRef.child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    notes.remove(notes.get(position));
+                                    noteAdapter.notifyItemRemoved(position);
+                                    noteAdapter.notifyDataSetChanged();
+
+                                    Toast.makeText(NotePage.this, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).addOnFailureListener(e -> Toast.makeText(NotePage.this, "Hata olustu", Toast.LENGTH_SHORT).show());
+                    }
+                });
+                builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(NotePage.this, "Vazgeçildi", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
+            }
+        });
         binding.rvNotes.setHasFixedSize(true);
-        //binding.rvNotes.setLayoutManager(new GridLayoutManager(this, 2));
         binding.rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.rvNotes.setAdapter(noteAdapter);
+    }
+
+
+
+
+    //TODO: Yukarıdaki Click.Listener arayüzünü method içerisine al.
+    private NoteAdapter.ClickListener removeNoteByID() {
+        return clickListener;
     }
 
 
@@ -333,6 +393,5 @@ public class NotePage extends AppCompatActivity {
             noteAdapter.filterList(filteredlist);
         }
     }
-
 
 }
