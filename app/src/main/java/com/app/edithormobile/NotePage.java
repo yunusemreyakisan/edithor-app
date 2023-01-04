@@ -46,7 +46,6 @@ public class NotePage extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
-    //deneme
 
     ActivityNotePageBinding binding;
 
