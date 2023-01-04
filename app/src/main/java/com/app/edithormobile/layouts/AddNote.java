@@ -38,6 +38,8 @@ import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.models.NoteModel;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +47,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -80,8 +83,6 @@ public class AddNote extends AppCompatActivity {
     private String[] storagePermission;
 
 
-    // request code
-    private final int PICK_IMAGE_REQUEST = 22;
     // instance for firebase storage and StorageReference
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -305,63 +306,19 @@ public class AddNote extends AppCompatActivity {
 
     }
 
-    //Galeriden fotograf secmek
-    private void pickImageGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        galleryActivityResultLauncher.launch(intent);
+    //Galeri Erisim İzni İsteği
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
     }
 
-    private final ActivityResultLauncher<Intent> galleryActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                assert result.getData() != null;
-                imageUri = result.getData().getData();
-                //set img view
-                binding.imageNote.setImageURI(imageUri);
-                uploadImage();
-                recognizeTextFromImage();
-            } else {
-                Toast.makeText(AddNote.this, "Cancelled...", Toast.LENGTH_SHORT).show();
-            }
-        }
-    });
-
-    //Kameradan fotograf cekimi
-    private void pickImageCamera() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "Ornek baslik");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "Ornek aciklama");
-
-        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        cameraActivityResultLauncher.launch(intent);
+    //Kamera Erisim İzni İsteği
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, cameraPermission, REQUEST_IMAGE_CODE);
     }
-
-    private final ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                binding.imageNote.setImageURI(imageUri);
-                uploadImage();
-                recognizeTextFromImage();
-            } else {
-                Toast.makeText(AddNote.this, "Cancelled...", Toast.LENGTH_SHORT).show();
-            }
-        }
-    });
 
     //Galeri Erisim İzni Kontrolü
     private boolean checkStoragePermission() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-    }
-
-    //Galeri Erisim İzni İsteği
-    private void requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
     }
 
     //Kamera Erisim İzni Kontrolü
@@ -371,12 +328,6 @@ public class AddNote extends AppCompatActivity {
 
         return cameraResult == storageResult;
     }
-
-    //Kamera Erisim İzni İsteği
-    private void requestCameraPermission() {
-        ActivityCompat.requestPermissions(this, cameraPermission, REQUEST_IMAGE_CODE);
-    }
-
 
     //İzin istegi sonucunun kontrolu
     @Override
@@ -417,6 +368,61 @@ public class AddNote extends AppCompatActivity {
     }
 
 
+
+
+
+    //Galeriden fotograf secmek
+    private void pickImageGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        galleryActivityResultLauncher.launch(intent);
+    }
+
+    private final ActivityResultLauncher<Intent> galleryActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                assert result.getData() != null;
+                imageUri = result.getData().getData();
+                //set img view
+                binding.imageNote.setImageURI(imageUri);
+                uploadImage();
+                recognizeTextFromImage();
+            } else {
+                Toast.makeText(AddNote.this, "Vazgeçildi", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+    //Kameradan fotograf cekimi
+    private void pickImageCamera() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "Ornek baslik");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "Ornek aciklama");
+
+        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraActivityResultLauncher.launch(intent);
+    }
+
+    private final ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                binding.imageNote.setImageURI(imageUri);
+                uploadImage();
+                recognizeTextFromImage();
+            } else {
+                Toast.makeText(AddNote.this, "Vazgeçildi", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+
+
+
     // Override onActivityResult method
     @Override
     protected void onActivityResult(int requestCode,
@@ -428,6 +434,8 @@ public class AddNote extends AppCompatActivity {
                 data);
 
         // checking request code and result code
+        // request code
+        int PICK_IMAGE_REQUEST = 22;
         if (requestCode == PICK_IMAGE_REQUEST
                 && resultCode == RESULT_OK
                 && data != null
@@ -436,8 +444,6 @@ public class AddNote extends AppCompatActivity {
             // Get the Uri of data
             imageUri = data.getData();
             try {
-
-                // Setting image on image view using Bitmap
                 Bitmap bitmap = MediaStore
                         .Images
                         .Media
@@ -446,7 +452,6 @@ public class AddNote extends AppCompatActivity {
                                 imageUri);
                 binding.imageNote.setImageBitmap(bitmap);
             } catch (IOException e) {
-                // Log the exception
                 e.printStackTrace();
             }
         }
@@ -465,11 +470,19 @@ public class AddNote extends AppCompatActivity {
 
             // adding listeners on upload
             // or failure of image
-            ref.putFile(imageUri)
-                    .addOnSuccessListener(
-                            taskSnapshot -> Log.d("Upload_Success", "Fotograf basarıyla yuklendi"))
-
-                    .addOnFailureListener(e -> Log.d("Upload_Failed", "Fotograf yuklenemedi"));
+            ref.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    String url = String.valueOf(ref.getDownloadUrl());
+                    Log.d("Upload_Success", "Fotograf basarıyla yuklendi");
+                    Toast.makeText(AddNote.this,url , Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("Upload_Failed", "Fotograf yüklemesi basarisiz");
+                }
+            });
         }
     }
 
