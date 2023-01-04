@@ -305,6 +305,7 @@ public class AddNote extends AppCompatActivity {
         });
 
     }
+    //TODO: Kamera ve depolama isteği istemeden izin gerekli diyor. İstek atmalı.
 
     //Galeri Erisim İzni İsteği
     private void requestStoragePermission() {
