@@ -27,6 +27,7 @@ import com.app.edithormobile.models.NoteModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity{
+public class NotePage extends AppCompatActivity {
 
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
@@ -173,11 +174,17 @@ public class NotePage extends AppCompatActivity{
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
 
         notes = new ArrayList<NoteModel>();
-        noteAdapter = new NoteAdapter(NotePage.this, notes,  new NoteAdapter.ClickListener() {
+        noteAdapter = new NoteAdapter(NotePage.this, notes, new NoteAdapter.ClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Toast.makeText(NotePage.this, "Kısa basıldı", Toast.LENGTH_SHORT).show();
 
+                Intent intent = new Intent(NotePage.this, AddNote.class);
+                intent.putExtra("id", notes.get(position).getNoteID());
+                intent.putExtra("baslik", notes.get(position).getNotBaslik());
+                intent.putExtra("icerik", notes.get(position).getNotIcerigi());
+                intent.putExtra("position", position);
+                startActivity(intent);
 
 
             }
@@ -201,6 +208,21 @@ public class NotePage extends AppCompatActivity{
                                     noteAdapter.notifyDataSetChanged();
 
                                     Toast.makeText(NotePage.this, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+
+                                    //Snackbar Effect (Throws Exception)
+                                    Snackbar snackbar = Snackbar
+                                            .make(v, "Message is deleted", Snackbar.LENGTH_LONG)
+                                            .setAction("UNDO", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    //TODO: Note Restore Process
+                                                    Snackbar snackbarRestore = Snackbar.make(v, "Message is restored!", Snackbar.LENGTH_SHORT);
+                                                    snackbarRestore.show();
+                                                }
+                                            });
+
+                                    snackbar.show();
+
                                 }
                             }
                         }).addOnFailureListener(e -> Toast.makeText(NotePage.this, "Hata olustu", Toast.LENGTH_SHORT).show());
@@ -219,8 +241,6 @@ public class NotePage extends AppCompatActivity{
         binding.rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.rvNotes.setAdapter(noteAdapter);
     }
-
-
 
 
     //TODO: Yukarıdaki Click.Listener arayüzünü method içerisine al.
@@ -388,7 +408,7 @@ public class NotePage extends AppCompatActivity{
             }
         }
         if (filteredlist.isEmpty()) {
-            Toast.makeText(this, "Veri bulunamadı.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Veri bulunamadı.", Toast.LENGTH_SHORT).show();
         } else {
             noteAdapter.filterList(filteredlist);
         }
