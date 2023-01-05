@@ -1,5 +1,7 @@
 package com.app.edithormobile.layouts;
 
+import static java.util.Objects.requireNonNull;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,9 +37,11 @@ import androidx.core.content.ContextCompat;
 
 import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
+import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.models.NoteModel;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -55,8 +59,10 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -69,6 +75,9 @@ public class AddNote extends AppCompatActivity {
     private FirebaseUser mUser;
     private StorageReference storageRef;
     private Uri imageUri;
+    NoteAdapter adapter;
+    ArrayList<NoteModel> notes;
+
 
     //Requests Code
     static final int REQUEST_IMAGE_CODE = 100;
@@ -99,10 +108,17 @@ public class AddNote extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        binding.btnNotuKaydet.setVisibility(View.VISIBLE);
+        binding.buttonGuncelle.setVisibility(View.GONE);
+
         //methods
         notKaydetmeIslevi();
+        //notGuncelleme();
         islemdenVazgec();
         optionsbarIslevi();
+
+        //TODO: Nota tıklandığında Güncelle butonu ortaya çıksın ve işlev yürütülsün.
+
 
         //Permission
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -128,12 +144,6 @@ public class AddNote extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        //deger alma (update first step)
-        binding.txtTitle.setText(getIntent().getStringExtra("baslik"));
-        binding.txtNote.setText(getIntent().getStringExtra("icerik"));
-        Glide.with(this)
-                .load(getIntent().getStringExtra("image"))
-                .into(binding.imageNote);
 
         //Styles
         styleBold = new StyleSpan(Typeface.BOLD);
@@ -144,6 +154,67 @@ public class AddNote extends AppCompatActivity {
         //TODO: imageNote özelinde uzun basıldığında resmi önizleme özelliği olmalı.
 
     }
+
+
+    //TODO: Güncelleme işlemi yapıyor fakat buton değiştirilmeli.
+    // Aynı buton olduğundan intent tarafından gelen değer null geliyor not eklemek istediğimizde.
+    /*
+    private void notGuncelleme() {
+        //deger alma (update first step)
+        binding.txtTitle.setText(getIntent().getStringExtra("baslik"));
+        binding.txtNote.setText(getIntent().getStringExtra("icerik"));
+        Glide.with(this)
+                .load(getIntent().getStringExtra("image"))
+                .into(binding.imageNote);
+
+        binding.btnNotuKaydet.setVisibility(View.GONE);
+        binding.buttonGuncelle.setVisibility(View.VISIBLE);
+
+        String noteID = getIntent().getStringExtra("id");
+        String position = getIntent().getStringExtra("position");
+
+        binding.buttonGuncelle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("notBaslik", binding.txtTitle.getText().toString());
+                map.put("notIcerigi", binding.txtNote.getText().toString());
+
+                //db ref
+                mAuth = FirebaseAuth.getInstance();
+                mUser = mAuth.getCurrentUser();
+                String user_id = requireNonNull(mUser).getUid();
+                FirebaseDatabase.getInstance()
+                        .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(noteID).updateChildren(map)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    notes.get(Integer.parseInt(position)).setNotBaslik(binding.txtTitle.getText().toString());
+                                    notes.get(Integer.parseInt(position)).setNotIcerigi(binding.txtTitle.getText().toString());
+                                    adapter.notifyItemChanged(Integer.parseInt(position));
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(AddNote.this, "Notunuz güncellendi", Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(AddNote.this, NotePage.class);
+                                    startActivity(intent);
+
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(AddNote.this, "Hata oluştu", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+            }
+        });
+    }
+
+     */
+
+
 
 
     //share notes
@@ -369,9 +440,6 @@ public class AddNote extends AppCompatActivity {
     }
 
 
-
-
-
     //Galeriden fotograf secmek
     private void pickImageGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -420,8 +488,6 @@ public class AddNote extends AppCompatActivity {
             }
         }
     });
-
-
 
 
     // Override onActivityResult method
@@ -476,7 +542,7 @@ public class AddNote extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     String url = String.valueOf(ref.getDownloadUrl());
                     Log.d("Upload_Success", "Fotograf basarıyla yuklendi");
-                    Toast.makeText(AddNote.this,url , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNote.this, url, Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -557,26 +623,17 @@ public class AddNote extends AppCompatActivity {
 
         //texti kopyalar
         binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
-    }
-    /*
-        //renk degistirir
-        btnColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                note.setTypeface(note.getTypeface(), Typeface.BOLD);
 
-            }
-        });
-        //resim ekler
-        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+        //color picker
+        binding.btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                note.setTypeface(note.getTypeface(), Typeface.BOLD);
+                Toast.makeText(AddNote.this, "Renk seçimi", Toast.LENGTH_SHORT).show();
             }
         });
 
-    }
 
-     */
+    }
 
 }
+
