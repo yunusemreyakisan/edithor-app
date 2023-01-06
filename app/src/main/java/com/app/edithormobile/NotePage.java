@@ -173,7 +173,7 @@ public class NotePage extends AppCompatActivity {
         removeRef = FirebaseDatabase.getInstance()
                 .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
 
-        notes = new ArrayList<NoteModel>();
+        notes = new ArrayList<>();
         noteAdapter = new NoteAdapter(NotePage.this, notes, new NoteAdapter.ClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -185,8 +185,6 @@ public class NotePage extends AppCompatActivity {
                 intent.putExtra("icerik", notes.get(position).getNotIcerigi());
                 intent.putExtra("position", position);
                 startActivity(intent);
-
-
             }
 
             @Override
@@ -397,10 +395,8 @@ public class NotePage extends AppCompatActivity {
     }
 
     private void filter(String text) {
-        // creating a new array list to filter our data.
         ArrayList<NoteModel> filteredlist = new ArrayList<>();
 
-        // running a for loop to compare elements.
         for (NoteModel item : notes) {
             // checking if the entered string matched with any item of our recycler view.
             if (item.getNotBaslik().toLowerCase().contains(text.toLowerCase())) {
@@ -408,7 +404,7 @@ public class NotePage extends AppCompatActivity {
             }
         }
         if (filteredlist.isEmpty()) {
-            //Toast.makeText(this, "Veri bulunamadı.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Eşleşen not yok", Toast.LENGTH_SHORT).show();
         } else {
             noteAdapter.filterList(filteredlist);
         }
