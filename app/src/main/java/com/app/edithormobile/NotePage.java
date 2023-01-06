@@ -83,6 +83,11 @@ public class NotePage extends AppCompatActivity {
 
     }
 
+    //Toast Method
+    private void displayToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void fabControl() {
@@ -205,7 +210,7 @@ public class NotePage extends AppCompatActivity {
                                     noteAdapter.notifyItemRemoved(position);
                                     noteAdapter.notifyDataSetChanged();
 
-                                    Toast.makeText(NotePage.this, "Notunuz silindi.", Toast.LENGTH_SHORT).show();
+                                    displayToast("Notunuz silindi");
 
                                     //Snackbar Effect (Throws Exception)
                                     Snackbar snackbar = Snackbar
@@ -223,13 +228,13 @@ public class NotePage extends AppCompatActivity {
 
                                 }
                             }
-                        }).addOnFailureListener(e -> Toast.makeText(NotePage.this, "Hata olustu", Toast.LENGTH_SHORT).show());
+                        }).addOnFailureListener(e -> displayToast("Notunuz silindi"));
                     }
                 });
                 builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(NotePage.this, "Vazgeçildi", Toast.LENGTH_SHORT).show();
+                        displayToast("Vazgeçildi");
                     }
                 });
                 builder.show();
@@ -261,11 +266,9 @@ public class NotePage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == AlertDialog.BUTTON_NEGATIVE) {
-                    Toast.makeText(NotePage.this, "İşlem iptal edildi.",
-                            Toast.LENGTH_SHORT).show();
+                    displayToast("İşlem iptal edildi");
                 } else if (which == AlertDialog.BUTTON_POSITIVE) { // veya else
-                    Toast.makeText(NotePage.this, "Çıkış başarıyla gerçekleştirildi.",
-                            Toast.LENGTH_SHORT).show();
+                    displayToast("Çıkış başarıyla gerçekleştirildi");
                     NotePage.this.finish(); // Activity’nin sonlandırılması
 
                     //Giriş ekranı için Pref. Kontrolü
@@ -276,9 +279,8 @@ public class NotePage extends AppCompatActivity {
                     finish();
 
                     //Giriş aktivitesine dönülmesi
-                    Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                    Intent intent = new Intent(NotePage.this, SignIn.class);
                     startActivity(intent);
-
                 }
             }
         }
@@ -336,7 +338,7 @@ public class NotePage extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "Veritabanı hatası!", Toast.LENGTH_SHORT).show();
+                displayToast("Veritabanı hatası!");
             }
         });
     }
@@ -404,7 +406,7 @@ public class NotePage extends AppCompatActivity {
             }
         }
         if (filteredlist.isEmpty()) {
-            Toast.makeText(this, "Eşleşen not yok", Toast.LENGTH_SHORT).show();
+            displayToast("Eşleşen not yok");
         } else {
             noteAdapter.filterList(filteredlist);
         }
