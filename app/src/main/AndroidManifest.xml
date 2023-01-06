@@ -60,12 +60,7 @@
         <activity
             android:name=".layouts.login.SignIn"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
 
 
         <activity
