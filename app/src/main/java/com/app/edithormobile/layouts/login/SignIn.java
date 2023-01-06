@@ -1,21 +1,53 @@
 package com.app.edithormobile.layouts.login;
 
+import static java.security.AccessController.getContext;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.NotePage;
+import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivitySignInBinding;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Objects;
+
+import io.reactivex.rxjava3.core.Single;
 
 
 public class SignIn extends AppCompatActivity {
@@ -23,20 +55,32 @@ public class SignIn extends AppCompatActivity {
     FirebaseAuth mAuth;
     ActivitySignInBinding binding;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);
 
+
         //Methods
         kayitOlGonder();
         girisIslemi();
         beniHatirla();
 
+
+        //TODO: UpdateUI methodu eklenmeli, for sign in google.
+
     }
+
+    //Toast Method
+    private void displayToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -49,6 +93,7 @@ public class SignIn extends AppCompatActivity {
             Intent intent = new Intent(SignIn.this, SignUp.class);
             startActivity(intent);
         });
+
     }
 
 
@@ -95,55 +140,32 @@ public class SignIn extends AppCompatActivity {
 
         // Email ve Şifre Giriş Kontrolü (Dolu-Boş)
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(),
-                            "Lütfen email giriniz.",
-                            Toast.LENGTH_LONG)
-                    .show();
+            displayToast("Lütfen emailinizi giriniz");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(),
-                            "Lütfen şifrenizi giriniz.",
-                            Toast.LENGTH_LONG)
-                    .show();
+            displayToast("Lütfen şifrenizi giriniz");
             return;
         }
 
         binding.pBarGiris.setVisibility(View.VISIBLE);
-
         // Kayıtlı Kullanıcı Girişi
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
                                 binding.pBarGiris.setVisibility(View.GONE);
-                              /*  Toast.makeText(getApplicationContext(),
-                                                "Giriş Başarılı!",
-                                                Toast.LENGTH_LONG)
-                                        .show();
-
-                               */
-
                                 // Eğer giriş bilgileri doğruysa:
                                 // Anasayfaya geç.
                                 Intent intent = new Intent(getApplicationContext(), NotePage.class);
                                 startActivity(intent);
-
-
                             } else {
 
                                 // Giriş hatalı ise:
-                              /*  Toast.makeText(getApplicationContext(),
-                                                "E-Mail veya Şifre Hatalı!",
-                                                Toast.LENGTH_LONG)
-                                        .show();
-
-                               */
-
+                                displayToast("E-Mail veya şifre hatalı!");
                             }
                         });
-
     }
 
 
