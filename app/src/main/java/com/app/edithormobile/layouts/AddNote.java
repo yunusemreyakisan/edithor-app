@@ -12,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -108,14 +110,14 @@ public class AddNote extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        binding.btnNotuKaydet.setVisibility(View.VISIBLE);
-        binding.buttonGuncelle.setVisibility(View.GONE);
-
         //methods
         notKaydetmeIslevi();
-        //notGuncelleme();
+        notGuncelleme();
         islemdenVazgec();
         optionsbarIslevi();
+
+
+
 
         //TODO: Nota tıklandığında Güncelle butonu ortaya çıksın ve işlev yürütülsün.
 
@@ -155,11 +157,11 @@ public class AddNote extends AppCompatActivity {
 
     }
 
-
+    //TODO: Kaydet butonu yerine auto-save methodu getirilmeli, onBackPressed() methodu tetiklendiğinde draft olarak kaydedilmiş olacak.
     //TODO: Güncelleme işlemi yapıyor fakat buton değiştirilmeli.
     // Aynı buton olduğundan intent tarafından gelen değer null geliyor not eklemek istediğimizde.
-    /*
-    private void notGuncelleme() {
+
+    public void notGuncelleme() {
         //deger alma (update first step)
         binding.txtTitle.setText(getIntent().getStringExtra("baslik"));
         binding.txtNote.setText(getIntent().getStringExtra("icerik"));
@@ -167,8 +169,6 @@ public class AddNote extends AppCompatActivity {
                 .load(getIntent().getStringExtra("image"))
                 .into(binding.imageNote);
 
-        binding.btnNotuKaydet.setVisibility(View.GONE);
-        binding.buttonGuncelle.setVisibility(View.VISIBLE);
 
         String noteID = getIntent().getStringExtra("id");
         String position = getIntent().getStringExtra("position");
@@ -205,34 +205,24 @@ public class AddNote extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(AddNote.this, "Hata oluştu", Toast.LENGTH_SHORT).show();
-
                             }
                         });
             }
         });
     }
 
-     */
-
-
-
 
     //share notes
     private void shareNotes() {
         //Alan Tanımları
-
         String notIcerigi = binding.txtNote.getText().toString();
         String notBaslik = binding.txtTitle.getText().toString();
-
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
-
         intent.putExtra(android.content.Intent.EXTRA_SUBJECT, notBaslik);
         intent.putExtra(android.content.Intent.EXTRA_TEXT, notIcerigi);
 
         startActivity(Intent.createChooser(intent, "Paylaş"));
-
-
     }
 
 
@@ -634,6 +624,5 @@ public class AddNote extends AppCompatActivity {
 
 
     }
-
 }
 
