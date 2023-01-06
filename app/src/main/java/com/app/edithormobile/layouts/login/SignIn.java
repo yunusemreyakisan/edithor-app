@@ -4,16 +4,32 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.NotePage;
+import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivitySignInBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Objects;
 
@@ -23,22 +39,110 @@ public class SignIn extends AppCompatActivity {
     FirebaseAuth mAuth;
     ActivitySignInBinding binding;
 
+
+    private static final int RC_SIGN_IN = 100;
+    private GoogleSignInClient gsc;
+    private static final String TAG = "GOOGLE_SIGN_IN_TAG";
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);
-
+//        binding.btnGoogle.setOnClickListener(v1 -> signIn());
         //Methods
         kayitOlGonder();
         girisIslemi();
         beniHatirla();
 
+            //configure google sign in
+        GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+                gsc = GoogleSignIn.getClient(this,gso);
+
+                // init firebase auth
+
+        //Click to sign in button
+        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "OnClick Google_sign_in");
+                Intent intent = gsc.getSignInIntent();
+                startActivityForResult(intent,RC_SIGN_IN);
+
+            }
+
+        });
+        mAuth =FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user!=null){
+            startActivity(new Intent(SignIn.this,NotePage.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
     }
 
+
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==RC_SIGN_IN){
+            Log.d(TAG, "onActivityResult: Google Sign in intent result");
+            Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if(accountTask.isSuccessful()){
+                 String s="Succesfull";
+                try {
+                    GoogleSignInAccount account = accountTask.getResult(ApiException.class);
+                    if(account!=null){
+                        firebaseAuthithGogleAccount(account);
+                    }
+                }
+                catch (Exception e){
+                    Log.d(TAG, "onActivityResult: " +e.getMessage());
+                }
+            }
+
+        }
+    }
+
+    private void firebaseAuthithGogleAccount(GoogleSignInAccount account) {
+        AuthCredential authCredential= GoogleAuthProvider
+                .getCredential(account.getIdToken()
+                        ,null);
+        // Check credential
+        mAuth.signInWithCredential(authCredential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // Check condition
+                        if(task.isSuccessful())
+                        {
+                            // When task is successful
+                            // Redirect to profile activity
+                            startActivity(new Intent(SignIn.this
+                                    ,NotePage.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            // Display Toast
+                            Toast.makeText(SignIn.this, "Succesfull", Toast.LENGTH_SHORT).show();;
+                        }
+                        else
+                        {
+                            // When task is unsuccessful
+                            // Display Toast
+                            Toast.makeText(SignIn.this, "Failed", Toast.LENGTH_SHORT).show();;
+
+                        }
+                    }
+                });
+
+}
+
+
+     @Override
     public void onBackPressed() {
         //nothing
     }
@@ -49,6 +153,7 @@ public class SignIn extends AppCompatActivity {
             Intent intent = new Intent(SignIn.this, SignUp.class);
             startActivity(intent);
         });
+
     }
 
 
@@ -118,12 +223,6 @@ public class SignIn extends AppCompatActivity {
                         task -> {
                             if (task.isSuccessful()) {
                                 binding.pBarGiris.setVisibility(View.GONE);
-                              /*  Toast.makeText(getApplicationContext(),
-                                                "Giriş Başarılı!",
-                                                Toast.LENGTH_LONG)
-                                        .show();
-
-                               */
 
                                 // Eğer giriş bilgileri doğruysa:
                                 // Anasayfaya geç.
@@ -134,12 +233,12 @@ public class SignIn extends AppCompatActivity {
                             } else {
 
                                 // Giriş hatalı ise:
-                              /*  Toast.makeText(getApplicationContext(),
+                                Toast.makeText(getApplicationContext(),
                                                 "E-Mail veya Şifre Hatalı!",
                                                 Toast.LENGTH_LONG)
                                         .show();
 
-                               */
+                              
 
                             }
                         });
