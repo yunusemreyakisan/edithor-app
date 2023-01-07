@@ -85,6 +85,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:18.0.0'
     implementation 'com.google.android.gms:play-services-auth:20.4.0'
 
+    //color picker
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+
 
 
 }
