@@ -5,6 +5,8 @@ public class NoteModel {
 
     String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri;
     boolean isSelected = false;
+    int color;
+
 
 
 
@@ -12,24 +14,33 @@ public class NoteModel {
     }
 
     //with images
-    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected) {
+    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
         this.imageUri = imageUri;
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
+        this.color = color;
     }
 
     //without images
-    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi,Boolean isSelected) {
+    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi,Boolean isSelected, int color) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
+        this.color = color;
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public String getImageUri() {
         return imageUri;
