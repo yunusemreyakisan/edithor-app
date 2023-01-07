@@ -6,15 +6,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -24,6 +22,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -42,10 +41,7 @@ import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
-import com.app.edithormobile.helper.Cons;
 import com.app.edithormobile.models.NoteModel;
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -70,6 +66,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+
 public class AddNote extends AppCompatActivity{
 
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
@@ -82,6 +80,8 @@ public class AddNote extends AppCompatActivity{
     NoteAdapter adapter;
     ArrayList<NoteModel> notes;
 
+    //color picker
+    int defaultColor;
 
     //Requests Code
     static final int REQUEST_IMAGE_CODE = 100;
@@ -118,6 +118,13 @@ public class AddNote extends AppCompatActivity{
         islemdenVazgec();
         optionsbarIslevi();
 
+        binding.btnColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openColorPicker();
+            }
+        });
+
 
 
 
@@ -128,6 +135,8 @@ public class AddNote extends AppCompatActivity{
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+        //color picker
+        defaultColor = ContextCompat.getColor(AddNote.this, R.color.button_active_color);
 
         //init TextRecognizer
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
@@ -157,6 +166,24 @@ public class AddNote extends AppCompatActivity{
 
         //TODO: imageNote özelinde uzun basıldığında resmi önizleme özelliği olmalı.
 
+    }//eof onCreate
+
+    //Color picker dialog
+    private void openColorPicker() {
+        AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                defaultColor = color;
+                binding.btnColor.setIconTint(ColorStateList.valueOf(color));
+
+            }
+        });
+        dialog.show();
     }
 
     //Toast Method
@@ -245,6 +272,7 @@ public class AddNote extends AppCompatActivity{
         });
     }
 
+
     //not kaydet
     private void notKaydetmeIslevi() {
         mAuth = FirebaseAuth.getInstance();
@@ -276,12 +304,14 @@ public class AddNote extends AppCompatActivity{
                 //yuklenen fotorafin storage adresi
                 final String image = imageUri != null ? imageUri.toString() : null;
 
+
                 //model
                 if (image != null) {
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
-                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false);
+                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false, defaultColor);
+                    mNotes.setColor(defaultColor);
                     mDatabase.child(id).setValue(mNotes);
 
                     //intent
@@ -291,11 +321,14 @@ public class AddNote extends AppCompatActivity{
                     displayToast("Not başarıyla oluşturuldu");
 
 
+
+
                 } else {
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
-                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false);
+                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, defaultColor);
+                    mNotes.setColor(defaultColor);
                     mDatabase.child(id).setValue(mNotes);
 
                     //intent
