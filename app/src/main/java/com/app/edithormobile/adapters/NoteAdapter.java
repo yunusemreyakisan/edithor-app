@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,6 +71,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     .load(mNote.getImageUri())
                     .into(holder.imageUri);
 
+
+
             //TODO: Fotoğrafın referansı cihazın kendi depolama alanıyla sınırlı. Storage üzerinden URL alıp göstermeli.
 
 
@@ -77,6 +80,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             holder.tvTitle.setText(mNote.getNotBaslik());
             holder.tvNote.setText(mNote.getNotIcerigi());
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
+
+          //  holder.itemView.setBackgroundColor(mNote.getColor());
+
+            //TODO: Holder ile getColor() methodunu kullanmalı.
         }
 
         //Remove reference
@@ -159,6 +166,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
         public CardView card;
         ImageView imageUri;
+        LinearLayout card_layout;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,6 +175,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
             imageUri = itemView.findViewById(R.id.imageUri);
+
+
+
 
             //click
             itemView.setOnClickListener(this);
