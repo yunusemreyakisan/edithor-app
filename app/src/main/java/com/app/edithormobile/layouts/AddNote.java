@@ -6,6 +6,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -41,6 +42,7 @@ import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
+import com.app.edithormobile.helper.Cons;
 import com.app.edithormobile.models.NoteModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,7 +70,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AddNote extends AppCompatActivity {
+public class AddNote extends AppCompatActivity{
 
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline, italic = false;
@@ -112,7 +114,7 @@ public class AddNote extends AppCompatActivity {
 
         //methods
         notKaydetmeIslevi();
-        notGuncelleme();
+        //notGuncelleme();
         islemdenVazgec();
         optionsbarIslevi();
 
@@ -157,10 +159,18 @@ public class AddNote extends AppCompatActivity {
 
     }
 
+    //Toast Method
+    private void displayToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
+
     //TODO: Kaydet butonu yerine auto-save methodu getirilmeli, onBackPressed() methodu tetiklendiğinde draft olarak kaydedilmiş olacak.
     //TODO: Güncelleme işlemi yapıyor fakat buton değiştirilmeli.
     // Aynı buton olduğundan intent tarafından gelen değer null geliyor not eklemek istediğimizde.
 
+    /*
     public void notGuncelleme() {
         //deger alma (update first step)
         binding.txtTitle.setText(getIntent().getStringExtra("baslik"));
@@ -211,6 +221,8 @@ public class AddNote extends AppCompatActivity {
         });
     }
 
+     */
+
 
     //share notes
     private void shareNotes() {
@@ -249,9 +261,9 @@ public class AddNote extends AppCompatActivity {
 
             //Bos-Dolu Kontrolu
             if (TextUtils.isEmpty(notIcerigi)) {
-                Toast.makeText(AddNote.this, "Not içeriği giriniz.", Toast.LENGTH_SHORT).show();
+                displayToast("Not içeriği giriniz");
             } else if (TextUtils.isEmpty(notBaslik)) {
-                Toast.makeText(AddNote.this, "Başlık boş bırakılamaz.", Toast.LENGTH_SHORT).show();
+                displayToast("Başlık boş bırakılamaz");
             } else {
                 //Olusturma zamanini al.
                 Calendar calendar = new GregorianCalendar();
@@ -276,7 +288,7 @@ public class AddNote extends AppCompatActivity {
                     Intent intent = new Intent(AddNote.this, NotePage.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
-                    Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
+                    displayToast("Not başarıyla oluşturuldu");
 
 
                 } else {
@@ -290,7 +302,7 @@ public class AddNote extends AppCompatActivity {
                     Intent intent = new Intent(AddNote.this, NotePage.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
-                    Toast.makeText(AddNote.this, "Not başarıyla oluşturuldu.", Toast.LENGTH_SHORT).show();
+                    displayToast("Not başarıyla oluşturuldu");
 
 
                 }
@@ -304,7 +316,7 @@ public class AddNote extends AppCompatActivity {
     private void recognizeTextFromImage() {
         //Eger uri degeri bos degilse:
         if (imageUri == null) {
-            Toast.makeText(AddNote.this, "Lütfen resim seçiniz", Toast.LENGTH_SHORT).show();
+            displayToast("Lütfen resim seçiniz");
         } else {
             InputImage inputImage = null;
             try {
@@ -322,7 +334,7 @@ public class AddNote extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddNote.this);
                     builder.setTitle("Not Taraması");
                     builder.setMessage("Fotoğrafta not bulundu, notunuza eklensin mi?");
-                    builder.setNegativeButton("Hayır", (dialog, which) -> Toast.makeText(this, "İçerik alınmadı", Toast.LENGTH_SHORT).show());
+                    builder.setNegativeButton("Hayır", (dialog, which) -> displayToast("İçerik alınmadı"));
                     builder.setPositiveButton("Evet", (dialogInterface, i) -> {
                         binding.txtNote.setText(recognized);
                     });
@@ -406,7 +418,7 @@ public class AddNote extends AppCompatActivity {
                     if (cameraAccepted && storageAccepted) {
                         pickImageCamera();
                     } else {
-                        Toast.makeText(this, "Kamera ve Depolama izni gerekli.", Toast.LENGTH_SHORT).show();
+                        displayToast("Kamera ve Depolama izni gerekli");
                     }
 
                 }
@@ -420,7 +432,7 @@ public class AddNote extends AppCompatActivity {
                     if (storageAccepted) {
                         pickImageGallery();
                     } else {
-                        Toast.makeText(this, "Depolama izni gerekli", Toast.LENGTH_SHORT).show();
+                        displayToast("Depolama izni gerekli");
                     }
                 }
 
@@ -448,7 +460,7 @@ public class AddNote extends AppCompatActivity {
                 uploadImage();
                 recognizeTextFromImage();
             } else {
-                Toast.makeText(AddNote.this, "Vazgeçildi", Toast.LENGTH_SHORT).show();
+                displayToast("Vazgeçildi");
             }
         }
     });
@@ -474,7 +486,7 @@ public class AddNote extends AppCompatActivity {
                 uploadImage();
                 recognizeTextFromImage();
             } else {
-                Toast.makeText(AddNote.this, "Vazgeçildi", Toast.LENGTH_SHORT).show();
+                displayToast("Vazgeçildi");
             }
         }
     });
@@ -613,7 +625,7 @@ public class AddNote extends AppCompatActivity {
 
         //texti kopyalar
         binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
-
+/*
         //color picker
         binding.btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -622,6 +634,7 @@ public class AddNote extends AppCompatActivity {
             }
         });
 
+ */
 
     }
 }
