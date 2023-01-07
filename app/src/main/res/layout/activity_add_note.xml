@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addNoteBG"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color_light">
@@ -133,7 +134,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:weightSum="4"
+            android:weightSum="5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -161,6 +162,8 @@
                 app:rippleColor="@android:color/transparent"
                 app:tint="@color/bg_color_light"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnitalic"
@@ -222,6 +225,30 @@
                 app:icon="@drawable/copy_icon"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:tint="@color/bg_color_light"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:padding="@dimen/_20sdp"
+                android:shadowColor="@android:color/transparent"
+                app:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/color_filter_icon_svg"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:tint="@color/bg_color_light"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
