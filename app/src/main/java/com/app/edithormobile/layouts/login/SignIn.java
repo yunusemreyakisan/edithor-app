@@ -35,6 +35,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,6 +56,9 @@ public class SignIn extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     ActivitySignInBinding binding;
+    private static final int RC_SIGN_IN = 100;
+    private GoogleSignInClient gsc;
+    private static final String TAG = "GOOGLE_SIGN_IN_TAG";
 
 
     @Override
@@ -73,8 +78,96 @@ public class SignIn extends AppCompatActivity {
 
 
         //TODO: UpdateUI methodu eklenmeli, for sign in google.
+        //configure google sign in
+        GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        gsc = GoogleSignIn.getClient(this,gso);
+
+        // init firebase auth
+
+        //Click to sign in button
+        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "OnClick Google_sign_in");
+                Intent intent = gsc.getSignInIntent();
+                startActivityForResult(intent,RC_SIGN_IN);
+
+            }
+
+        });
+        mAuth =FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user!=null){
+            startActivity(new Intent(SignIn.this,NotePage.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+
+
+
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==RC_SIGN_IN){
+            Log.d(TAG, "onActivityResult: Google Sign in intent result");
+            Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if(accountTask.isSuccessful()){
+                String s="Succesfull";
+                try {
+                    GoogleSignInAccount account = accountTask.getResult(ApiException.class);
+                    if(account!=null){
+                        firebaseAuthithGogleAccount(account);
+                    }
+                }
+                catch (Exception e){
+                    Log.d(TAG, "onActivityResult: " +e.getMessage());
+                }
+            }
+
+        }
+    }
+
+
+
+    private void firebaseAuthithGogleAccount(GoogleSignInAccount account) {
+        AuthCredential authCredential= GoogleAuthProvider
+                .getCredential(account.getIdToken()
+                        ,null);
+        // Check credential
+        mAuth.signInWithCredential(authCredential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // Check condition
+                        if(task.isSuccessful())
+                        {
+                            // When task is successful
+                            // Redirect to profile activity
+                            Toast.makeText(SignIn.this, "edfsefsef", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignIn.this
+                                    ,NotePage.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            // Display Toast
+                            Toast.makeText(SignIn.this, "Succesfull", Toast.LENGTH_SHORT).show();;
+                        }
+                        else
+                        {
+                            // When task is unsuccessful
+                            // Display Toast
+                            Toast.makeText(SignIn.this, "Failed", Toast.LENGTH_SHORT).show();;
+
+                        }
+                    }
+                });
+
+    }
+
+
+
 
     //Toast Method
     private void displayToast(String message) {
