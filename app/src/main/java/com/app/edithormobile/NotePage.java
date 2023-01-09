@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -24,6 +25,11 @@ import com.app.edithormobile.layouts.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.layouts.upload.UploadFile;
 import com.app.edithormobile.models.NoteModel;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +58,8 @@ public class NotePage extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
+    private GoogleSignInClient gsc;
+    GoogleSignInAccount account;
 
     NoteAdapter.ClickListener clickListener;
 
@@ -277,6 +285,8 @@ public class NotePage extends AppCompatActivity {
                     editor.putString("Remember", "false");
                     editor.apply();
                     finish();
+
+                    //TODO: Google Sign-out blogu yazılmalı.
 
                     //Giriş aktivitesine dönülmesi
                     Intent intent = new Intent(NotePage.this, SignIn.class);
