@@ -34,8 +34,8 @@
                 android:id="@+id/imageUri"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:contentDescription="TODO" />
+                android:contentDescription="TODO"
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
 
@@ -71,15 +71,38 @@
                 android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:weightSum="4"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tvOlusturmaTarihi"
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="15dp"
+                    android:paddingStart="15dp"
                     android:textColor="@color/cardview_date_color"
                     android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/notColor"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="DSCSDVC"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/cardview_date_color"
+                    android:textSize="13sp" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </LinearLayout>
