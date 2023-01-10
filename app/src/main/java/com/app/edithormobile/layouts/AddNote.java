@@ -20,6 +20,7 @@ import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -36,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 
 import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
@@ -142,7 +144,7 @@ public class AddNote extends AppCompatActivity{
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
         //Handle Click
-        binding.imageNote.setOnClickListener(new View.OnClickListener() {
+        binding.btncopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showInputImageDialog();
@@ -173,14 +175,14 @@ public class AddNote extends AppCompatActivity{
         AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
             @Override
             public void onCancel(AmbilWarnaDialog dialog) {
-
+                binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.bg_color_light));
+                binding.btnColor.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.bg_color_light)));
             }
 
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
                 defaultColor = color;
                 binding.btnColor.setIconTint(ColorStateList.valueOf(color));
-
             }
         });
         dialog.show();
@@ -311,7 +313,6 @@ public class AddNote extends AppCompatActivity{
                     String id = mDatabase.push().getKey();
                     assert id != null;
                     NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false, defaultColor);
-                    mNotes.setColor(defaultColor);
                     mDatabase.child(id).setValue(mNotes);
 
                     //intent
@@ -328,7 +329,6 @@ public class AddNote extends AppCompatActivity{
                     String id = mDatabase.push().getKey();
                     assert id != null;
                     NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, defaultColor);
-                    mNotes.setColor(defaultColor);
                     mDatabase.child(id).setValue(mNotes);
 
                     //intent
@@ -384,7 +384,7 @@ public class AddNote extends AppCompatActivity{
 
     //Popup Menu ile seceneklerin sorulması
     private void showInputImageDialog() {
-        PopupMenu popupMenu = new PopupMenu(this, binding.imageNote);
+        PopupMenu popupMenu = new PopupMenu(this, binding.btncopy);
         popupMenu.getMenu().add(Menu.NONE, 1, 1, "Fotoğraf çek");
         popupMenu.getMenu().add(Menu.NONE, 2, 2, "Galeriden seç");
 
@@ -657,7 +657,7 @@ public class AddNote extends AppCompatActivity{
         });
 
         //texti kopyalar
-        binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
+       // binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
 /*
         //color picker
         binding.btnColor.setOnClickListener(new View.OnClickListener() {
