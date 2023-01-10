@@ -45,7 +45,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     }
 
 
-
     @NonNull
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,7 +71,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     .into(holder.imageUri);
 
 
+            holder.color.setBackgroundColor(mNote.getColor());
 
+
+            //TODO:Talha hocaya sor. (Referans alma ile alakalı)
             //TODO: Fotoğrafın referansı cihazın kendi depolama alanıyla sınırlı. Storage üzerinden URL alıp göstermeli.
 
 
@@ -81,7 +83,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             holder.tvNote.setText(mNote.getNotIcerigi());
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
 
-          //  holder.itemView.setBackgroundColor(mNote.getColor());
+
+            holder.color.setBackgroundColor(mNote.getColor());
+
 
             //TODO: Holder ile getColor() methodunu kullanmalı.
         }
@@ -160,13 +164,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     }
 
 
-
     //ViewHolder with images
-    public static class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public static class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
         public CardView card;
         ImageView imageUri;
-        LinearLayout card_layout;
+        ImageView color;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
@@ -175,9 +178,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
             imageUri = itemView.findViewById(R.id.imageUri);
-
-
-
+            color = itemView.findViewById(R.id.notColor);
 
             //click
             itemView.setOnClickListener(this);
@@ -207,13 +208,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     }
 
 
-
     //Interface
     public interface ClickListener {
         void onItemClick(View v, int position);
+
         void onItemLongClick(View v, int position);
     }
-
 
     @Override
     public int getItemCount() {
