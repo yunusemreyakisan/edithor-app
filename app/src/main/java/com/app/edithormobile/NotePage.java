@@ -49,7 +49,7 @@ import java.util.ArrayList;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity {
+public class NotePage extends AppCompatActivity{
 
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
@@ -218,12 +218,10 @@ public class NotePage extends AppCompatActivity {
                                     noteAdapter.notifyItemRemoved(position);
                                     noteAdapter.notifyDataSetChanged();
 
-                                    displayToast("Notunuz silindi");
-
                                     //Snackbar Effect (Throws Exception)
                                     Snackbar snackbar = Snackbar
-                                            .make(v, "Message is deleted", Snackbar.LENGTH_LONG)
-                                            .setAction("UNDO", new View.OnClickListener() {
+                                            .make(v, "Notunuz silindi", Snackbar.LENGTH_LONG)
+                                            .setAction("GERİ AL", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     //TODO: Note Restore Process
@@ -236,7 +234,7 @@ public class NotePage extends AppCompatActivity {
 
                                 }
                             }
-                        }).addOnFailureListener(e -> displayToast("Notunuz silindi"));
+                        }).addOnFailureListener(e -> displayToast("Vazgeçildi"));
                     }
                 });
                 builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
