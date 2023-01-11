@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -21,17 +20,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
-import com.app.edithormobile.layouts.AddNote;
+import com.app.edithormobile.layouts.crud.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.layouts.upload.UploadFile;
 import com.app.edithormobile.models.NoteModel;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +44,7 @@ import java.util.ArrayList;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity{
+public class NotePage extends AppCompatActivity {
 
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
@@ -84,7 +79,7 @@ public class NotePage extends AppCompatActivity{
         notesViewRV();
         notesEventChangeListener();
         fabControl();
-        search(view);
+        search();
 
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
@@ -190,7 +185,7 @@ public class NotePage extends AppCompatActivity{
         noteAdapter = new NoteAdapter(NotePage.this, notes, new NoteAdapter.ClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(NotePage.this, "Kısa basıldı", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(NotePage.this, "Kısa basıldı", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(NotePage.this, AddNote.class);
                 intent.putExtra("id", notes.get(position).getNoteID());
@@ -214,27 +209,35 @@ public class NotePage extends AppCompatActivity{
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+                                    NoteModel deleted = notes.get(position);
+                                    //TODO: Sil dedikten 5 saniye sonra firebase üzerinden silmeli.
+                                    //TODO: Undo seçeneğine basarsa adapter görümünden geriye almalı.
+
                                     notes.remove(notes.get(position));
                                     noteAdapter.notifyItemRemoved(position);
                                     noteAdapter.notifyDataSetChanged();
 
                                     //Snackbar Effect (Throws Exception)
+                                    int sure = 2000;
                                     Snackbar snackbar = Snackbar
-                                            .make(v, "Notunuz silindi", Snackbar.LENGTH_LONG)
+                                            .make(v, "Notunuz silindi", sure)
                                             .setAction("GERİ AL", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    //TODO: Note Restore Process
-                                                    Snackbar snackbarRestore = Snackbar.make(v, "Message is restored!", Snackbar.LENGTH_SHORT);
-                                                    snackbarRestore.show();
-                                                }
-                                            });
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            //TODO: Firebase tarafında geri almalı.
+                                                            notes.add(position, deleted);
+                                                            noteAdapter.notifyItemInserted(position);
+                                                            restoreSnackbar(view).isShown();
 
+                                                        }
+                                                    }
+                                            );
+                                    snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                                     snackbar.show();
-
                                 }
                             }
-                        }).addOnFailureListener(e -> displayToast("Vazgeçildi"));
+                        }).addOnFailureListener(e -> displayToast("Vazgeçildi."));
+
                     }
                 });
                 builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
@@ -244,6 +247,8 @@ public class NotePage extends AppCompatActivity{
                     }
                 });
                 builder.show();
+
+
             }
         });
         binding.rvNotes.setHasFixedSize(true);
@@ -252,9 +257,9 @@ public class NotePage extends AppCompatActivity{
     }
 
 
-    //TODO: Yukarıdaki Click.Listener arayüzünü method içerisine al.
-    private NoteAdapter.ClickListener removeNoteByID() {
-        return clickListener;
+    //Snackbar Restore Method
+    public Snackbar restoreSnackbar(View v) {
+        return Snackbar.make(v, "Notunuz geri alındı", Snackbar.LENGTH_SHORT);
     }
 
 
@@ -388,7 +393,7 @@ public class NotePage extends AppCompatActivity{
 
 
     //Menu (Search)
-    private void search(View view) {
+    private void search() {
         //arama islemi
         binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -419,5 +424,4 @@ public class NotePage extends AppCompatActivity{
             noteAdapter.filterList(filteredlist);
         }
     }
-
 }
