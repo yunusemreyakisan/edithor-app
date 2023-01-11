@@ -1,4 +1,4 @@
-package com.app.edithormobile.layouts;
+package com.app.edithormobile.layouts.crud;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,10 +20,8 @@ import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -37,7 +35,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.WindowCompat;
 
 import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
@@ -64,13 +61,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class AddNote extends AppCompatActivity{
+public class AddNote extends AppCompatActivity {
 
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline, italic = false;
@@ -128,8 +124,6 @@ public class AddNote extends AppCompatActivity{
         });
 
 
-
-
         //TODO: Nota tıklandığında Güncelle butonu ortaya çıksın ve işlev yürütülsün.
 
 
@@ -138,7 +132,7 @@ public class AddNote extends AppCompatActivity{
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         //color picker
-        defaultColor = ContextCompat.getColor(AddNote.this, R.color.button_active_color);
+        defaultColor = ContextCompat.getColor(AddNote.this, R.color.cardview_color);
 
         //init TextRecognizer
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
@@ -192,7 +186,6 @@ public class AddNote extends AppCompatActivity{
     private void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
-
 
 
     //TODO: Kaydet butonu yerine auto-save methodu getirilmeli, onBackPressed() methodu tetiklendiğinde draft olarak kaydedilmiş olacak.
@@ -322,22 +315,19 @@ public class AddNote extends AppCompatActivity{
                     displayToast("Not başarıyla oluşturuldu");
 
 
-
-
                 } else {
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
-                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, defaultColor);
+                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false, defaultColor);
                     mDatabase.child(id).setValue(mNotes);
+
 
                     //intent
                     Intent intent = new Intent(AddNote.this, NotePage.class);
                     intent.putExtra("id", id);
                     startActivity(intent);
                     displayToast("Not başarıyla oluşturuldu");
-
-
                 }
 
             }
@@ -657,7 +647,7 @@ public class AddNote extends AppCompatActivity{
         });
 
         //texti kopyalar
-       // binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
+        // binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
 /*
         //color picker
         binding.btnColor.setOnClickListener(new View.OnClickListener() {
