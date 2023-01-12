@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.models.NoteModel;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -61,6 +64,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -115,6 +119,12 @@ public class AddNote extends AppCompatActivity {
         //notGuncelleme();
         islemdenVazgec();
         optionsbarIslevi();
+
+
+        if ((getIntent().getStringExtra("baslik")) != null && getIntent().getStringExtra("icerik") != null) {
+            notGuncelleme();
+        }
+
 
         binding.btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +190,8 @@ public class AddNote extends AppCompatActivity {
             }
         });
         dialog.show();
+        dialog.getDialog().getButton(dialog.getDialog().BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
+        dialog.getDialog().getButton(dialog.getDialog().BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
     }
 
     //Toast Method
@@ -192,7 +204,7 @@ public class AddNote extends AppCompatActivity {
     //TODO: Güncelleme işlemi yapıyor fakat buton değiştirilmeli.
     // Aynı buton olduğundan intent tarafından gelen değer null geliyor not eklemek istediğimizde.
 
-    /*
+
     public void notGuncelleme() {
         //deger alma (update first step)
         binding.txtTitle.setText(getIntent().getStringExtra("baslik"));
@@ -203,9 +215,10 @@ public class AddNote extends AppCompatActivity {
 
 
         String noteID = getIntent().getStringExtra("id");
-        String position = getIntent().getStringExtra("position");
+        NoteModel position = (NoteModel) getIntent().getSerializableExtra("position");
+        //Log.e("position degeri", position);
 
-        binding.buttonGuncelle.setOnClickListener(new View.OnClickListener() {
+        binding.btnNotuKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HashMap<String, Object> map = new HashMap<>();
@@ -222,10 +235,11 @@ public class AddNote extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    notes.get(Integer.parseInt(position)).setNotBaslik(binding.txtTitle.getText().toString());
-                                    notes.get(Integer.parseInt(position)).setNotIcerigi(binding.txtTitle.getText().toString());
-                                    adapter.notifyItemChanged(Integer.parseInt(position));
-                                    adapter.notifyDataSetChanged();
+                                    position.setNotBaslik(binding.txtTitle.getText().toString());
+                                    position.setNotIcerigi(binding.txtTitle.getText().toString());
+                                    //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
+                                    //adapter.notifyDataSetChanged(); null dönüyor!!!
+
                                     Toast.makeText(AddNote.this, "Notunuz güncellendi", Toast.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(AddNote.this, NotePage.class);
@@ -241,9 +255,8 @@ public class AddNote extends AppCompatActivity {
                         });
             }
         });
-    }
 
-     */
+    }
 
 
     //share notes
