@@ -6,9 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -186,13 +188,14 @@ public class NotePage extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 // Toast.makeText(NotePage.this, "Kısa basıldı", Toast.LENGTH_SHORT).show();
-
+                NoteModel model = notes.get(position);
                 Intent intent = new Intent(NotePage.this, AddNote.class);
                 intent.putExtra("id", notes.get(position).getNoteID());
                 intent.putExtra("baslik", notes.get(position).getNotBaslik());
                 intent.putExtra("icerik", notes.get(position).getNotIcerigi());
-                intent.putExtra("position", position);
+                intent.putExtra("position", model);
                 startActivity(intent);
+
             }
 
             @Override
@@ -213,6 +216,7 @@ public class NotePage extends AppCompatActivity {
                                     //TODO: Sil dedikten 5 saniye sonra firebase üzerinden silmeli.
                                     //TODO: Undo seçeneğine basarsa adapter görümünden geriye almalı.
 
+                                    //TODO: Silerken Timer() eklenmesi sorulmalı.
                                     notes.remove(notes.get(position));
                                     noteAdapter.notifyItemRemoved(position);
                                     noteAdapter.notifyDataSetChanged();
@@ -221,16 +225,13 @@ public class NotePage extends AppCompatActivity {
                                     int sure = 2000;
                                     Snackbar snackbar = Snackbar
                                             .make(v, "Notunuz silindi", sure)
-                                            .setAction("GERİ AL", new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            //TODO: Firebase tarafında geri almalı.
-                                                            notes.add(position, deleted);
-                                                            noteAdapter.notifyItemInserted(position);
-                                                            restoreSnackbar(view).isShown();
+                                            .setAction("GERİ AL", view -> {
+                                                //TODO: Firebase tarafında geri almalı.
+                                                notes.add(position, deleted);
+                                                noteAdapter.notifyItemInserted(position);
+                                                restoreSnackbar(view).isShown();
 
-                                                        }
-                                                    }
+                                            }
                                             );
                                     snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                                     snackbar.show();
@@ -246,9 +247,11 @@ public class NotePage extends AppCompatActivity {
                         displayToast("Vazgeçildi");
                     }
                 });
-                builder.show();
-
-
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
+                alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
+                alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
             }
         });
         binding.rvNotes.setHasFixedSize(true);
