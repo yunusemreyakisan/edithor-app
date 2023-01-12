@@ -1,7 +1,9 @@
 package com.app.edithormobile.models;
 
 
-public class NoteModel {
+import java.io.Serializable;
+
+public class NoteModel implements Serializable {
 
     String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri;
     boolean isSelected = false;
