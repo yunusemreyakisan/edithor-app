@@ -5,75 +5,77 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:layout_marginBottom="5dp"
     android:backgroundTint="@android:color/transparent"
     android:checkable="true"
-    android:focusable="true"
     android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/cardview_color"
     app:cardCornerRadius="10dp"
-    android:layout_margin="5dp"
     app:cardElevation="0dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_weight="1"
+        android:background="@color/cardview_color"
+        android:gravity="top"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:maxLines="1"
+            android:maxLength="15"
+            android:paddingHorizontal="15dp"
+            android:paddingTop="15dp"
+            android:textColor="@color/bg_color_dark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/tvNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="2"
+            android:maxLength="50"
+            android:paddingHorizontal="15dp"
+            android:textColor="@color/bg_color_dark"
+            android:textSize="15sp" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:background="@color/cardview_color"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:weightSum="4">
+
 
             <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:maxLength="15"
-                android:paddingHorizontal="15dp"
-                android:paddingTop="15dp"
-                android:textColor="@color/bg_color_dark"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvNote"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="2"
-                android:maxLength="50"
-                android:paddingHorizontal="15dp"
-                android:textColor="@color/bg_color_dark"
-                android:textSize="15sp" />
-
-
-            <LinearLayout
+                android:id="@+id/tvOlusturmaTarihi"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4"
-                android:weightSum="4"
-                android:orientation="vertical">
+                android:layout_marginTop="10dp"
+                android:layout_weight="3"
+                android:paddingHorizontal="15dp"
+                android:textColor="@color/cardview_date_color"
+                android:textSize="13sp" />
 
-
-                <TextView
-                    android:id="@+id/tvOlusturmaTarihi"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:layout_marginTop="10dp"
-                    android:paddingHorizontal="15dp"
-                    android:textColor="@color/cardview_date_color"
-                    android:textSize="13sp" />
-
-                <ImageView
-                    android:id="@+id/notColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:paddingEnd="10dp"
-                    />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/notColor"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingEnd="10dp" />
         </LinearLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
