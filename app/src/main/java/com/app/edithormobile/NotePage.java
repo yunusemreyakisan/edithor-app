@@ -48,6 +48,8 @@ import java.util.ArrayList;
 
 public class NotePage extends AppCompatActivity {
 
+    ArrayList<NoteModel> selectedNotes = new ArrayList<>();
+    boolean isSelectedMode = false;
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
@@ -252,6 +254,29 @@ public class NotePage extends AppCompatActivity {
                 alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
                 alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
                 alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
+
+
+
+
+                //TODO:Seçilim
+                /*
+                isSelectedMode = true;
+                if(selectedNotes.contains(notes.get(position))){
+                    v.setBackgroundColor(Color.TRANSPARENT);
+                    selectedNotes.remove(notes.get(position));
+                }else{
+                    v.findViewById(R.id.tvNote).setBackgroundColor(Color.CYAN);
+                    selectedNotes.add(notes.get(position));
+                }
+
+                if(selectedNotes.size() == 0){
+                    isSelectedMode = false;
+                }
+
+                Log.e("secilen liste", selectedNotes.toString());
+
+
+                 */
             }
         });
         binding.rvNotes.setHasFixedSize(true);
