@@ -26,8 +26,10 @@ import com.app.edithormobile.layouts.crud.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.layouts.upload.UploadFile;
 import com.app.edithormobile.models.NoteModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -57,7 +59,7 @@ public class NotePage extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     Boolean isAllFabsVisible;
-    private GoogleSignInClient gsc;
+    private GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
 
     NoteAdapter.ClickListener clickListener;
@@ -85,6 +87,20 @@ public class NotePage extends AppCompatActivity {
         fabControl();
         search();
 
+        /*
+        -- Google ile hesap verilerinin alınması
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account!=null){
+            String personName = account.getGivenName();
+            binding.tvBaslik.setText(personName);
+        }
+      */
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
 
@@ -228,12 +244,16 @@ public class NotePage extends AppCompatActivity {
                                     Snackbar snackbar = Snackbar
                                             .make(v, "Notunuz silindi", sure)
                                             .setAction("GERİ AL", view -> {
-                                                //TODO: Firebase tarafında geri almalı.
-                                                notes.add(position, deleted);
-                                                noteAdapter.notifyItemInserted(position);
-                                                restoreSnackbar(view).isShown();
+                                                        //TODO: Firebase tarafında geri almalı.
+                                                        notes.add(position, deleted);
+                                                        noteAdapter.notifyItemInserted(position);
+                                                        restoreSnackbar(view).isShown();
+                                                        //TODO: Firebase e ekleme kodu yerleştirilmeli.
+                                                        //TODO: 20 adet deneme yapıp en başarılı modeli bulup entegre edilecek.
+                                                        //TODO: Modele sonra karar verilecek.
 
-                                            }
+
+                                                    }
                                             );
                                     snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                                     snackbar.show();
@@ -256,10 +276,8 @@ public class NotePage extends AppCompatActivity {
                 alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
 
 
-
-
                 //TODO:Seçilim
-                /*
+/*
                 isSelectedMode = true;
                 if(selectedNotes.contains(notes.get(position))){
                     v.setBackgroundColor(Color.TRANSPARENT);
@@ -276,7 +294,8 @@ public class NotePage extends AppCompatActivity {
                 Log.e("secilen liste", selectedNotes.toString());
 
 
-                 */
+
+ */
             }
         });
         binding.rvNotes.setHasFixedSize(true);
@@ -294,6 +313,10 @@ public class NotePage extends AppCompatActivity {
     //Back Pressed
     @Override
     public void onBackPressed() {
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            mGoogleSignInClient.signOut();
+        }
         //Toast.makeText(MainActivity.this, "Back pressed", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(NotePage.this);
         // Pencere Baslik Tanımı
