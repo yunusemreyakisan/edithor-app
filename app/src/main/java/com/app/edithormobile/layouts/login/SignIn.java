@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivitySignInBinding;
+import com.app.edithormobile.models.UserModel;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.Identity;
@@ -46,20 +47,28 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Single;
 
 
 public class SignIn extends AppCompatActivity {
-
     FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private DatabaseReference mDatabase;
     ActivitySignInBinding binding;
-    private static final int RC_SIGN_IN = 100;
-    private GoogleSignInClient gsc;
-    private static final String TAG = "GOOGLE_SIGN_IN_TAG";
+    private static final int RC_SIGN_IN = 0;
+    private GoogleSignInClient mGoogleSignInClient;
 
+    //Firebase üzerinde ProjectSettings > Your Apps > Add Fingerprints kısmına tıklıyoruz.
+    //Gradle üzerinden aldığımız signingReport içerisinde bulunan SHA-1 anahtarını oraya ekliyoruz.
+    //SORUN ÇÖZÜLDÜ!
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,97 +86,114 @@ public class SignIn extends AppCompatActivity {
         beniHatirla();
 
 
-        //TODO: UpdateUI methodu eklenmeli, for sign in google.
         //configure google sign in
-        GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        gsc = GoogleSignIn.getClient(this,gso);
-
-        // init firebase auth
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //Click to sign in button
         binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "OnClick Google_sign_in");
-                Intent intent = gsc.getSignInIntent();
-                startActivityForResult(intent,RC_SIGN_IN);
-
+                switch (v.getId()) {
+                    case R.id.btnGoogle:
+                        signIn();
+                        break;
+                }
             }
-
         });
-        mAuth =FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user!=null){
-            startActivity(new Intent(SignIn.this,NotePage.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        }
+    }
+    //eof onCreate()
 
-
-
-
+    //Google Sign-in
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode ==RC_SIGN_IN){
-            Log.d(TAG, "onActivityResult: Google Sign in intent result");
-            Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-            if(accountTask.isSuccessful()){
-                String s="Succesfull";
-                try {
-                    GoogleSignInAccount account = accountTask.getResult(ApiException.class);
-                    if(account!=null){
-                        firebaseAuthithGogleAccount(account);
-                    }
-                }
-                catch (Exception e){
-                    Log.d(TAG, "onActivityResult: " +e.getMessage());
-                }
-            }
-
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
         }
     }
 
+    //Google ile giris isleminin sonucunun elde edilmesi
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            Toast.makeText(this, "Sign-in başarılı!", Toast.LENGTH_SHORT).show();
+            googleHesabiniKaydet(account);
 
+            Intent intent = new Intent(this, NotePage.class);
+            startActivity(intent);
+        } catch (ApiException e) {
+            Log.e("Error", "SignInResult:Failed Code = " + e.getStatusCode() + "error" + e.getMessage());
+        }
+    }
 
-    private void firebaseAuthithGogleAccount(GoogleSignInAccount account) {
-        AuthCredential authCredential= GoogleAuthProvider
-                .getCredential(account.getIdToken()
-                        ,null);
-        // Check credential
-        mAuth.signInWithCredential(authCredential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+    //Google ile giris yapildiginda kullanici bilgilerini Realtime DB uzerine kaydedilmesi
+    private void googleHesabiniKaydet(GoogleSignInAccount account) {
+        mAuth = FirebaseAuth.getInstance();
+
+        String name = Objects.requireNonNull(account.getGivenName());
+        String email = Objects.requireNonNull(account.getEmail());
+        String password = Objects.requireNonNull(account.getId());
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        // Check condition
-                        if(task.isSuccessful())
-                        {
-                            // When task is successful
-                            // Redirect to profile activity
-                            Toast.makeText(SignIn.this, "edfsefsef", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignIn.this
-                                    ,NotePage.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                            // Display Toast
-                            Toast.makeText(SignIn.this, "Succesfull", Toast.LENGTH_SHORT).show();;
-                        }
-                        else
-                        {
-                            // When task is unsuccessful
-                            // Display Toast
-                            Toast.makeText(SignIn.this, "Failed", Toast.LENGTH_SHORT).show();;
+                        if (task.isSuccessful()) {
+                            //Veritabanına Canlı Kayıt Etme (Realtime Database)
+                            String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                            mUser = mAuth.getCurrentUser();
+                            mDatabase = FirebaseDatabase.getInstance().getReference()
+                                    .child("Kullanicilar")
+                                    .child(user_id)
+                                    .child("Kullanıcı Bilgileri");
+                            //Olusturma zamanini al.
+                            Calendar calendar = new GregorianCalendar();
+                            int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
+                            int hours = calendar.get(Calendar.HOUR);
+                            int minutes = calendar.get(Calendar.MINUTE);
+                            String time = String.format("%02d:%02d", hours, minutes);
+                            String hesapOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
+                                    + " " + time;
 
+                            HashMap<String, UserModel> mData = new HashMap<>();
+                            mData.put(user_id, new UserModel(user_id, email, password, hesapOlusturmaTarihi));
+
+                            //Realtime Database
+                            mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Intent intent = new Intent(SignIn.this, NotePage.class);
+                                    startActivity(intent);
+                                    Toast.makeText(SignIn.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(SignIn.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 });
-
     }
 
-
-
+    //onStart() methodu ile kullanicinin onceden giris yapıp yapmadiginin kontrolu
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            //Toast.makeText(this, "Kullanıcı zaten giriş yaptı", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), NotePage.class);
+            startActivity(intent);
+        }
+    }
 
     //Toast Method
     private void displayToast(String message) {
@@ -175,6 +201,7 @@ public class SignIn extends AppCompatActivity {
     }
 
 
+    //Back-pressed methodu
     @Override
     public void onBackPressed() {
         //nothing
