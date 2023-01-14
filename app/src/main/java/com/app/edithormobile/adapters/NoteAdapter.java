@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,18 +30,20 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
 
-    private static ClickListener clickListener;
+    static ClickListener clickListener;
 
-    private static int TYPE_IMAGE = 1;
-    private static int TYPE_TEXT = 2;
+    private static final int TYPE_IMAGE = 1;
+    private static final int TYPE_TEXT = 2;
 
 
     //Constructor
     public NoteAdapter(Context context, ArrayList<NoteModel> notes, ClickListener clickListener) {
         this.context = context;
         this.notes = notes;
-        this.clickListener = clickListener;
+        NoteAdapter.clickListener = clickListener;
     }
+
+
 
 
     @NonNull
@@ -70,7 +71,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     .load(mNote.getImageUri())
                     .into(holder.imageUri);
 
-
             holder.color.setBackgroundColor(mNote.getColor());
 
 
@@ -82,12 +82,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             holder.tvTitle.setText(mNote.getNotBaslik());
             holder.tvNote.setText(mNote.getNotIcerigi());
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
-
-
             holder.color.setBackgroundColor(mNote.getColor());
 
-
-            //TODO: Holder ile getColor() methodunu kullanmalı.
         }
 
         //Remove reference
@@ -161,6 +157,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         });
 
          */
+
     }
 
 
@@ -168,8 +165,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     public static class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
         public CardView card;
-        ImageView imageUri;
-        ImageView color;
+        ImageView imageUri, color;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
@@ -188,10 +184,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
+            int positionID = getAdapterPosition();
             v = card;
-            if (position >= 0) {
-                clickListener.onItemClick(v, position);
+            if (positionID >= 0) {
+                clickListener.onItemClick(v, positionID);
             }
         }
 
@@ -211,9 +207,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     //Interface
     public interface ClickListener {
         void onItemClick(View v, int position);
-
         void onItemLongClick(View v, int position);
     }
+
 
     @Override
     public int getItemCount() {
