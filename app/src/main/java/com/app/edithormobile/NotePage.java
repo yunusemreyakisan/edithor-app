@@ -87,20 +87,12 @@ public class NotePage extends AppCompatActivity {
         fabControl();
         search();
 
-        /*
-        -- Google ile hesap verilerinin alınması
 
+        //Google ile hesap verilerinin alınması
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account!=null){
-            String personName = account.getGivenName();
-            binding.tvBaslik.setText(personName);
-        }
-      */
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
 
