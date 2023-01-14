@@ -116,7 +116,6 @@ public class AddNote extends AppCompatActivity {
 
         //methods
         notKaydetmeIslevi();
-        //notGuncelleme();
         islemdenVazgec();
         optionsbarIslevi();
 
