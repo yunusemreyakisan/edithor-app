@@ -66,9 +66,6 @@ public class SignIn extends AppCompatActivity {
     private static final int RC_SIGN_IN = 0;
     private GoogleSignInClient mGoogleSignInClient;
 
-    //Firebase üzerinde ProjectSettings > Your Apps > Add Fingerprints kısmına tıklıyoruz.
-    //Gradle üzerinden aldığımız signingReport içerisinde bulunan SHA-1 anahtarını oraya ekliyoruz.
-    //SORUN ÇÖZÜLDÜ!
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
