@@ -32,6 +32,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+
             <android.widget.SearchView
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
@@ -48,8 +50,8 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/tvBaslik"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
+                app:layout_constraintVertical_bias="1.0" >
+            </android.widget.SearchView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
