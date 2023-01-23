@@ -43,6 +43,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Objects;
 
 /**
  * @author yunusemreyakisan
@@ -89,14 +92,13 @@ public class NotePage extends AppCompatActivity {
 
 
         //Google ile hesap verilerinin alınması
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
 
     }
+
 
     //Toast Method
     private void displayToast(String message) {
@@ -115,34 +117,33 @@ public class NotePage extends AppCompatActivity {
         //Baslarken kucuk gosterir.
         binding.extendedFab.shrink();
         //extendable click listener
-        binding.extendedFab.setOnClickListener(
-                view -> {
-                    if (!isAllFabsVisible) {
-                        binding.addNoteTv.bringToFront();
-                        binding.addFileTv.bringToFront();
-                        //fab icerigi goster.
-                        binding.addNote.show();
-                        binding.addFile.show();
-                        binding.addNoteTv.setVisibility(View.VISIBLE);
-                        binding.addFileTv.setVisibility(View.VISIBLE);
-                        //fab genislesin
-                        binding.extendedFab.extend();
+        binding.extendedFab.setOnClickListener(view -> {
+            if (!isAllFabsVisible) {
+                binding.addNoteTv.bringToFront();
+                binding.addFileTv.bringToFront();
+                //fab icerigi goster.
+                binding.addNote.show();
+                binding.addFile.show();
+                binding.addNoteTv.setVisibility(View.VISIBLE);
+                binding.addFileTv.setVisibility(View.VISIBLE);
+                //fab genislesin
+                binding.extendedFab.extend();
 
-                        //TODO: FAB açıldığında arkaplanın solması gerekiyor.
+                //TODO: FAB açıldığında arkaplanın solması gerekiyor.
 
-                        isAllFabsVisible = true;
-                    } else {
-                        binding.addNote.hide();
-                        binding.addFile.hide();
-                        binding.addNoteTv.setVisibility(View.GONE);
-                        binding.addFileTv.setVisibility(View.GONE);
+                isAllFabsVisible = true;
+            } else {
+                binding.addNote.hide();
+                binding.addFile.hide();
+                binding.addNoteTv.setVisibility(View.GONE);
+                binding.addFileTv.setVisibility(View.GONE);
 
-                        //fab kucultme
-                        binding.extendedFab.shrink();
+                //fab kucultme
+                binding.extendedFab.shrink();
 
-                        isAllFabsVisible = false;
-                    }
-                });
+                isAllFabsVisible = false;
+            }
+        });
 
         //fab shrink anywhere in screen
         binding.rvNotes.setOnTouchListener((view, motionEvent) -> {
@@ -158,18 +159,16 @@ public class NotePage extends AppCompatActivity {
 
 
         //Not ekleme FAB
-        binding.addNote.setOnClickListener(
-                view -> {
-                    Intent intent = new Intent(NotePage.this, AddNote.class);
-                    startActivity(intent);
-                });
+        binding.addNote.setOnClickListener(view -> {
+            Intent intent = new Intent(NotePage.this, AddNote.class);
+            startActivity(intent);
+        });
 
         //Fotograf Yukleme
-        binding.addFile.setOnClickListener(
-                view -> {
-                    Intent intent = new Intent(NotePage.this, UploadFile.class);
-                    startActivity(intent);
-                });
+        binding.addFile.setOnClickListener(view -> {
+            Intent intent = new Intent(NotePage.this, UploadFile.class);
+            startActivity(intent);
+        });
 
 
     }
@@ -180,8 +179,7 @@ public class NotePage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String user_id = requireNonNull(mUser).getUid();
-        mDatabaseReference = FirebaseDatabase.getInstance()
-                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
     }
 
     //Recyclerview
@@ -190,8 +188,7 @@ public class NotePage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
-        removeRef = FirebaseDatabase.getInstance()
-                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+        removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
 
         notes = new ArrayList<>();
         noteAdapter = new NoteAdapter(NotePage.this, notes, new NoteAdapter.ClickListener() {
@@ -223,30 +220,51 @@ public class NotePage extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     NoteModel deleted = notes.get(position);
-                                    //TODO: Sil dedikten 5 saniye sonra firebase üzerinden silmeli.
-                                    //TODO: Undo seçeneğine basarsa adapter görümünden geriye almalı.
-
-                                    //TODO: Silerken Timer() eklenmesi sorulmalı.
                                     notes.remove(notes.get(position));
                                     noteAdapter.notifyItemRemoved(position);
                                     noteAdapter.notifyDataSetChanged();
 
                                     //Snackbar Effect (Throws Exception)
                                     int sure = 2000;
-                                    Snackbar snackbar = Snackbar
-                                            .make(v, "Notunuz silindi", sure)
-                                            .setAction("GERİ AL", view -> {
-                                                        //TODO: Firebase tarafında geri almalı.
-                                                        notes.add(position, deleted);
-                                                        noteAdapter.notifyItemInserted(position);
-                                                        restoreSnackbar(view).isShown();
-                                                        //TODO: Firebase e ekleme kodu yerleştirilmeli.
-                                                        //TODO: 20 adet deneme yapıp en başarılı modeli bulup entegre edilecek.
-                                                        //TODO: Modele sonra karar verilecek.
+                                    Snackbar snackbar = Snackbar.make(v, "Notunuz silindi", sure).setAction("GERİ AL", view -> {
+                                        notes.add(position, deleted);
+                                        noteAdapter.notifyItemInserted(position);
+                                        restoreSnackbar(view).isShown();
+                                        noteAdapter.notifyDataSetChanged();
+
+                                        //TODO: İki sefer adapter üzerinde gösteriyor. Onu tek modele çevirmemiz lazım.
+
+                                        mAuth = FirebaseAuth.getInstance();
+                                        //Veritabanına Canlı Kayıt Etme (Realtime Database)
+                                        String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
+                                        mUser = mAuth.getCurrentUser();
+                                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
+                                                .child("Kullanicilar").child(user_id).child("Notlarim");
+
+                                        //yuklenen fotorafin storage adresi
+                                        final String image = deleted.getImageUri() != null ?  deleted.getImageUri() : null;
+                                        //model
+                                        if (image != null) {
+                                            //unique getKey()
+                                            String id = mDatabase.push().getKey();
+                                            assert id != null;
+                                            NoteModel mNotes = new NoteModel(deleted.getNoteID(), deleted.getNotIcerigi(), deleted.getNotBaslik(), deleted.getNotOlusturmaTarihi(), image, false, deleted.getColor());
+                                            mDatabase.child(id).setValue(mNotes);
+                                        } else {
+                                            //unique getKey()
+                                            String id = mDatabase.push().getKey();
+                                            assert id != null;
+                                            NoteModel mNotes = new NoteModel(deleted.getNoteID(), deleted.getNotIcerigi(), deleted.getNotBaslik(), deleted.getNotOlusturmaTarihi(), false, deleted.getColor());
+                                            mDatabase.child(id).setValue(mNotes);
+                                        }
 
 
-                                                    }
-                                            );
+                                        //TODO: Firebase e ekleme kodu yerleştirilmeli.
+                                        //TODO: 20 adet deneme yapıp en başarılı modeli bulup entegre edilecek.
+                                        //TODO: Modele sonra karar verilecek.
+
+
+                                    });
                                     snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                                     snackbar.show();
                                 }
@@ -405,8 +423,7 @@ public class NotePage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String user_id = requireNonNull(mUser).getUid();
-        mDatabaseReference = FirebaseDatabase.getInstance()
-                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
