@@ -91,14 +91,11 @@ public class SignIn extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //Click to sign in button
-        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btnGoogle:
-                        signIn();
-                        break;
-                }
+        binding.btnGoogle.setOnClickListener(v1 -> {
+            switch (v1.getId()) {
+                case R.id.btnGoogle:
+                    signIn();
+                    break;
             }
         });
     }
