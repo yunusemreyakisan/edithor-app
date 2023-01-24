@@ -70,7 +70,7 @@ import java.util.UUID;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class AddNote extends AppCompatActivity {
+public class AddNote extends AppCompatActivity{
 
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline, italic = false;
@@ -281,7 +281,7 @@ public class AddNote extends AppCompatActivity {
 
 
     //not kaydet
-    private void notKaydetmeIslevi() {
+    public void notKaydetmeIslevi() {
         mAuth = FirebaseAuth.getInstance();
         binding.btnNotuKaydet.setOnClickListener(view -> {
             //Veritabanına Canlı Kayıt Etme (Realtime Database)
@@ -331,7 +331,7 @@ public class AddNote extends AppCompatActivity {
                     //unique getKey()
                     String id = mDatabase.push().getKey();
                     assert id != null;
-                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false, defaultColor);
+                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, defaultColor);
                     mDatabase.child(id).setValue(mNotes);
 
 
