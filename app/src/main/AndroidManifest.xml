@@ -36,7 +36,7 @@
             android:name=".layouts.upload.UploadFile"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".SplashScreen"
+        <activity android:name=".helpers.SplashScreen"
             android:exported="true"
             android:theme="@style/SplashTheme"
             >
