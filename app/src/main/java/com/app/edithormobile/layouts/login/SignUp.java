@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.databinding.ActivitySignUpBinding;
+import com.app.edithormobile.helpers.IHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,7 +28,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class SignUp extends AppCompatActivity {
+public class SignUp extends AppCompatActivity implements IHelper {
 
     ActivitySignUpBinding binding;
     FirebaseAuth mAuth;
@@ -66,12 +67,12 @@ public class SignUp extends AppCompatActivity {
 
 
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
-                Toast.makeText(SignUp.this, "Boş bırakılamaz.", Toast.LENGTH_SHORT).show();
+                Toast("Boş bırakılamaz");
             } else if (password.length() < 6) {
-                Toast.makeText(SignUp.this, "Şifre 6 karakterden daha uzun olmalı.", Toast.LENGTH_SHORT).show();
+                Toast("Şifre 6 karakterden daha uzun olmalı");
             } else if (!email.matches(emailPattern)) {
                 Log.i("E-Mail Valid", "Geçerli E-posta girildi.");
-                Toast.makeText(getApplicationContext(), "Geçersiz E-Posta", Toast.LENGTH_SHORT).show();
+                Toast("Geçersiz E-Posta");
             } else {
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -108,10 +109,10 @@ public class SignUp extends AppCompatActivity {
                                             binding.pBar.setVisibility(View.GONE);
                                             Intent intent = new Intent(SignUp.this, SignIn.class);
                                             startActivity(intent);
-                                            Toast.makeText(SignUp.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
+                                            Toast("Hesap oluşturuldu");
                                         } else {
                                             binding.pBar.setVisibility(View.GONE);
-                                            Toast.makeText(SignUp.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
+                                            Toast("Hesap oluşturulamadı, yeniden deneyin");
                                         }
                                     });
                                 }
@@ -121,4 +122,8 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void Toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 }

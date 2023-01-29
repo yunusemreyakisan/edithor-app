@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
+import com.app.edithormobile.helpers.IHelper;
 import com.app.edithormobile.layouts.crud.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.layouts.upload.UploadFile;
@@ -51,7 +52,7 @@ import java.util.Objects;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity {
+public class NotePage extends AppCompatActivity implements IHelper {
 
     ArrayList<NoteModel> selectedNotes = new ArrayList<>();
     boolean isSelectedMode = false;
@@ -97,12 +98,6 @@ public class NotePage extends AppCompatActivity {
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
 
-    }
-
-
-    //Toast Method
-    private void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -269,14 +264,14 @@ public class NotePage extends AppCompatActivity {
                                     snackbar.show();
                                 }
                             }
-                        }).addOnFailureListener(e -> displayToast("Vazgeçildi."));
+                        }).addOnFailureListener(e -> Toast("Vazgeçildi."));
 
                     }
                 });
                 builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        displayToast("Vazgeçildi");
+                        Toast("Vazgeçildi");
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -338,9 +333,9 @@ public class NotePage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == AlertDialog.BUTTON_NEGATIVE) {
-                    displayToast("İşlem iptal edildi");
+                    Toast("İşlem iptal edildi");
                 } else if (which == AlertDialog.BUTTON_POSITIVE) { // veya else
-                    displayToast("Çıkış başarıyla gerçekleştirildi");
+                    Toast("Çıkış başarıyla gerçekleştirildi");
                     NotePage.this.finish(); // Activity’nin sonlandırılması
 
                     //Giriş ekranı için Pref. Kontrolü
@@ -412,7 +407,7 @@ public class NotePage extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                displayToast("Veritabanı hatası!");
+                Toast("Veritabanı hatası!");
             }
         });
     }
@@ -479,9 +474,14 @@ public class NotePage extends AppCompatActivity {
             }
         }
         if (filteredlist.isEmpty()) {
-            displayToast("Eşleşen not yok");
+            Toast("Eşleşen not yok");
         } else {
             noteAdapter.filterList(filteredlist);
         }
+    }
+
+    @Override
+    public void Toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

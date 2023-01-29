@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivitySignInBinding;
+import com.app.edithormobile.helpers.IHelper;
 import com.app.edithormobile.models.UserModel;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
@@ -58,7 +59,7 @@ import java.util.Objects;
 import io.reactivex.rxjava3.core.Single;
 
 
-public class SignIn extends AppCompatActivity {
+public class SignIn extends AppCompatActivity implements IHelper {
     FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mDatabase;
@@ -120,7 +121,7 @@ public class SignIn extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(this, "Sign-in başarılı!", Toast.LENGTH_SHORT).show();
+            Toast("Giris başarılı");
             googleHesabiniKaydet(account);
 
             Intent intent = new Intent(this, NotePage.class);
@@ -167,9 +168,9 @@ public class SignIn extends AppCompatActivity {
                                 if (task1.isSuccessful()) {
                                     Intent intent = new Intent(SignIn.this, NotePage.class);
                                     startActivity(intent);
-                                    Toast.makeText(SignIn.this, "Hesap oluşturuldu.", Toast.LENGTH_SHORT).show();
+                                    Toast("Hesap oluşturuldu");
                                 } else {
-                                    Toast.makeText(SignIn.this, "Hesap oluşturulamadı, yeniden deneyin.", Toast.LENGTH_SHORT).show();
+                                    Toast("Hesap oluşturulamadı, yeniden deneyin");
                                 }
                             });
                         }
@@ -188,12 +189,6 @@ public class SignIn extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-    //Toast Method
-    private void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
 
     //Back-pressed methodu
     @Override
@@ -254,12 +249,12 @@ public class SignIn extends AppCompatActivity {
 
         // Email ve Şifre Giriş Kontrolü (Dolu-Boş)
         if (TextUtils.isEmpty(email)) {
-            displayToast("Lütfen emailinizi giriniz");
+            Toast("Lütfen emailinizi giriniz");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            displayToast("Lütfen şifrenizi giriniz");
+            Toast("Lütfen şifrenizi giriniz");
             return;
         }
 
@@ -277,10 +272,14 @@ public class SignIn extends AppCompatActivity {
                             } else {
 
                                 // Giriş hatalı ise:
-                                displayToast("E-Mail veya şifre hatalı!");
+                                Toast("E-Mail veya şifre hatalı!");
                             }
                         });
     }
 
 
+    @Override
+    public void Toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 }
