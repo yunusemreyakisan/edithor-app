@@ -497,8 +497,8 @@ public class AddNote extends AppCompatActivity implements IHelper {
     //Kameradan fotograf cekimi
     private void pickImageCamera() {
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "Ornek baslik");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "Ornek aciklama");
+        values.put(MediaStore.Images.Media.TITLE, "");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "");
 
         imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
@@ -531,8 +531,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
                 resultCode,
                 data);
 
-        // checking request code and result code
-        // request code
         int PICK_IMAGE_REQUEST = 22;
         if (requestCode == PICK_IMAGE_REQUEST
                 && resultCode == RESULT_OK
