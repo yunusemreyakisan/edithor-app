@@ -10,7 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.app.edithormobile.databinding.ActivityUploadFileBinding;
+
+import com.app.edithormobile.databinding.ActivityChatGptBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,7 @@ import okhttp3.Response;
 
 //TODO: ChatGPT Entegresi üzerinde çalışılacak.
 public class GPT extends AppCompatActivity {
-    ActivityUploadFileBinding binding;
+    ActivityChatGptBinding binding;
     String deger = null;
 
     //OkHTTP
@@ -40,7 +41,7 @@ public class GPT extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityUploadFileBinding.inflate(getLayoutInflater());
+        binding = ActivityChatGptBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
