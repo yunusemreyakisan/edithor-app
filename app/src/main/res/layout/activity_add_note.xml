@@ -13,7 +13,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:alpha="0.5"
-        android:background="@drawable/image"
+        android:background="@drawable/ic_image"
         android:backgroundTint="@color/bg_color_dark"
         android:contentDescription="TODO"
         android:scaleType="centerCrop"
@@ -208,7 +208,7 @@
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btncopy"
+                android:id="@+id/btnImage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
