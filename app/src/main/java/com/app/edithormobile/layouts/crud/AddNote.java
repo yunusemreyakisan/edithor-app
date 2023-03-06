@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +40,7 @@ import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
-import com.app.edithormobile.helpers.IHelper;
+import com.app.edithormobile.utils.IHelper;
 import com.app.edithormobile.models.NoteModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,6 +71,9 @@ import java.util.UUID;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AddNote extends AppCompatActivity implements IHelper {
+
+    //TODO: Fotograf seçtirirken Galeri intenti açılıyor. Bu çözülecek.
+    //TODO: Fotograf eklerken kaydetmede hata alınıyor.
 
     CharacterStyle styleBold, styleItalic, styleNormal, underLine;
     boolean bold, underline, italic = false;
@@ -116,7 +118,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
         setContentView(view);
 
         //methods
-        notKaydetmeIslevi();
         islemdenVazgec();
         optionsbarIslevi();
 
@@ -126,12 +127,10 @@ public class AddNote extends AppCompatActivity implements IHelper {
         }
 
 
-        binding.btnColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openColorPicker();
-            }
-        });
+
+
+        //open color picker
+        binding.btnColor.setOnClickListener(v -> openColorPicker());
 
 
         //TODO: Nota tıklandığında Güncelle butonu ortaya çıksın ve işlev yürütülsün.
@@ -146,24 +145,13 @@ public class AddNote extends AppCompatActivity implements IHelper {
 
         //init TextRecognizer
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-
         //Handle Click
-        binding.btncopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showInputImageDialog();
-            }
-        });
-
-
+        binding.imageNote.setOnClickListener(v -> showInputImageDialog());
         //share text
         binding.btnUploadImage.setOnClickListener(v -> shareNotes());
-
         // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-
-
         //Styles
         styleBold = new StyleSpan(Typeface.BOLD);
         styleNormal = new StyleSpan(Typeface.NORMAL);
@@ -173,6 +161,13 @@ public class AddNote extends AppCompatActivity implements IHelper {
         //TODO: imageNote özelinde uzun basıldığında resmi önizleme özelliği olmalı.
 
     }//eof onCreate
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        notKaydetmeIslevi();
+        notGuncelleme();
+    }
 
     //Color picker dialog
     private void openColorPicker() {
@@ -207,12 +202,11 @@ public class AddNote extends AppCompatActivity implements IHelper {
                 .load(getIntent().getStringExtra("image"))
                 .into(binding.imageNote);
 
-
         String noteID = getIntent().getStringExtra("id");
         NoteModel position = (NoteModel) getIntent().getSerializableExtra("position");
         //Log.e("position degeri", position);
 
-        binding.btnNotuKaydet.setOnClickListener(new View.OnClickListener() {
+       binding.btnNotuKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HashMap<String, Object> map = new HashMap<>();
@@ -229,10 +223,20 @@ public class AddNote extends AppCompatActivity implements IHelper {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+                                    //Olusturma zamanini al.
+                                    Calendar calendar = new GregorianCalendar();
+                                    int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
+                                    int hours = calendar.get(Calendar.HOUR);
+                                    int minutes = calendar.get(Calendar.MINUTE);
+                                    String time = String.format("%02d:%02d", hours, minutes);
+                                    String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
+                                            + " " + time;
+
                                     position.setNotBaslik(binding.txtTitle.getText().toString());
                                     position.setNotIcerigi(binding.txtTitle.getText().toString());
+                                    position.setNotOlusturmaTarihi(notOlusturmaTarihi);
                                     //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
-                                    //adapter.notifyDataSetChanged(); null dönüyor!!!
+                                    //adapter.notifyDataSetChanged(); //null dönüyor!!!
 
                                     Toast("Notunuz güncellendi");
                                     Intent intent = new Intent(AddNote.this, NotePage.class);
@@ -249,8 +253,9 @@ public class AddNote extends AppCompatActivity implements IHelper {
             }
         });
 
-    }
 
+
+    }
 
     //share notes
     private void shareNotes() {
@@ -380,7 +385,7 @@ public class AddNote extends AppCompatActivity implements IHelper {
 
     //Popup Menu ile seceneklerin sorulması
     private void showInputImageDialog() {
-        PopupMenu popupMenu = new PopupMenu(this, binding.btncopy);
+        PopupMenu popupMenu = new PopupMenu(this, binding.imageNote);
         popupMenu.getMenu().add(Menu.NONE, 1, 1, "Fotoğraf çek");
         popupMenu.getMenu().add(Menu.NONE, 2, 2, "Galeriden seç");
 
@@ -439,7 +444,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
 
         switch (requestCode) {
             case REQUEST_IMAGE_CODE: {
-
                 if (grantResults.length > 0) {
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
@@ -454,7 +458,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
 
             }
             case STORAGE_REQUEST_CODE: {
-
                 if (grantResults.length > 0) {
                     boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
@@ -469,7 +472,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
         }
 
     }
-
 
     //Galeriden fotograf secmek
     private void pickImageGallery() {
