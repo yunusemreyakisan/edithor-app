@@ -1,80 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color_light">
+    tools:context=".layouts.chat_gpt.AskGPT">
 
-
-    <TextView
-        android:id="@+id/chatResponse"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="ChatGPT API"
-        android:textSize="@dimen/_20sdp"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:paddingHorizontal="10dp"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:navigationIcon="?homeAsUpIndicator"
+        app:theme="@style/ToolbarTheme">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/chatWrapper"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp">
+            android:layout_gravity="center"
+            android:fontFamily="@font/inter_black"
+            android:text="ChatGPT"
+            android:textColor="?attr/colorOnPrimary" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtChat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/cardview_color"
-                android:hint="Thor'a sor"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp"
-                android:textColor="@color/input_text_color"
-                android:textColorHint="@color/text_hint_color" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:id="@+id/state_icon"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:contentDescription="state icon"
+            android:src="@drawable/ic_check" />
 
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/chat_send_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="@color/button_active_color"
-            android:text="Gönder"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/button_bg"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+        <TextView
+            android:id="@+id/state_text"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:fontFamily="@font/inter_thin"
+            android:text="online"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp" />
+    </androidx.appcompat.widget.Toolbar>
 
 
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/input_layout"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/input_layout_bg"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <EditText
+            android:id="@+id/txtChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/chat_screen_bg"
+            android:fontFamily="@font/inter_regular"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/animationView"
+            android:hint="GPT'ye sor"
+            android:inputType="text"
+            android:minHeight="50dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorPrimary" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:paddingHorizontal="10dp"
+            android:scaleType="centerCrop"
+            app:lottie_url="https://assets1.lottiefiles.com/packages/lf20_36yd3qvl.json" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
