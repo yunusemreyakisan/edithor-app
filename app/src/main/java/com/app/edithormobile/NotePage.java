@@ -6,11 +6,9 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -22,10 +20,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
-import com.app.edithormobile.helpers.IHelper;
+import com.app.edithormobile.utils.IHelper;
 import com.app.edithormobile.layouts.crud.AddNote;
 import com.app.edithormobile.layouts.login.SignIn;
-import com.app.edithormobile.layouts.upload.UploadFile;
+import com.app.edithormobile.layouts.chat_gpt.GPT;
 import com.app.edithormobile.models.NoteModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,9 +42,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Objects;
 
 /**
  * @author yunusemreyakisan
@@ -87,19 +82,22 @@ public class NotePage extends AppCompatActivity implements IHelper {
         //Methods
         databaseRef();
         notesViewRV();
-        notesEventChangeListener();
         fabControl();
-        search();
-
 
         //Google ile hesap verilerinin alınması
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
-
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //onStart modunda yenilensin.
+        notesEventChangeListener();
+        search();
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void fabControl() {
@@ -159,9 +157,9 @@ public class NotePage extends AppCompatActivity implements IHelper {
             startActivity(intent);
         });
 
-        //Fotograf Yukleme
+        //ChatGPT
         binding.addFile.setOnClickListener(view -> {
-            Intent intent = new Intent(NotePage.this, UploadFile.class);
+            Intent intent = new Intent(NotePage.this, GPT.class);
             startActivity(intent);
         });
 
@@ -183,7 +181,8 @@ public class NotePage extends AppCompatActivity implements IHelper {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
-        removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+        removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar")
+                .child(user_id).child("Notlarim");
 
         notes = new ArrayList<>();
         noteAdapter = new NoteAdapter(NotePage.this, notes, new NoteAdapter.ClickListener() {
@@ -214,55 +213,54 @@ public class NotePage extends AppCompatActivity implements IHelper {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    NoteModel deleted = notes.get(position);
                                     notes.remove(notes.get(position));
                                     noteAdapter.notifyItemRemoved(position);
                                     noteAdapter.notifyDataSetChanged();
-
-                                    //Snackbar Effect (Throws Exception)
-                                    int sure = 2000;
-                                    Snackbar snackbar = Snackbar.make(v, "Notunuz silindi", sure).setAction("GERİ AL", view -> {
-                                        notes.add(position, deleted);
-                                        noteAdapter.notifyItemInserted(position);
-                                        restoreSnackbar(view).isShown();
-                                        noteAdapter.notifyDataSetChanged();
-
-                                        //TODO: İki sefer adapter üzerinde gösteriyor. Onu tek modele çevirmemiz lazım.
-
-                                        mAuth = FirebaseAuth.getInstance();
-                                        //Veritabanına Canlı Kayıt Etme (Realtime Database)
-                                        String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
-                                        mUser = mAuth.getCurrentUser();
-                                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
-                                                .child("Kullanicilar").child(user_id).child("Notlarim");
-
-                                        //yuklenen fotorafin storage adresi
-                                        final String image = deleted.getImageUri() != null ?  deleted.getImageUri() : null;
-                                        //model
-                                        if (image != null) {
-                                            //unique getKey()
-                                            String id = mDatabase.push().getKey();
-                                            assert id != null;
-                                            NoteModel mNotes = new NoteModel(deleted.getNoteID(), deleted.getNotIcerigi(), deleted.getNotBaslik(), deleted.getNotOlusturmaTarihi(), image, false, deleted.getColor());
-                                            mDatabase.child(id).setValue(mNotes);
-                                        } else {
-                                            //unique getKey()
-                                            String id = mDatabase.push().getKey();
-                                            assert id != null;
-                                            NoteModel mNotes = new NoteModel(deleted.getNoteID(), deleted.getNotIcerigi(), deleted.getNotBaslik(), deleted.getNotOlusturmaTarihi(), false, deleted.getColor());
-                                            mDatabase.child(id).setValue(mNotes);
-                                        }
-
-
-                                        //TODO: Firebase e ekleme kodu yerleştirilmeli.
-                                        //TODO: 20 adet deneme yapıp en başarılı modeli bulup entegre edilecek.
-                                        //TODO: Modele sonra karar verilecek.
-
-
-                                    });
-                                    snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
-                                    snackbar.show();
                                 }
+
+                                //Snackbar Effect (Throws Exception)
+                                int sure = 2000;
+                                Snackbar snackbar = Snackbar.make(v, "Notunuz silindi", sure).setAction("GERİ AL", view -> {
+                                    NoteModel deleted = notes.get(position);
+                                    notes.add(position, deleted);
+                                    noteAdapter.notifyItemInserted(position);
+                                    restoreSnackbar(view).isShown();
+                                    noteAdapter.notifyDataSetChanged();
+
+                                    //TODO: İki sefer adapter üzerinde gösteriyor. Onu tek modele çevirmemiz lazım.
+
+                                    mAuth = FirebaseAuth.getInstance();
+                                    //Veritabanına Canlı Kayıt Etme (Realtime Database)
+                                    String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
+                                    mUser = mAuth.getCurrentUser();
+                                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
+                                            .child("Kullanicilar").child(user_id).child("Notlarim");
+
+                                    //yuklenen fotorafin storage adresi
+                                    final String image = deleted.getImageUri() != null ?  deleted.getImageUri() : null;
+                                    //model
+                                    if (image != null) {
+                                        //unique getKey()
+                                        NoteModel mNotes = new NoteModel(deleted.getNoteID(), deleted.getNotIcerigi(), deleted.getNotBaslik(),
+                                                deleted.getNotOlusturmaTarihi(), image, false, deleted.getColor());
+                                        mDatabase.child(id).setValue(mNotes);
+                                    } else {
+                                        //unique getKey()
+                                        NoteModel mNotes = new NoteModel(deleted.getNoteID(), deleted.getNotIcerigi(), deleted.getNotBaslik(),
+                                                deleted.getNotOlusturmaTarihi(), false, deleted.getColor());
+                                        mDatabase.child(id).setValue(mNotes);
+                                    }
+
+
+
+                                    //TODO: Firebase e ekleme kodu yerleştirilmeli.
+                                    //TODO: 20 adet deneme yapıp en başarılı modeli bulup entegre edilecek.
+                                    //TODO: Modele sonra karar verilecek.
+
+
+                                });
+                                snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
+                                snackbar.show();
                             }
                         }).addOnFailureListener(e -> Toast("Vazgeçildi."));
 
@@ -379,6 +377,7 @@ public class NotePage extends AppCompatActivity implements IHelper {
                 noteAdapter.notifyItemInserted(notes.size());
                 noteAdapter.notifyDataSetChanged();
                 bosKontrolu();
+                Log.d("note size", String.valueOf(notes.size()));
             }
 
 
@@ -394,8 +393,9 @@ public class NotePage extends AppCompatActivity implements IHelper {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 //Intent
                 bosKontrolu();
-
-                Log.d("note size", String.valueOf(notes.size()));
+                noteAdapter.notifyItemRemoved(notes.size());
+                noteAdapter.notifyDataSetChanged();
+                Log.d("note size removed", String.valueOf(notes.size()));
 
             }
 
