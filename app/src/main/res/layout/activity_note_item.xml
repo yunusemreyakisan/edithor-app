@@ -55,8 +55,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:maxLength="10"
+                android:text="Baslik"
                 android:paddingHorizontal="15dp"
                 android:paddingTop="15dp"
+                android:fontFamily="@font/inter_medium"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -67,6 +69,8 @@
                 android:layout_height="wrap_content"
                 android:lines="2"
                 android:maxLength="30"
+                android:text="Icerik"
+                android:fontFamily="@font/inter_regular"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />
@@ -84,8 +88,10 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:layout_weight="3"
+                    android:text="2023/21"
+                    android:fontFamily="@font/inter_regular"
                     android:gravity="center_vertical"
-                    android:paddingStart="15dp"
+                    android:paddingHorizontal="15dp"
                     android:textColor="@color/cardview_date_color"
                     android:textSize="13sp" />
 
@@ -96,12 +102,9 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingEnd="10dp" />
-
+                    android:paddingHorizontal="10dp" />
 
             </LinearLayout>
-
-
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

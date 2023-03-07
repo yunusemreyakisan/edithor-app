@@ -55,8 +55,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/input_layout"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="60dp"
-        />
+        android:layout_marginTop="60dp" />
 
 
     <RelativeLayout
