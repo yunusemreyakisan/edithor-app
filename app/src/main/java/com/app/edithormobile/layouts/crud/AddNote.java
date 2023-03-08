@@ -40,8 +40,8 @@ import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
-import com.app.edithormobile.utils.IHelper;
 import com.app.edithormobile.models.NoteModel;
+import com.app.edithormobile.utils.IHelper;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -100,6 +100,9 @@ public class AddNote extends AppCompatActivity implements IHelper {
     private String[] cameraPermission;
     private String[] storagePermission;
 
+    String notBasligi, notIcerigi, notOlusturmaZamani, notID;
+    int notRengi;
+
 
     // instance for firebase storage and StorageReference
     FirebaseStorage storage;
@@ -125,8 +128,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
         if ((getIntent().getStringExtra("baslik")) != null && getIntent().getStringExtra("icerik") != null) {
             notGuncelleme();
         }
-
-
 
 
         //open color picker
@@ -160,14 +161,40 @@ public class AddNote extends AppCompatActivity implements IHelper {
 
         //TODO: imageNote özelinde uzun basıldığında resmi önizleme özelliği olmalı.
 
+        //Get data
+        getIntentData();
+        assignData(notBasligi, notIcerigi);
+
     }//eof onCreate
 
     @Override
     protected void onStart() {
         super.onStart();
         notKaydetmeIslevi();
-        notGuncelleme();
+        //notGuncelleme();
+        //TODO: Not guncelleme NoteDetail sayfasına alınacak.
+        //TODO: UI screen bilgisayarda dokumanlarda.
+
     }
+
+
+    //Intent data
+    public void getIntentData() {
+        Intent data = getIntent();
+        notID = data.getStringExtra("id");
+        notBasligi = data.getStringExtra("baslik");
+        notIcerigi = data.getStringExtra("icerik");
+        notOlusturmaZamani = data.getStringExtra("olusturma_zamani");
+        notRengi = data.getIntExtra("color", 0);
+    }
+
+
+    //assign data
+    public void assignData(String baslik, String icerik) {
+        binding.txtTitle.setText(baslik);
+        binding.txtNote.setText(icerik);
+    }
+
 
     //Color picker dialog
     private void openColorPicker() {
@@ -206,7 +233,7 @@ public class AddNote extends AppCompatActivity implements IHelper {
         NoteModel position = (NoteModel) getIntent().getSerializableExtra("position");
         //Log.e("position degeri", position);
 
-       binding.btnNotuKaydet.setOnClickListener(new View.OnClickListener() {
+        binding.btnNotuKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HashMap<String, Object> map = new HashMap<>();
@@ -223,18 +250,12 @@ public class AddNote extends AppCompatActivity implements IHelper {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    //Olusturma zamanini al.
-                                    Calendar calendar = new GregorianCalendar();
-                                    int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-                                    int hours = calendar.get(Calendar.HOUR);
-                                    int minutes = calendar.get(Calendar.MINUTE);
-                                    String time = String.format("%02d:%02d", hours, minutes);
-                                    String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
-                                            + " " + time;
+
+                                    String notOlusturmaZamani = olusturmaZamaniGetir();
 
                                     position.setNotBaslik(binding.txtTitle.getText().toString());
                                     position.setNotIcerigi(binding.txtTitle.getText().toString());
-                                    position.setNotOlusturmaTarihi(notOlusturmaTarihi);
+                                    position.setNotOlusturmaTarihi(notOlusturmaZamani);
                                     //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
                                     //adapter.notifyDataSetChanged(); //null dönüyor!!!
 
@@ -254,7 +275,71 @@ public class AddNote extends AppCompatActivity implements IHelper {
         });
 
 
+    }
 
+    public String olusturmaZamaniGetir() {
+        //Olusturma zamanini al.
+        Calendar calendar = new GregorianCalendar();
+        int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
+        int hours = calendar.get(Calendar.HOUR);
+        int minutes = calendar.get(Calendar.MINUTE);
+        String time = String.format("%02d:%02d", hours, minutes);
+        String ay = null;
+        int ayinGunu = calendar.get(Calendar.DAY_OF_MONTH);
+
+        /*
+        if (calendar.get(Calendar.DAY_OF_MONTH) < 9) {
+            ayinGunu = "0" + calendar.get(Calendar.DAY_OF_MONTH);
+        } else {
+            ayinGunu = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        }
+
+         */
+
+        //Ay
+        switch (month) {
+            case 1:
+                ay = "ocak";
+                break;
+            case 2:
+                ay = "Şubat";
+                break;
+            case 3:
+                ay = "Mart";
+                break;
+
+            case 4:
+                ay = "Nisan";
+                break;
+            case 5:
+                ay = "Mayıs";
+                break;
+            case 6:
+                ay = "Haziran";
+                break;
+            case 7:
+                ay = "Temmuz";
+                break;
+            case 8:
+                ay = "Ağustos";
+                break;
+            case 9:
+                ay = "Eylül";
+                break;
+            case 10:
+                ay = "Ekim";
+                break;
+            case 11:
+                ay = "Kasım";
+                break;
+            case 12:
+                ay = "Aralık";
+                break;
+        }
+
+        String notOlusturmaTarihi = ayinGunu + " " + ay + " " + time;
+
+        return notOlusturmaTarihi;
     }
 
     //share notes
@@ -299,14 +384,7 @@ public class AddNote extends AppCompatActivity implements IHelper {
             } else if (TextUtils.isEmpty(notBaslik)) {
                 Toast("Başlık boş bırakılamaz");
             } else {
-                //Olusturma zamanini al.
-                Calendar calendar = new GregorianCalendar();
-                int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-                int hours = calendar.get(Calendar.HOUR);
-                int minutes = calendar.get(Calendar.MINUTE);
-                String time = String.format("%02d:%02d", hours, minutes);
-                String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
-                        + " " + time;
+                String notOlusturmaTarihi = olusturmaZamaniGetir();
                 //yuklenen fotorafin storage adresi
                 final String image = imageUri != null ? imageUri.toString() : null;
 
@@ -382,6 +460,9 @@ public class AddNote extends AppCompatActivity implements IHelper {
             });
         }
     }
+    //TODO: Recognize islemi ve depolamalar yeniden yazılacak.
+    //TODO: Nota tıklanıldığında okumak için detay sayfasına gidilmeli.
+
 
     //Popup Menu ile seceneklerin sorulması
     private void showInputImageDialog() {
@@ -460,7 +541,6 @@ public class AddNote extends AppCompatActivity implements IHelper {
             case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
                     boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
                     if (storageAccepted) {
                         pickImageGallery();
                     } else {
