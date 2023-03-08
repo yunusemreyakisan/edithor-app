@@ -26,17 +26,15 @@ import com.app.edithormobile.models.GPTModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public final class AskGPT extends AppCompatActivity {
     private ActivityChatGptBinding binding;
@@ -45,7 +43,7 @@ public final class AskGPT extends AppCompatActivity {
     private DatabaseReference mDatabase;
     FirebaseAuth mAuth;
     private FirebaseUser mUser;
-    String url = "https://api.openai.com/v1/completions";
+    String url = "https://api.openai.com/v1/chat/completions";
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,19 +104,34 @@ public final class AskGPT extends AppCompatActivity {
     private void getResponse(String question) throws JSONException {
         binding.txtChat.setText("");
         RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
+
+        /** @author yunusemreyakisan
+
+        {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": "Hello!"}]
+        }
+
+         */
+
+        //Parametrelere gore objelerin olusturulması
         final JSONObject jsonObject = new JSONObject();
-        jsonObject.put("model", "text-davinci-003");
-        jsonObject.put("prompt", question);
-        jsonObject.put("max_tokens", 4000);
-        jsonObject.put("temperature", 0);
+        jsonObject.put("model", "gpt-3.5-turbo");
+        JSONArray messagesArray = new JSONArray();
+        JSONObject messageObject = new JSONObject();
+        messageObject.put("role", "user");
+        messageObject.put("content", question);
+        messagesArray.put(messageObject);
+        jsonObject.put("messages", messagesArray);
 
 
+        //Post istegi
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     messages.remove(messages.size() - 1);
-                    String resMessage = response.getJSONArray("choices").getJSONObject(0).getString("text").trim();
+                    String resMessage = response.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim();
                     messages.add(new GPTModel(resMessage, "gpt"));
                     message_adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
