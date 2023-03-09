@@ -3,15 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/gpt_root_view"
     android:layout_height="match_parent"
+    android:background="@color/bg_color_light"
     tools:context=".layouts.chat_gpt.AskGPT">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/bg_color_light"
+        android:elevation="5dp"
         android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?homeAsUpIndicator"
         app:theme="@style/ToolbarTheme">
 
@@ -53,9 +59,12 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_above="@+id/input_layout"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="60dp" />
+        android:layout_below="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <RelativeLayout
@@ -64,33 +73,37 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/input_layout_bg"
         android:orientation="horizontal"
-        android:layout_marginBottom="5dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/txtChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/chat_screen_bg"
-            android:fontFamily="@font/inter_regular"
             android:layout_centerInParent="true"
             android:layout_toStartOf="@+id/animationView"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@color/chat_screen_bg"
+            android:fontFamily="@font/inter_regular"
             android:hint="GPT'ye sor"
             android:inputType="text"
             android:minHeight="50dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/colorPrimary" />
+            android:textColor="@color/bg_color_dark"
+            android:textColorHint="@color/bg_color_dark" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:paddingHorizontal="10dp"
             android:scaleType="centerCrop"
             app:lottie_url="https://assets1.lottiefiles.com/packages/lf20_36yd3qvl.json" />

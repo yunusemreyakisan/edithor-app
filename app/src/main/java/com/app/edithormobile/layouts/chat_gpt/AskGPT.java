@@ -23,9 +23,6 @@ import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.MessageAdapter;
 import com.app.edithormobile.databinding.ActivityChatGptBinding;
 import com.app.edithormobile.models.GPTModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -40,9 +37,7 @@ public final class AskGPT extends AppCompatActivity {
     private ActivityChatGptBinding binding;
     private MessageAdapter message_adapter;
     private ArrayList<GPTModel> messages;
-    private DatabaseReference mDatabase;
-    FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+
     String url = "https://api.openai.com/v1/chat/completions";
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +55,9 @@ public final class AskGPT extends AppCompatActivity {
         //init rv
         messages = new ArrayList<>();
         message_adapter = new MessageAdapter(messages);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+        LinearLayoutManager llm = new LinearLayoutManager(this.getApplicationContext());
+        llm.setStackFromEnd(true); //Sondan baslayarak uste tasinir.
+        binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(message_adapter);
         binding.recyclerView.smoothScrollToPosition(message_adapter.getItemCount());
 
@@ -100,7 +97,7 @@ public final class AskGPT extends AppCompatActivity {
         });
     }
 
-    //Response
+    //Response (GPT-3.5-Turbo)
     private void getResponse(String question) throws JSONException {
         binding.txtChat.setText("");
         RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
@@ -115,6 +112,9 @@ public final class AskGPT extends AppCompatActivity {
          */
 
         //Parametrelere gore objelerin olusturulması
+        //messageObject içerisine role ve content verilerini yerleştirdik.
+        //Bu nesneyi daha sonra messageArray içerisine yerleştirdik.
+        //Bu array'i genel jsonObject'e yerleştirdik.
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("model", "gpt-3.5-turbo");
         JSONArray messagesArray = new JSONArray();

@@ -12,8 +12,8 @@
         android:backgroundTint="#1E88E5"
         android:padding="8dp"
         android:orientation="vertical"
-        android:layout_marginEnd="80dp"
-        >
+        android:layout_marginEnd="80dp">
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,17 +21,14 @@
             android:textColor="@color/white"
             android:text="GPT"
             android:fontFamily="@font/inter_medium"
-            android:textSize="12sp"
-            />
-
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/left_chat_text_view"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,8 +40,7 @@
         android:backgroundTint="@color/button_active_color"
         android:padding="8dp"
         android:orientation="vertical"
-        android:layout_marginStart="80dp"
-        >
+        android:layout_marginStart="80dp">
 
         <TextView
             android:id="@+id/chat_kullanici_adi"
@@ -53,8 +49,7 @@
             android:textColor="@color/white"
             android:text="Kullanıcı"
             android:fontFamily="@font/inter_medium"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
 
 
         <TextView
@@ -62,8 +57,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/right_chat_text_view"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>

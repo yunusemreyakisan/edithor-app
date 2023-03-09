@@ -14,4 +14,13 @@
     <color name="ya_da_text_color">#757575</color>
     <color name="fab_color">#000000</color>
 
+    <!--Chat App Colors -->
+    <color name="button_color">@color/black</color>
+    <color name="colorPrimary">@color/black</color>
+    <color name="chat_screen_bg">#E5E5E5</color>
+
 </resources>
+
+<!--
+<color name="button_active_color">#00d27b</color>
+-->

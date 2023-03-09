@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,14 +10,17 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
+    app:strokeWidth="2dp"
+    app:strokeColor="@color/cardview_color"
     app:cardBackgroundColor="@color/cardview_color"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp">
 
 
     <LinearLayout
+        android:id="@+id/card_layout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/cardview_color"
         android:gravity="top"
@@ -30,8 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:maxLength="15"
-            android:maxLines="1"
+            android:fontFamily="@font/inter_medium"
             android:paddingHorizontal="15dp"
             android:paddingTop="15dp"
             android:textColor="@color/bg_color_dark"
@@ -43,39 +44,43 @@
             android:id="@+id/tvNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="2"
-            android:maxLength="50"
+            android:maxLines="5"
+            android:maxLength="100"
+            android:fontFamily="@font/inter_regular"
             android:paddingHorizontal="15dp"
             android:textColor="@color/bg_color_dark"
             android:textSize="15sp" />
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:orientation="vertical"
-            android:weightSum="4">
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvOlusturmaTarihi"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_weight="3"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/inter_regular"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/cardview_date_color"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/notColor"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingEnd="10dp" />
-        </LinearLayout>
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

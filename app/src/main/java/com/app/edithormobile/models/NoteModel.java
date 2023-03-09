@@ -10,13 +10,11 @@ public class NoteModel implements Serializable {
     int color;
 
 
-
-
-    public NoteModel(){
+    public NoteModel() {
     }
 
     //with images
-    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color) {
+    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
@@ -27,13 +25,17 @@ public class NoteModel implements Serializable {
     }
 
     //without images
-    public NoteModel( String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi,Boolean isSelected, int color) {
+    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, Boolean isSelected, int color) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
         this.color = color;
+    }
+
+    public NoteModel(String noteID) {
+        this.noteID = noteID;
     }
 
     public int getColor() {
@@ -59,6 +61,7 @@ public class NoteModel implements Serializable {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
     public String getNoteID() {
         return noteID;
     }
@@ -93,11 +96,11 @@ public class NoteModel implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null)
+        if (obj == null)
             return false;
 
         NoteModel itemCompare = (NoteModel) obj;
-        if(itemCompare.getNoteID().equals(this.getNoteID()))
+        if (itemCompare.getNoteID().equals(this.getNoteID()))
             return true;
 
         return false;

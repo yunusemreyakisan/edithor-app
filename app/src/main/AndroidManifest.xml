@@ -3,15 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="33" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,50 +21,50 @@
         android:theme="@style/LightTheme.EdithorMobile"
         tools:targetApi="33">
 
-
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
 
-        <activity
-            android:name=".layouts.upload.UploadFile"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".helpers.SplashScreen"
-            android:exported="true"
-            android:theme="@style/SplashTheme"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
-        </activity>
+        <activity
+            android:name=".layouts.detail.NoteDetail"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" />
 
         <activity
             android:name=".NotePage"
             android:exported="true"
+            android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".layouts.crud.AddNote"
             android:exported="true"
+            android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".layouts.login.SignIn"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"/>
+            android:enableOnBackInvokedCallback="true"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".layouts.login.SignUp"
             android:exported="true"
+            android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustPan" />
-
+        <activity
+            android:name=".layouts.chat_gpt.AskGPT"
+            android:enableOnBackInvokedCallback="true"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" />
     </application>
 
 </manifest>

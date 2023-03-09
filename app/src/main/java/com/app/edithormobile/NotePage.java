@@ -22,9 +22,10 @@ import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.layouts.chat_gpt.AskGPT;
 import com.app.edithormobile.layouts.crud.AddNote;
+import com.app.edithormobile.layouts.detail.NoteDetail;
 import com.app.edithormobile.layouts.login.SignIn;
 import com.app.edithormobile.models.NoteModel;
-import com.app.edithormobile.utils.IHelper;
+import com.app.edithormobile.utils.IToast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity implements IHelper {
+public class NotePage extends AppCompatActivity implements IToast {
 
     ArrayList<NoteModel> selectedNotes = new ArrayList<>();
     boolean isSelectedMode = false;
@@ -190,10 +191,12 @@ public class NotePage extends AppCompatActivity implements IHelper {
             public void onItemClick(View v, int position) {
                 // Toast.makeText(NotePage.this, "Kısa basıldı", Toast.LENGTH_SHORT).show();
                 NoteModel model = notes.get(position);
-                Intent intent = new Intent(NotePage.this, AddNote.class);
+                Intent intent = new Intent(NotePage.this, NoteDetail.class);
                 intent.putExtra("id", notes.get(position).getNoteID());
                 intent.putExtra("baslik", notes.get(position).getNotBaslik());
                 intent.putExtra("icerik", notes.get(position).getNotIcerigi());
+                intent.putExtra("olusturma_zamani", notes.get(position).getNotOlusturmaTarihi());
+                intent.putExtra("color", notes.get(position).getColor());
                 intent.putExtra("position", model);
                 startActivity(intent);
 
@@ -473,17 +476,20 @@ public class NotePage extends AppCompatActivity implements IHelper {
             @Override
             public boolean onQueryTextChange(String newText) {
                 filter(newText);
+                noteAdapter.notifyDataSetChanged();
                 return false;
             }
         });
     }
 
+    //TODO: Issue -> Filtreleme sırasında notu bulduktan sonra bir önceki liste pozisyonunu alıyor.
     private void filter(String text) {
         ArrayList<NoteModel> filteredlist = new ArrayList<>();
 
         for (NoteModel item : notes) {
             // checking if the entered string matched with any item of our recycler view.
-            if (item.getNotBaslik().toLowerCase().contains(text.toLowerCase())) {
+            if (item.getNotBaslik().toLowerCase().contains(text.toLowerCase())
+                    || item.getNotIcerigi().toLowerCase().contains(text.toLowerCase())) {
                 filteredlist.add(item);
             }
         }
@@ -491,6 +497,7 @@ public class NotePage extends AppCompatActivity implements IHelper {
             Toast("Eşleşen not yok");
         } else {
             noteAdapter.filterList(filteredlist);
+            noteAdapter.notifyDataSetChanged();
         }
     }
 

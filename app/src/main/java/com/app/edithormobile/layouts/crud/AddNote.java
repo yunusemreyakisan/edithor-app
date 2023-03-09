@@ -41,7 +41,7 @@ import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.models.NoteModel;
-import com.app.edithormobile.utils.IHelper;
+import com.app.edithormobile.utils.IToast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -70,7 +70,7 @@ import java.util.UUID;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class AddNote extends AppCompatActivity implements IHelper {
+public class AddNote extends AppCompatActivity implements IToast {
 
     //TODO: Fotograf seçtirirken Galeri intenti açılıyor. Bu çözülecek.
     //TODO: Fotograf eklerken kaydetmede hata alınıyor.
@@ -299,7 +299,7 @@ public class AddNote extends AppCompatActivity implements IHelper {
         //Ay
         switch (month) {
             case 1:
-                ay = "ocak";
+                ay = "Ocak";
                 break;
             case 2:
                 ay = "Şubat";

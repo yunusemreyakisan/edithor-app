@@ -7,15 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.models.NoteModel;
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -42,8 +43,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         this.notes = notes;
         NoteAdapter.clickListener = clickListener;
     }
-
-
 
 
     @NonNull
@@ -73,6 +72,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
             holder.color.setBackgroundColor(mNote.getColor());
 
+            holder.card.setBackgroundColor(mNote.getColor());
+
 
             //TODO:Talha hocaya sor. (Referans alma ile alakalı)
             //TODO: Fotoğrafın referansı cihazın kendi depolama alanıyla sınırlı. Storage üzerinden URL alıp göstermeli.
@@ -80,9 +81,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
         } else {
             holder.tvTitle.setText(mNote.getNotBaslik());
+            //TODO: Eger icerik boyutu 30'dan buyukse sonuna uc nokta koyulmalı.
             holder.tvNote.setText(mNote.getNotIcerigi());
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
             holder.color.setBackgroundColor(mNote.getColor());
+            //holder.card_layout.setBackgroundColor(mNote.getColor());
+            //TODO: Eger boyle yaparsak notların arkaplanı değiştirilecek ve mantık aynı olacak.
+            holder.card.setStrokeColor(mNote.getColor());
 
         }
 
@@ -164,8 +169,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     //ViewHolder with images
     public static class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
-        public CardView card;
+        public MaterialCardView card;
         ImageView imageUri, color;
+        LinearLayout card_layout;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
@@ -175,6 +181,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
             imageUri = itemView.findViewById(R.id.imageUri);
             color = itemView.findViewById(R.id.notColor);
+            card_layout = itemView.findViewById(R.id.card_layout);
 
             //click
             itemView.setOnClickListener(this);
@@ -207,6 +214,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     //Interface
     public interface ClickListener {
         void onItemClick(View v, int position);
+
         void onItemLongClick(View v, int position);
     }
 

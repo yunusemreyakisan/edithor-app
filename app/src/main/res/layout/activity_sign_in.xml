@@ -11,280 +11,280 @@
         android:background="@color/bg_color_light"
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp">
-    <!-- TextInputLayouts -->
+        <!-- TextInputLayouts -->
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/tekrar_hosgeldniz"
-        android:textColor="@color/bg_color_dark"
-        android:textSize="@dimen/_40ssp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <!-- Buttons -->
-
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_marginTop="48dp"
-        android:layout_weight="0.5"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/kullaniciAdiWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtGrsEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/cardview_color"
-                android:hint="@string/e_mail_hint"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp"
-                android:textColor="@color/input_text_color"
-                android:textColorHint="@color/text_hint_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/girisSifreWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/kullaniciAdiWrapper"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:endIconMode="password_toggle">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtGrsSifre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/cardview_color"
-                android:hint="@string/sifre"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
-                android:textColor="@color/input_text_color"
-                android:textColorHint="@color/text_hint_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Checkbox -->
-        <CheckBox
-            android:id="@+id/beniHatirlaCheckbox"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/girisSifreWrapper"
-            android:layout_alignParentStart="true"
-            android:text="@string/beni_hatirla"
-            android:textColor="@color/cardview_date_color" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_80sdp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="@dimen/_5sdp"
-        app:layout_constraintVertical_bias="0.625">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGirisYap"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_weight="1"
-            android:text="@string/giris_yap"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:text="@string/tekrar_hosgeldniz"
+            android:textColor="@color/bg_color_dark"
+            android:textSize="@dimen/_40ssp"
             android:textStyle="bold"
-            app:backgroundTint="@color/button_active_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    </LinearLayout>
+        <!-- Buttons -->
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_20sdp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.908">
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_marginTop="48dp"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/kullaniciAdiWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtGrsEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/cardview_color"
+                    android:hint="@string/e_mail_hint"
+                    android:inputType="textEmailAddress"
+                    android:minHeight="48dp"
+                    android:textColor="@color/input_text_color"
+                    android:textColorHint="@color/text_hint_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/girisSifreWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/kullaniciAdiWrapper"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtGrsSifre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/cardview_color"
+                    android:hint="@string/sifre"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                    android:textColor="@color/input_text_color"
+                    android:textColorHint="@color/text_hint_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Checkbox -->
+            <CheckBox
+                android:id="@+id/beniHatirlaCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/girisSifreWrapper"
+                android:layout_alignParentStart="true"
+                android:text="@string/beni_hatirla"
+                android:textColor="@color/cardview_date_color" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_80sdp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            app:layout_constraintVertical_bias="0.625">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGirisYap"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_weight="1"
+                android:text="@string/giris_yap"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@color/button_active_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.908">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/cardview_date_color"
+                android:text="Hesabın yok mu?"
+                android:textSize="@dimen/_14sdp" />
+
+            <TextView
+                android:id="@+id/btnKayitOl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Kayıt ol"
+                android:textColor="@color/button_active_color"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="ya da"
             android:textColor="@color/cardview_date_color"
-            android:text="Hesabın yok mu?"
-            android:textSize="@dimen/_14sdp" />
+            android:textSize="@dimen/_10sdp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.285" />
 
-        <TextView
-            android:id="@+id/btnKayitOl"
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogle"
+                android:layout_width="56dp"
+                android:layout_height="53dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/google_sign_button"
+                android:gravity="center"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="@dimen/_5sdp"
+                app:icon="@drawable/ic_google_logo"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="30dp"
+                app:iconTint="@color/bg_color_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.479"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.27" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnApple"
+                android:layout_width="56dp"
+                android:layout_height="53dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/google_sign_button"
+                android:gravity="center"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="@dimen/_5sdp"
+                app:icon="@drawable/ic_apple_logo"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="30dp"
+                app:iconTint="@color/bg_color_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.479"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.27" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFacebook"
+                android:layout_width="56dp"
+                android:layout_height="53dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/google_sign_button"
+                android:gravity="center"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="@dimen/_5sdp"
+                app:icon="@drawable/ic_facebook_logo"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="30dp"
+                app:iconTint="@color/bg_color_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.479"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.27" />
+
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pBarGiris"
+            style="?android:attr/progressBarStyle"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="Kayıt ol"
-            android:textColor="@color/button_active_color"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="ya da"
-        android:textColor="@color/cardview_date_color"
-        android:textSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.285" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_5sdp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGoogle"
-            android:layout_width="56dp"
-            android:layout_height="53dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/google_sign_button"
-            android:gravity="center"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:cornerRadius="@dimen/_5sdp"
-            app:icon="@drawable/google_logo"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="30dp"
-            app:iconTint="@color/bg_color_dark"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.479"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.27" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnApple"
-            android:layout_width="56dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/google_sign_button"
-            android:gravity="center"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:cornerRadius="@dimen/_5sdp"
-            app:icon="@drawable/apple_logo"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="30dp"
-            app:iconTint="@color/bg_color_dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.479"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.27" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFacebook"
-            android:layout_width="56dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/google_sign_button"
-            android:gravity="center"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:cornerRadius="@dimen/_5sdp"
-            app:icon="@drawable/facebook_logo"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconSize="30dp"
-            app:iconTint="@color/bg_color_dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.479"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.27" />
-
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/pBarGiris"
-        style="?android:attr/progressBarStyle"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.databinding.ActivitySignUpBinding;
-import com.app.edithormobile.helpers.IHelper;
+import com.app.edithormobile.utils.IToast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class SignUp extends AppCompatActivity implements IHelper {
+public class SignUp extends AppCompatActivity implements IToast {
 
     ActivitySignUpBinding binding;
     FirebaseAuth mAuth;
