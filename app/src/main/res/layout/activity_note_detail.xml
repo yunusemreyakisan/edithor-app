@@ -7,102 +7,202 @@
     android:background="@color/bg_color_light"
     tools:context=".layouts.detail.NoteDetail">
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_detail_back"
-        android:layout_width="55dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:contentDescription="detail back button"
-        app:cornerRadius="@dimen/_5sdp"
-        app:icon="@drawable/ic_back"
-        app:iconGravity="start"
-        app:iconTint="@color/bg_color_light"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/bg_color_light" />
-
-
-    <EditText
-        android:id="@+id/txt_detail_title"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:autofillHints=""
-        android:fontFamily="@font/inter_bold"
-        android:hint="Başlık"
-        android:background="@android:color/transparent"
-        android:inputType="textMultiLine"
-        android:textColorHint="@color/bg_color_dark"
-        android:textColor="@color/bg_color_dark"
-        android:textSize="@dimen/_20sdp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_color_light"
+        android:elevation="1dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_detail_back" />
-
-
-    <TextView
-        android:id="@+id/tv_detail_olusturma_zamani"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/inter_regular"
-        android:text="May 21, 2020"
-        android:textColorHint="@color/bg_color_dark"
-        android:textColor="@color/bg_color_dark"
-        android:textSize="@dimen/_10ssp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_detail_title" />
-
-    <ImageView
-        android:id="@+id/iv_detail_color"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:circularflow_radiusInDP="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_detail_olusturma_zamani"
-        app:layout_constraintStart_toEndOf="@+id/tv_detail_olusturma_zamani"
-        app:layout_constraintTop_toBottomOf="@+id/txt_detail_title" />
-
-    <EditText
-        android:id="@+id/txt_detail_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:autofillHints=""
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/inter_medium"
-        android:hint="Bir şeyler yazın..."
-        android:inputType="textMultiLine"
-        android:textColorHint="@color/bg_color_dark"
-        android:isScrollContainer="true"
-        android:textColor="@color/bg_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detail_olusturma_zamani"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tvSonDuzenlemeZamani"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bilegimdeki gumus degil altin"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/bg_color_dark" />
+
+        <ImageButton
+            android:id="@+id/btn_detail_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/bg_color_dark" />
+
+
+        <ImageButton
+            android:id="@+id/btn_detail_pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginHorizontal="10dp"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_pin"
+            app:tint="@color/bg_color_dark" />
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="60dp"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_detail_back">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/txt_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/inter_bold"
+                android:hint="Başlık"
+                android:inputType="textMultiLine"
+                android:textColor="@color/bg_color_dark"
+                android:textColorHint="@color/bg_color_dark"
+                android:textSize="@dimen/_20sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_detail_back" />
 
+            <LinearLayout
+                android:id="@+id/tarih_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_detail_title">
+
+
+                <TextView
+                    android:id="@+id/tv_detail_olusturma_zamani"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="May 21, 2020"
+                    android:textColor="@color/bg_color_dark"
+                    android:textColorHint="@color/bg_color_dark"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_detail_title" />
+
+                <ImageView
+                    android:id="@+id/iv_detail_color"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    app:circularflow_radiusInDP="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_detail_olusturma_zamani"
+                    app:layout_constraintStart_toEndOf="@+id/tv_detail_olusturma_zamani"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_detail_title" />
+
+
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/txt_detail_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/inter_medium"
+                android:hint="Bir şeyler yazın..."
+                android:inputType="textMultiLine"
+                android:isScrollContainer="true"
+                android:paddingBottom="20dp"
+                android:textColor="@color/bg_color_dark"
+                android:textColorHint="@color/bg_color_dark"
+                app:layout_constraintBottom_toTopOf="@+id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tarih_layout"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_color_light"
+        android:elevation="5dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_properties"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_add"
+            app:tint="@color/bg_color_dark" />
+
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_color_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginHorizontal="10dp"
+            android:src="@drawable/ic_color_picker"
+            app:tint="@color/bg_color_dark" />
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginHorizontal="10dp"
+            android:src="@drawable/ic_extra"
+            app:tint="@color/bg_color_dark" />
+
+
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

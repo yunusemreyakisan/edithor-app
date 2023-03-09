@@ -7,6 +7,40 @@
     android:layout_height="match_parent"
     android:background="@color/bg_color_light">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarTopNotePage"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_color_light"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/bg_color_dark" />
+
+
+        <ImageButton
+            android:id="@+id/btnNotuKaydet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginHorizontal="20dp"
+            android:src="@drawable/ic_save_note"
+            app:tint="@color/bg_color_dark" />
+    </androidx.appcompat.widget.Toolbar>
+
 
     <ImageView
         android:id="@+id/imageNote"
@@ -27,16 +61,15 @@
     <EditText
         android:id="@+id/txtTitle"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:alpha="0.5"
         android:autofillHints=""
-        android:fontFamily="@font/inter_medium"
         android:background="@android:color/transparent"
         android:ems="10"
+        android:fontFamily="@font/inter_medium"
         android:hint="@string/title"
-        android:inputType="textPersonName"
-        android:maxLength="20"
+        android:inputType="textMultiLine"
         android:textColor="@color/bg_color_dark"
         android:textColorHint="@color/bg_color_dark"
         android:textSize="30sp"
@@ -44,8 +77,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.248"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.236" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarTopNotePage"
+        app:layout_constraintVertical_bias="0.050000012" />
 
 
     <EditText
@@ -54,10 +87,10 @@
         android:layout_height="100dp"
         android:layout_marginHorizontal="30dp"
         android:alpha="0.5"
-        android:fontFamily="@font/inter_regular"
         android:autofillHints=""
         android:background="@android:color/transparent"
         android:ems="10"
+        android:fontFamily="@font/inter_regular"
         android:gravity="top|start"
         android:hint="@string/type_something"
         android:inputType="textMultiLine"
@@ -69,44 +102,7 @@
         app:layout_constraintHorizontal_bias="0.248"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        app:layout_constraintVertical_bias="0.065" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnNotuKaydet"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_bg"
-        android:text="@string/save"
-        android:textAllCaps="false"
-        android:textColor="@color/bg_color_light"
-        android:textStyle="bold"
-        app:backgroundTint="@color/bg_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBack"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:alpha="0.5"
-        android:background="@android:color/transparent"
-        android:contentDescription=""
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        app:backgroundTint="@android:color/transparent"
-        app:icon="@drawable/back_icon"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconTint="@color/bg_color_dark"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintVertical_bias="0.050000012" />
 
 
     <LinearLayout
@@ -114,16 +110,16 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_50sdp"
         android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="100dp"
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
+        android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="6"
-        android:layout_marginBottom="@dimen/_10sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:baselineAligned="false">
+        app:layout_constraintTop_toBottomOf="@+id/txtNote">
 
 
         <LinearLayout
@@ -164,7 +160,6 @@
                 app:rippleColor="@android:color/transparent"
                 app:tint="@color/bg_color_light"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
 
 
             <com.google.android.material.button.MaterialButton
@@ -297,6 +292,54 @@
 
     </LinearLayout>
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarAddNote"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bg_color_light"
+        android:elevation="5dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_properties_addNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_add"
+            app:tint="@color/bg_color_dark" />
+
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_color_picker_addNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginHorizontal="10dp"
+            android:src="@drawable/ic_color_picker"
+            app:tint="@color/bg_color_dark" />
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_share_addNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginHorizontal="10dp"
+            android:src="@drawable/ic_extra"
+            app:tint="@color/bg_color_dark" />
+
+
+    </androidx.appcompat.widget.Toolbar>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
