@@ -143,7 +143,7 @@
                 android:hint="Bir şeyler yazın..."
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
-                android:paddingBottom="20dp"
+                android:paddingBottom="100dp"
                 android:textColor="@color/bg_color_dark"
                 android:textColorHint="@color/bg_color_dark"
                 app:layout_constraintBottom_toTopOf="@+id/toolbar"

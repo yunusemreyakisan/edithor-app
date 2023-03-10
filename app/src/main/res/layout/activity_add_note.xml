@@ -29,16 +29,6 @@
             app:tint="@color/bg_color_dark" />
 
 
-        <ImageButton
-            android:id="@+id/btnNotuKaydet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:background="@android:color/transparent"
-            android:padding="8dp"
-            android:layout_marginHorizontal="20dp"
-            android:src="@drawable/ic_save_note"
-            app:tint="@color/bg_color_dark" />
     </androidx.appcompat.widget.Toolbar>
 
 

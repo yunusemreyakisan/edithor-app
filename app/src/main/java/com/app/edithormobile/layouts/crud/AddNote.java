@@ -1,7 +1,5 @@
 package com.app.edithormobile.layouts.crud;
 
-import static java.util.Objects.requireNonNull;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,8 +40,6 @@ import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.models.NoteModel;
 import com.app.edithormobile.utils.IToast;
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -64,7 +60,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -100,7 +95,7 @@ public class AddNote extends AppCompatActivity implements IToast {
     private String[] cameraPermission;
     private String[] storagePermission;
 
-    String notBasligi, notIcerigi, notOlusturmaZamani, notID;
+    String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
     int notRengi;
 
 
@@ -121,14 +116,8 @@ public class AddNote extends AppCompatActivity implements IToast {
         setContentView(view);
 
         //methods
-        islemdenVazgec();
+        notKaydet();
         optionsbarIslevi();
-
-
-        if ((getIntent().getStringExtra("baslik")) != null && getIntent().getStringExtra("icerik") != null) {
-            notGuncelleme();
-        }
-
 
         //open color picker
         binding.btnColor.setOnClickListener(v -> openColorPicker());
@@ -170,7 +159,8 @@ public class AddNote extends AppCompatActivity implements IToast {
     @Override
     protected void onStart() {
         super.onStart();
-        notKaydetmeIslevi();
+        //Not kaydetme işlemi
+        notKaydet();
         //notGuncelleme();
         //TODO: Not guncelleme NoteDetail sayfasına alınacak.
         //TODO: UI screen bilgisayarda dokumanlarda.
@@ -221,7 +211,7 @@ public class AddNote extends AppCompatActivity implements IToast {
     // Aynı buton olduğundan intent tarafından gelen değer null geliyor not eklemek istediğimizde.
 
 
-    public void notGuncelleme() {
+    /* public void notGuncelleme() {
         //deger alma (update first step)
         binding.txtTitle.setText(getIntent().getStringExtra("baslik"));
         binding.txtNote.setText(getIntent().getStringExtra("icerik"));
@@ -276,6 +266,8 @@ public class AddNote extends AppCompatActivity implements IToast {
 
 
     }
+
+     */
 
     public String olusturmaZamaniGetir() {
         //Olusturma zamanini al.
@@ -356,10 +348,19 @@ public class AddNote extends AppCompatActivity implements IToast {
     }
 
 
-    private void islemdenVazgec() {
+    private void notKaydet() {
         binding.btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(AddNote.this, NotePage.class);
-            startActivity(intent);
+            //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
+            if (binding.txtTitle.getText().toString() != null) {
+                olusturma_zamani = olusturmaZamaniGetir();
+                notKaydetmeIslevi();
+            } else if (binding.txtNote.getText().toString() != null) {
+                olusturma_zamani = olusturmaZamaniGetir();
+                notKaydetmeIslevi();
+            } else {
+                Intent intent = new Intent(AddNote.this, NotePage.class);
+                startActivity(intent);
+            }
         });
     }
 
@@ -367,60 +368,59 @@ public class AddNote extends AppCompatActivity implements IToast {
     //not kaydet
     public void notKaydetmeIslevi() {
         mAuth = FirebaseAuth.getInstance();
-        binding.btnNotuKaydet.setOnClickListener(view -> {
-            //Veritabanına Canlı Kayıt Etme (Realtime Database)
-            String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            mUser = mAuth.getCurrentUser();
-            mDatabase = FirebaseDatabase.getInstance().getReference()
-                    .child("Kullanicilar").child(user_id).child("Notlarim");
+        //Veritabanına Canlı Kayıt Etme (Realtime Database)
+        String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        mUser = mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference()
+                .child("Kullanicilar").child(user_id).child("Notlarim");
 
-            //Alan Tanımları
-            String notIcerigi = binding.txtNote.getText().toString();
-            String notBaslik = binding.txtTitle.getText().toString();
+        //Alan Tanımları
+        String notIcerigi = binding.txtNote.getText().toString();
+        String notBaslik = binding.txtTitle.getText().toString();
 
-            //Bos-Dolu Kontrolu
-            if (TextUtils.isEmpty(notIcerigi)) {
-                Toast("Not içeriği giriniz");
-            } else if (TextUtils.isEmpty(notBaslik)) {
-                Toast("Başlık boş bırakılamaz");
+        //Bos-Dolu Kontrolu
+        if (TextUtils.isEmpty(notIcerigi)) {
+            Toast("Not içeriği giriniz");
+        } else if (TextUtils.isEmpty(notBaslik)) {
+            Toast("Başlık boş bırakılamaz");
+        } else {
+            String notOlusturmaTarihi = olusturmaZamaniGetir();
+            //yuklenen fotorafin storage adresi
+            final String image = imageUri != null ? imageUri.toString() : null;
+
+
+            //model
+            if (image != null) {
+                //unique getKey()
+                String id = mDatabase.push().getKey();
+                assert id != null;
+                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false, defaultColor);
+                mDatabase.child(id).setValue(mNotes);
+
+                //intent
+                Intent intent = new Intent(AddNote.this, NotePage.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+                Toast("Not başarıyla oluşturuldu");
+
+
             } else {
-                String notOlusturmaTarihi = olusturmaZamaniGetir();
-                //yuklenen fotorafin storage adresi
-                final String image = imageUri != null ? imageUri.toString() : null;
+                //unique getKey()
+                String id = mDatabase.push().getKey();
+                assert id != null;
+                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, defaultColor);
+                mDatabase.child(id).setValue(mNotes);
 
 
-                //model
-                if (image != null) {
-                    //unique getKey()
-                    String id = mDatabase.push().getKey();
-                    assert id != null;
-                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, image, false, defaultColor);
-                    mDatabase.child(id).setValue(mNotes);
-
-                    //intent
-                    Intent intent = new Intent(AddNote.this, NotePage.class);
-                    intent.putExtra("id", id);
-                    startActivity(intent);
-                    Toast("Not başarıyla oluşturuldu");
-
-
-                } else {
-                    //unique getKey()
-                    String id = mDatabase.push().getKey();
-                    assert id != null;
-                    NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, defaultColor);
-                    mDatabase.child(id).setValue(mNotes);
-
-
-                    //intent
-                    Intent intent = new Intent(AddNote.this, NotePage.class);
-                    intent.putExtra("id", id);
-                    startActivity(intent);
-                    Toast("Not başarıyla oluşturuldu");
-                }
-
+                //intent
+                Intent intent = new Intent(AddNote.this, NotePage.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+                Toast("Not başarıyla oluşturuldu");
             }
-        });
+
+        }
+
     }
 
 

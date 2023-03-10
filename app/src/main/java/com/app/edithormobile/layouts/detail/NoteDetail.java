@@ -75,7 +75,8 @@ public class NoteDetail extends AppCompatActivity implements IToast {
             olusturma_zamani = olusturmaZamaniGetir();
             notGuncelleme();
         } else {
-            onBackPressed();
+            Intent intent = new Intent(NoteDetail.this, NotePage.class);
+            startActivity(intent);
         }
     }
 
