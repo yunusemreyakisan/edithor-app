@@ -19,8 +19,13 @@
     <color name="colorPrimary">@color/black</color>
     <color name="chat_screen_bg">#E5E5E5</color>
 
+    <!-- Note Colors -->
+    <color name="blue_circle">#4D96FF</color>
+    <color name="red_circle">#DF2E38</color>
+    <color name="green_circle">#6BCB77</color>
+
 </resources>
 
-<!--
-<color name="button_active_color">#00d27b</color>
--->
+    <!--
+    <color name="button_active_color">#00d27b</color>
+    -->
