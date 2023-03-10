@@ -118,7 +118,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginHorizontal="10dp"
                     app:circularflow_radiusInDP="10dp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_detail_olusturma_zamani"
                     app:layout_constraintStart_toEndOf="@+id/tv_detail_olusturma_zamani"
@@ -181,15 +181,32 @@
 
 
         <ImageButton
-            android:id="@+id/btn_toolbar_color_picker"
+            android:id="@+id/btn_toolbar_color_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_red_circle" />
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_color_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_blue_circle" />
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_color_green"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
             android:layout_marginHorizontal="10dp"
-            android:src="@drawable/ic_color_picker"
-            app:tint="@color/bg_color_dark" />
+            android:src="@drawable/ic_green_circle" />
 
         <ImageButton
             android:id="@+id/btn_toolbar_share"
