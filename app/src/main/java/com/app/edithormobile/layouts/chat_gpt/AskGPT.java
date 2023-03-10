@@ -103,12 +103,10 @@ public final class AskGPT extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
 
         /** @author yunusemreyakisan
-
         {
         "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": "Hello!"}]
         }
-
          */
 
         //Parametrelere gore objelerin olusturulması
