@@ -1,0 +1,138 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Öneriler"
+        android:textSize="20dp"
+        android:layout_marginHorizontal="8dp"
+        android:fontFamily="@font/inter_bold"
+        android:layout_marginVertical="10dp"
+        android:textColor="@color/bg_color_dark" />
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_gunun_sozu_layout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_quote" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Bana günün sözünü söyle"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/bg_color_dark"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_brain_storming_layout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_brainstorm" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Bana fikir ver"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/bg_color_dark"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_translate_layout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_bottom_sheet_bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_translate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Yabancı dile çevir"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/bg_color_dark"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_gpt_question_layout"
+        android:layout_width="match_parent"
+        android:layout_marginVertical="20dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_gpt_bot" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Başka bir şey istiyorum"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/bg_color_dark"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:fontFamily="@font/inter_light"
+        android:layout_marginTop="10dp"
+        android:text="*Edithor'a sorarak çeşitli konularda yazıları notlarınıza ekleyebilirsiniz."
+        android:padding="8dp"
+        android:alpha="0.8"
+        android:textSize="11sp"
+        android:textColor="@color/bg_color_dark"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

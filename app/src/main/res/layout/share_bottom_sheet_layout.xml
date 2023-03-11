@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_delete_layout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_bottom_sheet_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Sil"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/bg_color_dark"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_bottom_sheet_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_copy" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Kopyala"
+            android:textColor="@color/bg_color_dark"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_bottom_sheet_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_share" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="Paylaş"
+            android:textColor="@color/bg_color_dark"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>
