@@ -8,15 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -117,7 +113,6 @@ public class AddNote extends AppCompatActivity implements IToast {
 
         //methods
         notKaydet();
-        optionsbarIslevi();
 
         //open color picker
         binding.btnColor.setOnClickListener(v -> openColorPicker());
@@ -142,12 +137,6 @@ public class AddNote extends AppCompatActivity implements IToast {
         // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        //Styles
-        styleBold = new StyleSpan(Typeface.BOLD);
-        styleNormal = new StyleSpan(Typeface.NORMAL);
-        styleItalic = new StyleSpan(Typeface.ITALIC);
-        underLine = new UnderlineSpan();
-
         //TODO: imageNote özelinde uzun basıldığında resmi önizleme özelliği olmalı.
 
         //Get data
@@ -160,8 +149,9 @@ public class AddNote extends AppCompatActivity implements IToast {
     protected void onStart() {
         super.onStart();
         //Not kaydetme işlemi
-        notKaydet();
+        //notKaydet();
         //notGuncelleme();
+        buttonTask();
         //TODO: Not guncelleme NoteDetail sayfasına alınacak.
         //TODO: UI screen bilgisayarda dokumanlarda.
 
@@ -206,7 +196,6 @@ public class AddNote extends AppCompatActivity implements IToast {
         dialog.getDialog().getButton(dialog.getDialog().BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
     }
 
-    //TODO: Kaydet butonu yerine auto-save methodu getirilmeli, onBackPressed() methodu tetiklendiğinde draft olarak kaydedilmiş olacak.
     //TODO: Güncelleme işlemi yapıyor fakat buton değiştirilmeli.
     // Aynı buton olduğundan intent tarafından gelen değer null geliyor not eklemek istediğimizde.
 
@@ -347,20 +336,37 @@ public class AddNote extends AppCompatActivity implements IToast {
         startActivity(Intent.createChooser(intent, "Paylaş"));
     }
 
+    public void buttonTask() {
+        //Buton seçimlerine göre renk degisimi
+        binding.btnToolbarColorRedAddNote.setOnClickListener(v -> {
+            notRengi = getColor(R.color.red_circle);
+            binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.red_circle));
+        });
+
+        binding.btnToolbarColorBlueAddNote.setOnClickListener(v -> {
+            notRengi = getColor(R.color.blue_circle);
+            binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.blue_circle));
+        });
+
+        binding.btnToolbarColorGreenAddNote.setOnClickListener(v -> {
+            notRengi = getColor(R.color.green_circle);
+            binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.green_circle));
+        });
+
+        //TODO: Light temada herhangi bir renk seçmediğimizde sorun yok, dark theme de seçince light moda dönüşte yazılar görünmüyor.
+        binding.btnToolbarColorEmptyAddNote.setOnClickListener(v -> {
+            notRengi = getColor(R.color.bg_color_light);
+            binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.bg_color_light));
+        });
+    }
+
 
     private void notKaydet() {
         binding.btnBack.setOnClickListener(v -> {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
-            if (binding.txtTitle.getText().toString() != null) {
-                olusturma_zamani = olusturmaZamaniGetir();
-                notKaydetmeIslevi();
-            } else if (binding.txtNote.getText().toString() != null) {
-                olusturma_zamani = olusturmaZamaniGetir();
-                notKaydetmeIslevi();
-            } else {
-                Intent intent = new Intent(AddNote.this, NotePage.class);
-                startActivity(intent);
-            }
+            olusturma_zamani = olusturmaZamaniGetir();
+            notKaydetmeIslevi();
+
         });
     }
 
@@ -378,16 +384,14 @@ public class AddNote extends AppCompatActivity implements IToast {
         String notIcerigi = binding.txtNote.getText().toString();
         String notBaslik = binding.txtTitle.getText().toString();
 
-        //Bos-Dolu Kontrolu
-        if (TextUtils.isEmpty(notIcerigi)) {
-            Toast("Not içeriği giriniz");
-        } else if (TextUtils.isEmpty(notBaslik)) {
-            Toast("Başlık boş bırakılamaz");
+        if (TextUtils.isEmpty(notBaslik) && TextUtils.isEmpty(notIcerigi)) {
+            Intent intent = new Intent(AddNote.this, NotePage.class);
+            startActivity(intent);
         } else {
+
             String notOlusturmaTarihi = olusturmaZamaniGetir();
             //yuklenen fotorafin storage adresi
             final String image = imageUri != null ? imageUri.toString() : null;
-
 
             //model
             if (image != null) {
@@ -418,9 +422,7 @@ public class AddNote extends AppCompatActivity implements IToast {
                 startActivity(intent);
                 Toast("Not başarıyla oluşturuldu");
             }
-
         }
-
     }
 
 
@@ -664,88 +666,6 @@ public class AddNote extends AppCompatActivity implements IToast {
         }
     }
 
-
-    private void optionsbarIslevi() {
-        //bold yapar
-        binding.btnbold.setOnClickListener(v -> {
-            // Toast.makeText(AddNote.this, "Tıklandı Bold", Toast.LENGTH_SHORT).show();
-
-            bold = !bold;
-            String wholeText = binding.txtNote.getText().toString();
-            int start = binding.txtNote.getSelectionStart();
-            int end = binding.txtNote.getSelectionEnd();
-
-            CharacterStyle passedStyle;
-            SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
-
-            if (bold) {
-                passedStyle = styleBold;
-
-            } else {
-                passedStyle = styleBold;
-            }
-            sb.setSpan(passedStyle, start, end, 0);
-            binding.txtNote.setText(sb);
-        });
-
-
-        //italic yapar
-        binding.btnitalic.setOnClickListener(v -> {
-
-            italic = !italic;
-            String wholeText = binding.txtNote.getText().toString();
-            int start = binding.txtNote.getSelectionStart();
-            int end = binding.txtNote.getSelectionEnd();
-
-            CharacterStyle passedStyle;
-            SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
-            if (italic) {
-                passedStyle = styleItalic;
-
-            } else {
-                passedStyle = styleItalic;
-
-            }
-            sb.setSpan(passedStyle, start, end, 0);
-            binding.txtNote.setText(sb);
-
-        });
-
-        //altini cizer
-        binding.btnunderline.setOnClickListener(v -> {
-            underline = !underline;
-            String wholeText = binding.txtNote.getText().toString();
-            int start = binding.txtNote.getSelectionStart();
-            int end = binding.txtNote.getSelectionEnd();
-
-            CharacterStyle passedStyle;
-            SpannableStringBuilder sb = new SpannableStringBuilder(wholeText);
-            if (underline) {
-                passedStyle = underLine;
-
-            } else {
-                passedStyle = underLine;
-
-            }
-            sb.setSpan(passedStyle, start, end, 0);
-            binding.txtNote.setText(sb);
-
-        });
-
-        //texti kopyalar
-        // binding.btncopy.setOnClickListener(v -> binding.txtNote.getText().toString());
-/*
-        //color picker
-        binding.btnColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(AddNote.this, "Renk seçimi", Toast.LENGTH_SHORT).show();
-            }
-        });
-
- */
-
-    }
 
     @Override
     public void Toast(String message) {
