@@ -28,7 +28,6 @@
             android:src="@drawable/ic_back"
             app:tint="@color/bg_color_dark" />
 
-
     </androidx.appcompat.widget.Toolbar>
 
 
@@ -306,7 +305,17 @@
             app:tint="@color/bg_color_dark" />
 
         <ImageButton
-            android:id="@+id/btn_toolbar_color_empty"
+            android:id="@+id/btn_toolbar_gpt_addNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_gpt_bot"
+            app:tint="@color/bg_color_dark" />
+
+        <ImageButton
+            android:id="@+id/btn_toolbar_color_empty_addNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -315,7 +324,7 @@
             android:src="@drawable/ic_empty_color_circle" />
 
         <ImageButton
-            android:id="@+id/btn_toolbar_color_red"
+            android:id="@+id/btn_toolbar_color_red_addNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -324,7 +333,7 @@
             android:src="@drawable/ic_red_circle" />
 
         <ImageButton
-            android:id="@+id/btn_toolbar_color_blue"
+            android:id="@+id/btn_toolbar_color_blue_addNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -333,7 +342,7 @@
             android:src="@drawable/ic_blue_circle" />
 
         <ImageButton
-            android:id="@+id/btn_toolbar_color_green"
+            android:id="@+id/btn_toolbar_color_green_addNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
