@@ -98,17 +98,17 @@ public final class AskGPT extends AppCompatActivity {
     }
 
     //Response (GPT-3.5-Turbo)
+
+    /**
+     * @author yunusemreyakisan
+     * {
+     * "model": "gpt-3.5-turbo",
+     * "messages": [{"role": "user", "content": "Hello!"}]
+     * }
+     */
     private void getResponse(String question) throws JSONException {
         binding.txtChat.setText("");
         RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
-
-        /** @author yunusemreyakisan
-        {
-        "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": "Hello!"}]
-        }
-         */
-
         //Parametrelere gore objelerin olusturulması
         //messageObject içerisine role ve content verilerini yerleştirdik.
         //Bu nesneyi daha sonra messageArray içerisine yerleştirdik.

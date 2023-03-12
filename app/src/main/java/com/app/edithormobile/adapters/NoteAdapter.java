@@ -1,7 +1,5 @@
 package com.app.edithormobile.adapters;
 
-import static java.util.Objects.requireNonNull;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -49,9 +46,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == TYPE_IMAGE) {
-            return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.activity_note_item, parent, false));
+            return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.note_item, parent, false));
         } else {
-            return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.activity_note_item_without_image, parent, false));
+            return new NoteHolder(LayoutInflater.from(context).inflate(R.layout.note_item_without_image, parent, false));
         }
 
     }
@@ -70,8 +67,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     .load(mNote.getImageUri())
                     .into(holder.imageUri);
 
-            holder.color.setBackgroundColor(mNote.getColor());
-
+            //holder.color.setBackgroundColor(mNote.getColor());
             holder.card.setBackgroundColor(mNote.getColor());
 
 
@@ -84,84 +80,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             //TODO: Eger icerik boyutu 30'dan buyukse sonuna uc nokta koyulmalı.
             holder.tvNote.setText(mNote.getNotIcerigi());
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
-            holder.color.setBackgroundColor(mNote.getColor());
+            // holder.color.setBackgroundColor(mNote.getColor());
             //holder.card_layout.setBackgroundColor(mNote.getColor());
             //TODO: Eger boyle yaparsak notların arkaplanı değiştirilecek ve mantık aynı olacak.
             holder.card.setStrokeColor(mNote.getColor());
 
         }
-
-        //Remove reference
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
-        removeRef = FirebaseDatabase.getInstance()
-                .getReference().child("Kullanicilar").child(user_id).child("Notlarim");
-
-        /*
-        //Card Update
-        holder.card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo: update edilecek.
-                final DialogPlus dialog = DialogPlus.newDialog(context)
-                        .setContentHolder(new ViewHolder(R.layout.update_dialog_plus))
-                        .setContentBackgroundResource(R.color.bg_color_light)
-                        .setExpanded(true, 900)
-                        .create();
-
-
-                View view = dialog.getHolderView();
-
-                Button update = view.findViewById(R.id.btnNotuGuncelle);
-                EditText baslik = view.findViewById(R.id.dialogTxtTitle);
-                EditText icerik = view.findViewById(R.id.dialogTxtNote);
-
-                baslik.setText(mNote.getNotBaslik());
-                icerik.setText(mNote.getNotIcerigi());
-
-                //dialog show
-                dialog.show();
-
-                //Update Note
-                update.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("notBaslik", baslik.getText().toString());
-                        map.put("notIcerigi", icerik.getText().toString());
-
-                        //db ref
-                        mAuth = FirebaseAuth.getInstance();
-                        mUser = mAuth.getCurrentUser();
-                        String user_id = requireNonNull(mUser).getUid();
-                        FirebaseDatabase.getInstance()
-                                .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(mNote.getNoteID()).updateChildren(map)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            notes.get(holder.getLayoutPosition()).setNotBaslik(String.valueOf(baslik.getText()));
-                                            notes.get(holder.getLayoutPosition()).setNotIcerigi(String.valueOf(icerik.getText()));
-                                            notifyItemChanged(holder.getLayoutPosition());
-                                            notifyDataSetChanged();
-                                            Toast.makeText(context, "Notunuz güncellendi", Toast.LENGTH_SHORT).show();
-                                            dialog.dismiss();
-                                        }
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context, "Hata oluştu", Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
-                                    }
-                                });
-                    }
-                });
-            }
-        });
-
-         */
 
     }
 

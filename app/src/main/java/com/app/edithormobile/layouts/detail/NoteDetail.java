@@ -24,7 +24,6 @@ import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -161,7 +160,6 @@ public class NoteDetail extends AppCompatActivity implements IToast {
 
     }
 
-
     //assign data
     public void assignData(String baslik, String icerik, String olusturmaZamani, int notRengi) {
         binding.txtDetailTitle.setText(baslik);
@@ -266,7 +264,7 @@ public class NoteDetail extends AppCompatActivity implements IToast {
 
             // ClipboardManager nesnesini al
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            
+
             // Metin değerini kopyala
             ClipData clip = ClipData.newPlainText("label", gptResponse);
             clipboard.setPrimaryClip(clip);
@@ -277,6 +275,7 @@ public class NoteDetail extends AppCompatActivity implements IToast {
     }
 
     //Custom dialog send message button listener
+    //TODO: Chat sisteminde response Türkçe gelirken custom dialog üzerinde ingilizce geliyor. Çözmeliyiz.
     public void sendMessageGPT(String ifade, TextView text) {
         try {
             getResponse(ifade, text);
@@ -312,15 +311,12 @@ public class NoteDetail extends AppCompatActivity implements IToast {
 
 
         //Post istegi
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String resMessage = response.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim();
-                    text.setText(resMessage);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, response -> {
+            try {
+                String resMessage = response.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim();
+                text.setText(resMessage);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }, error -> {
             Toast.makeText(getApplicationContext(), "Failed response", Toast.LENGTH_SHORT)
@@ -344,11 +340,9 @@ public class NoteDetail extends AppCompatActivity implements IToast {
             }
 
             public void retry(@Nullable VolleyError error) {
-                runOnUiThread((Runnable) (new Runnable() {
-                    public final void run() {
-                        Toast toast = Toast.makeText(getApplicationContext(), (CharSequence) "API Hatası", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
+                runOnUiThread((Runnable) (() -> {
+                    Toast toast = Toast.makeText(getApplicationContext(), (CharSequence) "API Hatası", Toast.LENGTH_SHORT);
+                    toast.show();
                 }));
             }
         }));
