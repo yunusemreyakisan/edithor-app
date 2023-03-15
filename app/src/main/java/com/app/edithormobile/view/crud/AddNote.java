@@ -1,4 +1,4 @@
-package com.app.edithormobile.layouts.crud;
+package com.app.edithormobile.view.crud;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.text.style.CharacterStyle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -30,12 +29,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
-import com.app.edithormobile.models.NoteModel;
-import com.app.edithormobile.utils.IToast;
+import com.app.edithormobile.model.NoteModel;
+import com.app.edithormobile.util.IToast;
+import com.app.edithormobile.util.Util;
+import com.app.edithormobile.view.NotePage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -65,9 +65,7 @@ public class AddNote extends AppCompatActivity implements IToast {
 
     //TODO: Fotograf seçtirirken Galeri intenti açılıyor. Bu çözülecek.
     //TODO: Fotograf eklerken kaydetmede hata alınıyor.
-
-    CharacterStyle styleBold, styleItalic, styleNormal, underLine;
-    boolean bold, underline, italic = false;
+    Util util = new Util();
     private DatabaseReference mDatabase;
     FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -405,7 +403,7 @@ public class AddNote extends AppCompatActivity implements IToast {
                 Intent intent = new Intent(AddNote.this, NotePage.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
-                Toast("Not başarıyla oluşturuldu");
+                util.toastMessage(getApplicationContext(), "Not başarıyla oluşturuldu");
 
 
             } else {
@@ -420,7 +418,7 @@ public class AddNote extends AppCompatActivity implements IToast {
                 Intent intent = new Intent(AddNote.this, NotePage.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
-                Toast("Not başarıyla oluşturuldu");
+                util.toastMessage(getApplicationContext(), "Not başarıyla oluşturuldu");
             }
         }
     }
@@ -431,6 +429,7 @@ public class AddNote extends AppCompatActivity implements IToast {
         //Eger uri degeri bos degilse:
         if (imageUri == null) {
             Toast("Lütfen resim seçiniz");
+            util.toastMessage(getApplicationContext(), "Lütfen resim seçiniz");
         } else {
             InputImage inputImage = null;
             try {
@@ -600,6 +599,7 @@ public class AddNote extends AppCompatActivity implements IToast {
                 recognizeTextFromImage();
             } else {
                 Toast("Vazgecildi");
+
             }
         }
     });
@@ -655,7 +655,6 @@ public class AddNote extends AppCompatActivity implements IToast {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     String url = String.valueOf(ref.getDownloadUrl());
                     Log.d("Upload_Success", "Fotograf basarıyla yuklendi");
-                    Toast(url);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -666,10 +665,9 @@ public class AddNote extends AppCompatActivity implements IToast {
         }
     }
 
-
     @Override
     public void Toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
 

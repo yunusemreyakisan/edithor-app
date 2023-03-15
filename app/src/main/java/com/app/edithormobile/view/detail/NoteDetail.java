@@ -1,9 +1,7 @@
-package com.app.edithormobile.layouts.detail;
+package com.app.edithormobile.view.detail;
 
 import static java.util.Objects.requireNonNull;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -14,25 +12,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivityNoteDetailBinding;
-import com.app.edithormobile.models.NoteModel;
-import com.app.edithormobile.utils.IToast;
+import com.app.edithormobile.model.NoteModel;
+import com.app.edithormobile.util.Util;
+import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.viewmodel.NoteDetailViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -42,17 +34,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Map;
 
-public class NoteDetail extends AppCompatActivity implements IToast {
+public class NoteDetail extends AppCompatActivity {
 
     ActivityNoteDetailBinding binding;
     String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
@@ -62,14 +46,21 @@ public class NoteDetail extends AppCompatActivity implements IToast {
     DatabaseReference removeRef, removedReference;
     //color picker
     int defaultColor;
+    NoteDetailViewModel viewModel;
+    Util util = new Util();
 
     String url = "https://api.openai.com/v1/chat/completions";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNoteDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //ViewModel Bağlama
+        viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
+        System.out.println("URL: " + viewModel.getAPIUrl()); //ViewModel Test
 
         //Window nesnesi alma
         if (Build.VERSION.SDK_INT >= 26) {
@@ -78,7 +69,7 @@ public class NoteDetail extends AppCompatActivity implements IToast {
 
         //get intent data
         getIntentData();
-        assignData(notBasligi, notIcerigi, notOlusturmaZamani, notRengi);
+        viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi);
         //notGuncelleme();
 
 
@@ -88,7 +79,6 @@ public class NoteDetail extends AppCompatActivity implements IToast {
         buttonTasks();
 
     }
-
 
     //onStart()
     @Override
@@ -104,10 +94,10 @@ public class NoteDetail extends AppCompatActivity implements IToast {
     public void onBackPressed() {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
-            olusturma_zamani = olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir();
             notGuncelleme();
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
-            olusturma_zamani = olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir();
             notGuncelleme();
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
@@ -150,24 +140,15 @@ public class NoteDetail extends AppCompatActivity implements IToast {
                             //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
                             //adapter.notifyDataSetChanged(); //null dönüyor!!!
 
-
-                            Toast("Notunuz güncellendi");
+                            util.toastMessage(getApplicationContext(), "Notunuz güncellendi").show();
                             Intent intent = new Intent(NoteDetail.this, NotePage.class);
                             startActivity(intent);
                         }
                     }
-                }).addOnFailureListener(e -> Toast("Hata oluştu"));
+                }).addOnFailureListener(e -> util.toastMessage(this, "Hata oluştu").show());
 
     }
 
-    //assign data
-    public void assignData(String baslik, String icerik, String olusturmaZamani, int notRengi) {
-        binding.txtDetailTitle.setText(baslik);
-        binding.txtDetailContent.setText(icerik);
-        binding.tvDetailOlusturmaZamani.setText(olusturmaZamani);
-        binding.tvSonDuzenlemeZamani.setText(olusturmaZamani); //Toolbar üzerinde son düzenleme tarihinin gosterilmesi
-        binding.scrollView2.setBackgroundColor(notRengi);
-    }
 
     //Button Tasks
     public void buttonTasks() {
@@ -175,10 +156,10 @@ public class NoteDetail extends AppCompatActivity implements IToast {
         binding.btnDetailBack.setOnClickListener(v -> {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
-                olusturma_zamani = olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir();
                 notGuncelleme();
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
-                olusturma_zamani = olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir();
                 notGuncelleme();
             } else {
                 onBackPressed();
@@ -231,10 +212,7 @@ public class NoteDetail extends AppCompatActivity implements IToast {
 
         //Custom layout for ask question
         viewGPT.findViewById(R.id.bottom_sheet_gpt_question_layout).setOnClickListener(this::showAlertDialogButtonClicked);
-
-
     }
-
 
     //Custom GPT Ask Question
     public void showAlertDialogButtonClicked(View view) {
@@ -254,99 +232,18 @@ public class NoteDetail extends AppCompatActivity implements IToast {
         String ifade = editText.getText().toString();
         sendMessageGPTButton.setOnClickListener(v -> {
             tvResponse.setHint("Edithor düşünüyor...");
-            sendMessageGPT(ifade, tvResponse);
+            viewModel.sendMessageGPT(ifade, tvResponse, getApplicationContext());
         });
 
         // add a button
         builder.setPositiveButton("Kopyala", (dialog, which) -> {
             // send data from the AlertDialog to the Activity
             String gptResponse = tvResponse.getText().toString();
-
-            // ClipboardManager nesnesini al
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
-            // Metin değerini kopyala
-            ClipData clip = ClipData.newPlainText("label", gptResponse);
-            clipboard.setPrimaryClip(clip);
+            viewModel.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
         });
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    //Custom dialog send message button listener
-    //TODO: Chat sisteminde response Türkçe gelirken custom dialog üzerinde ingilizce geliyor. Çözmeliyiz.
-    public void sendMessageGPT(String ifade, TextView text) {
-        try {
-            getResponse(ifade, text);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    //Response (GPT-3.5-Turbo)
-    private void getResponse(String question, TextView text) throws JSONException {
-        RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
-
-        /** @author yunusemreyakisan
-        {
-        "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": "Hello!"}]
-        }
-         */
-
-        //Parametrelere gore objelerin olusturulması
-        //messageObject içerisine role ve content verilerini yerleştirdik.
-        //Bu nesneyi daha sonra messageArray içerisine yerleştirdik.
-        //Bu array'i genel jsonObject'e yerleştirdik.
-        final JSONObject jsonObject = new JSONObject();
-        jsonObject.put("model", "gpt-3.5-turbo");
-        JSONArray messagesArray = new JSONArray();
-        JSONObject messageObject = new JSONObject();
-        messageObject.put("role", "user");
-        messageObject.put("content", question);
-        messagesArray.put(messageObject);
-        jsonObject.put("messages", messagesArray);
-
-
-        //Post istegi
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, response -> {
-            try {
-                String resMessage = response.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim();
-                text.setText(resMessage);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }, error -> {
-            Toast.makeText(getApplicationContext(), "Failed response", Toast.LENGTH_SHORT)
-                    .show();
-        }) {
-            @NotNull
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/json");
-                params.put("Authorization", "Bearer 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");
-                return params;
-            }
-        };
-        postRequest.setRetryPolicy((RetryPolicy) (new RetryPolicy() {
-            public int getCurrentTimeout() {
-                return 50000;
-            }
-
-            public int getCurrentRetryCount() {
-                return 50000;
-            }
-
-            public void retry(@Nullable VolleyError error) {
-                runOnUiThread((Runnable) (() -> {
-                    Toast toast = Toast.makeText(getApplicationContext(), (CharSequence) "API Hatası", Toast.LENGTH_SHORT);
-                    toast.show();
-                }));
-            }
-        }));
-        queue.add(postRequest);
     }
 
 
@@ -422,14 +319,14 @@ public class NoteDetail extends AppCompatActivity implements IToast {
                         snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                         snackbar.show();
                     }
-                }).addOnFailureListener(e -> Toast("Vazgeçildi."));
+                }).addOnFailureListener(e -> util.toastMessage(getApplicationContext(), "Vazgeçildi").show());
 
             }
         });
         builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast("Vazgeçildi");
+                util.toastMessage(getApplicationContext(), "Vazgeçildi");
             }
         });
         AlertDialog alertDialog = builder.create();
@@ -439,98 +336,6 @@ public class NoteDetail extends AppCompatActivity implements IToast {
         alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
     }
 
-    //Color picker dialog
-   /* private void openColorPicker() {
-        AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                //binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.bg_color_light));
-                binding.btnToolbarColorPicker.setColorFilter(getResources().getColor(R.color.bg_color_dark));
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                defaultColor = color;
-                //binding.btnToolbarColorPicker.setBackgroundColor(color);
-                binding.btnToolbarColorPicker.setColorFilter(color);
-
-
-            }
-        });
-        dialog.show();
-        dialog.getDialog().getButton(dialog.getDialog().BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
-        dialog.getDialog().getButton(dialog.getDialog().BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-    }
-
-    */
-
-    //Olusturma zamani al
-    public String olusturmaZamaniGetir() {
-        //Olusturma zamanini al.
-        Calendar calendar = new GregorianCalendar();
-        int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-        int hours = calendar.get(Calendar.HOUR);
-        int minutes = calendar.get(Calendar.MINUTE);
-        String time = String.format("%02d:%02d", hours, minutes);
-        String ay = null;
-        int ayinGunu = calendar.get(Calendar.DAY_OF_MONTH);
-
-        /*
-        if (calendar.get(Calendar.DAY_OF_MONTH) < 9) {
-            ayinGunu = "0" + calendar.get(Calendar.DAY_OF_MONTH);
-        } else {
-            ayinGunu = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        }
-
-         */
-
-        //Ay
-        switch (month) {
-            case 1:
-                ay = "Ocak";
-                break;
-            case 2:
-                ay = "Şubat";
-                break;
-            case 3:
-                ay = "Mart";
-                break;
-
-            case 4:
-                ay = "Nisan";
-                break;
-            case 5:
-                ay = "Mayıs";
-                break;
-            case 6:
-                ay = "Haziran";
-                break;
-            case 7:
-                ay = "Temmuz";
-                break;
-            case 8:
-                ay = "Ağustos";
-                break;
-            case 9:
-                ay = "Eylül";
-                break;
-            case 10:
-                ay = "Ekim";
-                break;
-            case 11:
-                ay = "Kasım";
-                break;
-            case 12:
-                ay = "Aralık";
-                break;
-        }
-
-        String notOlusturmaTarihi = ayinGunu + " " + ay + " " + time;
-
-        return notOlusturmaTarihi;
-    }
-
-
     //Intent data
     public void getIntentData() {
         Intent data = getIntent();
@@ -539,12 +344,6 @@ public class NoteDetail extends AppCompatActivity implements IToast {
         notIcerigi = data.getStringExtra("icerik");
         notOlusturmaZamani = data.getStringExtra("olusturma_zamani");
         notRengi = data.getIntExtra("color", 0);
-    }
-
-
-    @Override
-    public void Toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 

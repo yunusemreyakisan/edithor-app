@@ -1,4 +1,4 @@
-package com.app.edithormobile.layouts.chat_gpt;
+package com.app.edithormobile.view.chat_gpt;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,7 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.MessageAdapter;
 import com.app.edithormobile.databinding.ActivityChatGptBinding;
-import com.app.edithormobile.models.GPTModel;
+import com.app.edithormobile.model.GPTModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;

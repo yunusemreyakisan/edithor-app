@@ -1,9 +1,7 @@
-package com.app.edithormobile.layouts.login;
+package com.app.edithormobile.view.login;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -12,12 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.app.edithormobile.NotePage;
 import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivitySignInBinding;
-import com.app.edithormobile.models.UserModel;
-import com.app.edithormobile.utils.IToast;
+import com.app.edithormobile.model.UserModel;
+import com.app.edithormobile.util.IToast;
+import com.app.edithormobile.util.Util;
+import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.viewmodel.sign_in.SignInViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,8 +32,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -45,6 +44,9 @@ public class SignIn extends AppCompatActivity implements IToast {
     private static final int RC_SIGN_IN = 0;
     private GoogleSignInClient mGoogleSignInClient;
 
+    Util util = new Util();
+    SignInViewModel viewModel;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,18 +57,18 @@ public class SignIn extends AppCompatActivity implements IToast {
         View v = binding.getRoot();
         setContentView(v);
 
+        //ViewModel Bağlama
+        viewModel = ViewModelProviders.of(this).get(SignInViewModel.class);
+
 
         //Methods
         kayitOlGonder();
         girisIslemi();
-        beniHatirla();
+        rememberUser();
 
 
         //configure google sign in
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //Click to sign in button
@@ -80,6 +82,8 @@ public class SignIn extends AppCompatActivity implements IToast {
     }
     //eof onCreate()
 
+
+    //TODO: Google sign in sıkıntılı,düzenlenmesi gerekiyor
     //Google Sign-in
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -117,43 +121,33 @@ public class SignIn extends AppCompatActivity implements IToast {
         String email = Objects.requireNonNull(account.getEmail());
         String password = Objects.requireNonNull(account.getId());
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //Veritabanına Canlı Kayıt Etme (Realtime Database)
-                            String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                            mUser = mAuth.getCurrentUser();
-                            mDatabase = FirebaseDatabase.getInstance().getReference()
-                                    .child("Kullanicilar")
-                                    .child(user_id)
-                                    .child("Kullanıcı Bilgileri");
-                            //Olusturma zamanini al.
-                            Calendar calendar = new GregorianCalendar();
-                            int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-                            int hours = calendar.get(Calendar.HOUR);
-                            int minutes = calendar.get(Calendar.MINUTE);
-                            String time = String.format("%02d:%02d", hours, minutes);
-                            String hesapOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
-                                    + " " + time;
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    //Veritabanına Canlı Kayıt Etme (Realtime Database)
+                    String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                    mUser = mAuth.getCurrentUser();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Kullanıcı Bilgileri");
 
-                            HashMap<String, UserModel> mData = new HashMap<>();
-                            mData.put(user_id, new UserModel(user_id, email, password, hesapOlusturmaTarihi));
+                    String hesapOlusturmaTarihi = util.olusturmaZamaniGetir();
 
-                            //Realtime Database
-                            mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    Intent intent = new Intent(SignIn.this, NotePage.class);
-                                    startActivity(intent);
-                                    Toast("Hesap oluşturuldu");
-                                } else {
-                                    Toast("Hesap oluşturulamadı, yeniden deneyin");
-                                }
-                            });
+                    HashMap<String, UserModel> mData = new HashMap<>();
+                    mData.put(user_id, new UserModel(user_id, email, password, hesapOlusturmaTarihi));
+
+                    //Realtime Database
+                    mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            Intent intent = new Intent(SignIn.this, NotePage.class);
+                            startActivity(intent);
+                            Toast("Hesap oluşturuldu");
+                        } else {
+                            Toast("Hesap oluşturulamadı, yeniden deneyin");
                         }
-                    }
-                });
+                    });
+                }
+            }
+        });
     }
 
     //onStart() methodu ile kullanicinin onceden giris yapıp yapmadiginin kontrolu
@@ -183,30 +177,17 @@ public class SignIn extends AppCompatActivity implements IToast {
 
     }
 
-
-    //Shared Preferences (Beni Hatırla)
-    private void beniHatirla() {
-        SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-        String checkbox = preferences.getString("Remember", "");
-
-        if (checkbox.equals("true")) {
+    public void rememberUser() {
+        if (viewModel.getSharedPreferences(getApplication())) {
             Intent intent = new Intent(SignIn.this, NotePage.class);
             startActivity(intent);
         }
-
-
         binding.beniHatirlaCheckbox.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isChecked()) {
-                SharedPreferences preferences1 = getSharedPreferences("checkbox", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences1.edit();
-                editor.putString("Remember", "true");
-                editor.apply();
+                viewModel.setSharedPreference(getApplication(), "true");
                 //  Toast.makeText(getApplicationContext(), "Beni hatırla açık!", Toast.LENGTH_SHORT).show();
             } else if (!compoundButton.isChecked()) {
-                SharedPreferences preferences1 = getSharedPreferences("checkbox", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences1.edit();
-                editor.putString("Remember", "false");
-                editor.apply();
+                viewModel.setSharedPreference(getApplication(), "false");
                 //  Toast.makeText(getApplicationContext(), "Beni hatırla kapalı!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -214,45 +195,7 @@ public class SignIn extends AppCompatActivity implements IToast {
 
     //E-Mail ve Şifre ile Giriş İşlemi
     private void girisIslemi() {
-        //Kaydolunan şifre ve ad soyad şartlanacak.
-        mAuth = FirebaseAuth.getInstance();
-        binding.btnGirisYap.setOnClickListener(v -> kayitliKullaniciGirisi());
-    }
-
-    private void kayitliKullaniciGirisi() {
-        // Firebase üzerinden email ve şifre alınması
-        String email, password;
-        email = Objects.requireNonNull(binding.txtGrsEmail.getText()).toString();
-        password = Objects.requireNonNull(binding.txtGrsSifre.getText()).toString();
-
-        // Email ve Şifre Giriş Kontrolü (Dolu-Boş)
-        if (TextUtils.isEmpty(email)) {
-            Toast("Lütfen emailinizi giriniz");
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            Toast("Lütfen şifrenizi giriniz");
-            return;
-        }
-
-        binding.pBarGiris.setVisibility(View.VISIBLE);
-        // Kayıtlı Kullanıcı Girişi
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                        task -> {
-                            if (task.isSuccessful()) {
-                                binding.pBarGiris.setVisibility(View.GONE);
-                                // Eğer giriş bilgileri doğruysa:
-                                // Anasayfaya geç.
-                                Intent intent = new Intent(getApplicationContext(), NotePage.class);
-                                startActivity(intent);
-                            } else {
-
-                                // Giriş hatalı ise:
-                                Toast("E-Mail veya şifre hatalı!");
-                            }
-                        });
+        binding.btnGirisYap.setOnClickListener(v -> viewModel.kayitliKullaniciGirisi(getApplication(), binding));
     }
 
 

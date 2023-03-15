@@ -1,4 +1,4 @@
-package com.app.edithormobile.models;
+package com.app.edithormobile.model;
 
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package com.app.edithormobile;
+package com.app.edithormobile.view;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,14 +17,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
-import com.app.edithormobile.layouts.chat_gpt.AskGPT;
-import com.app.edithormobile.layouts.crud.AddNote;
-import com.app.edithormobile.layouts.detail.NoteDetail;
-import com.app.edithormobile.layouts.login.SignIn;
-import com.app.edithormobile.models.NoteModel;
-import com.app.edithormobile.utils.IToast;
+import com.app.edithormobile.model.NoteModel;
+import com.app.edithormobile.util.ISnackbar;
+import com.app.edithormobile.util.IToast;
+import com.app.edithormobile.util.Util;
+import com.app.edithormobile.view.chat_gpt.AskGPT;
+import com.app.edithormobile.view.crud.AddNote;
+import com.app.edithormobile.view.detail.NoteDetail;
+import com.app.edithormobile.view.login.SignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -48,9 +50,10 @@ import java.util.ArrayList;
  * @author yunusemreyakisan
  */
 
-public class NotePage extends AppCompatActivity implements IToast {
+public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
 
     ArrayList<NoteModel> selectedNotes = new ArrayList<>();
+    Util util = new Util();
     boolean isSelectedMode = false;
     ArrayList<NoteModel> notes;
     NoteAdapter noteAdapter;
@@ -241,7 +244,7 @@ public class NotePage extends AppCompatActivity implements IToast {
                                     //TODO: Geri alınan notu kendi silinen yerine iade etmek gerekiyor.
                                     //notes.add(position, pos);
                                     noteAdapter.notifyItemInserted(position);
-                                    restoreSnackbar(view).isShown();
+                                    Snackbar(view, "Not geri alındı");
                                     noteAdapter.notifyDataSetChanged();
 
                                     //Geri al dedikten sonra silinenlerden silinip yine eklenen notlara gecmesi
@@ -278,14 +281,14 @@ public class NotePage extends AppCompatActivity implements IToast {
                                 snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                                 snackbar.show();
                             }
-                        }).addOnFailureListener(e -> Toast("Vazgeçildi."));
+                        }).addOnFailureListener(e -> util.toastMessage(getApplicationContext(), "Vazgeçildi"));
 
                     }
                 });
                 builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast("Vazgeçildi");
+                        util.toastMessage(getApplicationContext(), "Vazgeçildi");
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -321,12 +324,6 @@ public class NotePage extends AppCompatActivity implements IToast {
         binding.rvNotes.setHasFixedSize(true);
         binding.rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.rvNotes.setAdapter(noteAdapter);
-    }
-
-
-    //Snackbar Restore Method
-    public Snackbar restoreSnackbar(View v) {
-        return Snackbar.make(v, "Notunuz geri alındı", Snackbar.LENGTH_SHORT);
     }
 
 
@@ -503,6 +500,13 @@ public class NotePage extends AppCompatActivity implements IToast {
 
     @Override
     public void Toast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        android.widget.Toast.makeText(getApplicationContext(), message, android.widget.Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void Snackbar(View v, String message) {
+        Snackbar.make(v, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.app.edithormobile.layouts.login;
+package com.app.edithormobile.view.login;
 
 
 import android.content.Intent;
@@ -14,7 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.app.edithormobile.databinding.ActivitySignUpBinding;
-import com.app.edithormobile.utils.IToast;
+import com.app.edithormobile.util.IToast;
+import com.app.edithormobile.util.Util;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,8 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -34,6 +33,7 @@ public class SignUp extends AppCompatActivity implements IToast {
     FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mDatabase;
+    Util util = new Util();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,14 +87,8 @@ public class SignUp extends AppCompatActivity implements IToast {
                                             .child("Kullanicilar")
                                             .child(user_id)
                                             .child("Kullanıcı Bilgileri");
-                                    //Olusturma zamanini al.
-                                    Calendar calendar = new GregorianCalendar();
-                                    int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-                                    int hours = calendar.get(Calendar.HOUR);
-                                    int minutes = calendar.get(Calendar.MINUTE);
-                                    String time = String.format("%02d:%02d", hours, minutes);
-                                    String notOlusturmaTarihi = calendar.get(Calendar.DAY_OF_MONTH) + "/" + month
-                                            + " " + time;
+
+                                    String notOlusturmaTarihi = util.olusturmaZamaniGetir();
 
                                     HashMap<String, String> mData = new HashMap<>();
                                     mData.put("mail", email);
