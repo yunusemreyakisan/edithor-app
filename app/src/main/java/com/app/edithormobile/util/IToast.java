@@ -1,4 +1,4 @@
-package com.app.edithormobile.utils;
+package com.app.edithormobile.util;
 
 public interface IToast {
     void Toast(String message);
