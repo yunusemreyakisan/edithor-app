@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/addNoteBG"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,12 +39,10 @@
         android:backgroundTint="@color/bg_color_dark"
         android:contentDescription="TODO"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/generalBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.086"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNote"
-        app:layout_constraintVertical_bias="0.098" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNote" />
 
     <EditText
         android:id="@+id/txtTitle"
@@ -94,194 +91,6 @@
         app:layout_constraintVertical_bias="0.050000012" />
 
 
-    <LinearLayout
-        android:id="@+id/generalBar"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="100dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"
-        android:baselineAligned="false"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:weightSum="6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNote">
-
-
-        <LinearLayout
-            android:id="@+id/optionBar"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_weight="4.75"
-            android:background="@drawable/upload_layout_bg"
-            android:backgroundTint="@color/cardview_color"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:weightSum="5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNote">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnbold"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:backgroundTint="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                android:shadowColor="@android:color/transparent"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/bold_icon_svg"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:rippleColor="@android:color/transparent"
-                app:tint="@color/bg_color_light"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnitalic"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/italic_icon_svg"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:tint="@color/bg_color_light"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnunderline"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/underline_icon_svg"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:tint="@color/bg_color_light"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/copy_icon"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:tint="@color/bg_color_light"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnColor"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:backgroundTint="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                android:shadowColor="@android:color/transparent"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/color_filter_icon_svg"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:rippleColor="@android:color/transparent"
-                app:tint="@color/bg_color_light"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/uploadBar"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_weight="1.25"
-            android:background="@drawable/upload_layout_bg"
-            android:backgroundTint="@color/cardview_color"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNote">
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnUploadImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="@dimen/_20sdp"
-                app:backgroundTint="@android:color/transparent"
-                app:icon="@drawable/upload_image"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:tint="@color/bg_color_light"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarAddNote"
         android:layout_width="match_parent"
@@ -321,7 +130,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_empty_color_circle" />
+            android:src="@drawable/ic_not" />
 
         <ImageButton
             android:id="@+id/btn_toolbar_color_red_addNote"
@@ -346,21 +155,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="10dp"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:layout_marginHorizontal="10dp"
             android:src="@drawable/ic_green_circle" />
-
-        <ImageButton
-            android:id="@+id/btn_toolbar_share_addNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:background="@android:color/transparent"
-            android:padding="8dp"
-            android:layout_marginHorizontal="10dp"
-            android:src="@drawable/ic_extra"
-            app:tint="@color/bg_color_dark" />
 
 
     </androidx.appcompat.widget.Toolbar>
