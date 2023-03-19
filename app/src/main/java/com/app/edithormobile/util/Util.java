@@ -3,6 +3,10 @@ package com.app.edithormobile.util;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.core.view.ViewCompat;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -76,5 +80,21 @@ public class Util {
     //Toast mesaji goster
     public Toast toastMessage(Context context, String message) {
         return Toast.makeText(context, message, Toast.LENGTH_SHORT);
+    }
+
+    //Set snacbar elevation
+    public void configSnackbar(Context context, Snackbar snack) {
+        ViewCompat.setElevation(snack.getView(), 0f);
+    }
+
+    //Set snacbar drawable
+    public void setDrawableSnackbar(Snackbar snackbar, int drawable) {
+        snackbar.getView().setBackgroundResource(drawable);
+    }
+
+
+    //Kullanıcı verilerini cek
+    public void kullaniciyiGetir() {
+        //TODO Kullanıcı verilerini bir diziye at, o diziyi her yerden cagir.
     }
 }

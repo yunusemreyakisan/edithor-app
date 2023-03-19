@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.Request;
@@ -23,6 +24,7 @@ import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.MessageAdapter;
 import com.app.edithormobile.databinding.ActivityChatGptBinding;
 import com.app.edithormobile.model.GPTModel;
+import com.app.edithormobile.viewmodel.gpt.GPTViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -38,12 +40,18 @@ public final class AskGPT extends AppCompatActivity {
     private MessageAdapter message_adapter;
     private ArrayList<GPTModel> messages;
 
+    GPTViewModel viewModel;
+
     String url = "https://api.openai.com/v1/chat/completions";
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatGptBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //ViewModel Bind
+        viewModel = ViewModelProviders.of(this).get(GPTViewModel.class);
+
 
         //Status bar color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
