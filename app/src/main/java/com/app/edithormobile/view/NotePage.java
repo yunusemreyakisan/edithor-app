@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +67,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     NoteAdapter.ClickListener clickListener;
 
     ActivityNotePageBinding binding;
+    Bitmap bmp; // store the image in your bitmap
 
 
     @Override
@@ -104,6 +106,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
             public void onRefresh() {
                 binding.swipeRefreshLayout.setRefreshing(false);
                 binding.rvNotes.setAdapter(noteAdapter);
+                noteAdapter.notifyDataSetChanged();
             }
         });
 
@@ -223,6 +226,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 intent.putExtra("olusturma_zamani", notes.get(position).getNotOlusturmaTarihi());
                 intent.putExtra("color", notes.get(position).getColor());
                 intent.putExtra("position", model);
+                intent.putExtra("image", notes.get(position).getImageUri());
+
                 startActivity(intent);
 
             }
