@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
@@ -97,14 +98,21 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         search();
         notesViewRV();
 
+        //TODO: Swipe yapıldığında liste kapanıp progress bar çıkacak ve liste yenilenecek.
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                binding.swipeRefreshLayout.setRefreshing(false);
+                binding.rvNotes.setAdapter(noteAdapter);
+            }
+        });
+
         binding.toolbarSecilenler.setOnClickListener(v1 -> {
             //todo: verileri siliyoruz, fakat adapter listesi güncellenmiyor.
             for (NoteModel model : selectedNotes) {
                 String id = model.getNoteID();
                 removeRef.child(id).removeValue();
             }
-            noteAdapter.listeyiGuncelle(notes);
-            noteAdapter.notifyDataSetChanged();
 
             selectedNotes.removeAll(selectedNotes);
             binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
@@ -112,7 +120,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
             Log.e("secilenler listesi", selectedNotes.toString());
 
         });
-        noteAdapter.notifyDataSetChanged();
+        noteAdapter.listeyiGuncelle(notes);
 
     }
 
@@ -430,7 +438,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
             }
         }
         if (filteredlist.isEmpty()) {
-            Toast("Eşleşen not yok");
+            //Toast("Eşleşen not yok");
         } else {
             noteAdapter.filterList(filteredlist);
             noteAdapter.notifyDataSetChanged();

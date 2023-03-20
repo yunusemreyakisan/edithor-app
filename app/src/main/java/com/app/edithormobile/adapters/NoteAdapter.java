@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.model.NoteModel;
@@ -63,14 +65,23 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             holder.tvTitle.setText(util.bosKontrolluDeger(mNote.getNotBaslik()));
             holder.tvNote.setText(util.bosKontrolluDeger(mNote.getNotIcerigi()));
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
-            //glide
+
+            // Placeholder
+            CircularProgressDrawable drawable = new CircularProgressDrawable(context);
+            drawable.setCenterRadius(40f);
+            drawable.setStrokeWidth(8f);
+            drawable.start();
+            // Glide
             Glide.with(context)
                     .load(mNote.getImageUri())
+                    .centerCrop()
+                    .placeholder(drawable)
                     .into(holder.imageUri);
+
 
             //holder.color.setBackgroundColor(mNote.getColor());
             // holder.card.setBackgroundColor(mNote.getColor());
-            holder.cardWithImages.setStrokeColor(mNote.getColor());
+            holder.card.setStrokeColor(mNote.getColor());
 
 
             //TODO:Talha hocaya sor. (Referans alma ile alakalı)
@@ -85,7 +96,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             // holder.color.setBackgroundColor(mNote.getColor());
             //holder.card_layout.setBackgroundColor(mNote.getColor());
             //TODO: Eger boyle yaparsak notların arkaplanı değiştirilecek ve mantık aynı olacak.
-            holder.cardWithoutImages.setStrokeColor(mNote.getColor());
+            holder.card.setStrokeColor(mNote.getColor());
 
         }
 
@@ -95,21 +106,21 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     //ViewHolder with images
     public static class NoteHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tvNote, tvTitle, tvOlusturmaTarihi;
-        public MaterialCardView cardWithoutImages, cardWithImages;
-        ImageView imageUri, color;
+        public MaterialCardView card;
+        ImageView imageUri;
         LinearLayout card_layout;
+        public ProgressBar bar;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
             //TODO: İki farklı kart düzenimiz var, düzenlerin long click methodunda hata var, çözülecek.
-            cardWithoutImages = itemView.findViewById(R.id.cardWithoutImages);
-            cardWithImages = itemView.findViewById(R.id.cardWithImages);
+            card = itemView.findViewById(R.id.card);
             tvNote = itemView.findViewById(R.id.tvNote);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvOlusturmaTarihi = itemView.findViewById(R.id.tvOlusturmaTarihi);
             imageUri = itemView.findViewById(R.id.imageUri);
-            color = itemView.findViewById(R.id.notColor);
             card_layout = itemView.findViewById(R.id.card_layout);
+            bar = itemView.findViewById(R.id.progressForImage);
 
             //click
             itemView.setOnClickListener(this);
@@ -120,7 +131,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         @Override
         public void onClick(View v) {
             int positionID = getAdapterPosition();
-            v = cardWithoutImages;
+            v = card;
             if (positionID >= 0) {
                 clickListener.onItemClick(v, positionID);
             }
@@ -129,7 +140,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         @Override
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
-            v = cardWithoutImages;
+            v = card;
             if (position >= 0) {
                 clickListener.onItemLongClick(v, position);
                 return true;

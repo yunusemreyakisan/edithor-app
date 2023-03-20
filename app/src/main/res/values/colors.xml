@@ -23,6 +23,7 @@
     <color name="blue_circle">#4D96FF</color>
     <color name="red_circle">#DF2E38</color>
     <color name="green_circle">#6BCB77</color>
+    <color name="empty_color">?attr/colorOnPrimary</color>
 
 </resources>
 

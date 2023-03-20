@@ -51,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_copy"
+            android:src="@drawable/ic_copy_link"
             app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

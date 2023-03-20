@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -30,22 +30,22 @@
 
 
         <activity
-            android:name=".layouts.detail.NoteDetail"
+            android:name=".view.detail.NoteDetail"
             android:windowSoftInputMode="adjustResize"
             android:exported="true" />
 
         <activity
-            android:name=".NotePage"
+            android:name=".view.NotePage"
             android:exported="true"
             android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".layouts.crud.AddNote"
+            android:name=".view.crud.AddNote"
             android:exported="true"
             android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".layouts.login.SignIn"
+            android:name=".view.login.SignIn"
             android:exported="true"
             android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustPan">
@@ -56,12 +56,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".layouts.login.SignUp"
+            android:name=".view.login.SignUp"
             android:exported="true"
             android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".layouts.chat_gpt.AskGPT"
+            android:name=".view.chat_gpt.AskGPT"
             android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustResize"
             android:exported="true" />

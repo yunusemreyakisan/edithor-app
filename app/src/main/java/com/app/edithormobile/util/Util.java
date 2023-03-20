@@ -1,6 +1,7 @@
 package com.app.edithormobile.util;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.core.view.ViewCompat;
@@ -90,6 +91,18 @@ public class Util {
     //Set snacbar drawable
     public void setDrawableSnackbar(Snackbar snackbar, int drawable) {
         snackbar.getView().setBackgroundResource(drawable);
+    }
+
+
+    //Bos Kontrollu deger donduren method
+    public String bosKontrolluDeger(String deger) {
+        if (TextUtils.isEmpty(deger)) {
+            deger = "Başlık yok";
+        } else {
+            return deger;
+        }
+
+        return deger;
     }
 
 
