@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,11 +36,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NoteDetail extends AppCompatActivity {
 
     ActivityNoteDetailBinding binding;
+    ArrayList<NoteModel> pinnedList;
     String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
     int notRengi;
     FirebaseAuth mAuth;
@@ -46,11 +50,11 @@ public class NoteDetail extends AppCompatActivity {
     DatabaseReference removeRef, removedReference;
     //color picker
     int defaultColor;
+    BottomSheetDialog dialog;
     NoteDetailViewModel viewModel;
+    int sure = 3000;
     Util util = new Util();
-
-    String url = "https://api.openai.com/v1/chat/completions";
-
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,8 @@ public class NoteDetail extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
         System.out.println("URL: " + viewModel.getAPIUrl()); //ViewModel Test
 
+        //init snackbar
+        snackbar = Snackbar.make(binding.getRoot(), "Notunuz silindi", sure);
         //Window nesnesi alma
         if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.bg_color_light));
@@ -70,14 +76,12 @@ public class NoteDetail extends AppCompatActivity {
         //get intent data
         getIntentData();
         viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi);
-        //notGuncelleme();
 
 
         //TODO: Textviewler edittexte donusturulup otomatik not kaydedilecek.
         //TODO: Edittext klavyenin üzerinde görünmeli.
 
         buttonTasks();
-
     }
 
     //onStart()
@@ -86,8 +90,6 @@ public class NoteDetail extends AppCompatActivity {
         super.onStart();
         //Button tasks
         buttonTasks();
-
-
     }
 
     @Override
@@ -189,7 +191,7 @@ public class NoteDetail extends AppCompatActivity {
         });
 
         //Share Toolbar Button
-        BottomSheetDialog dialog = new BottomSheetDialog(NoteDetail.this);
+        dialog = new BottomSheetDialog(NoteDetail.this);
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.share_bottom_sheet_layout, null);
         dialog.setContentView(view);
         binding.btnToolbarShare.setOnClickListener(v -> {
@@ -199,19 +201,43 @@ public class NoteDetail extends AppCompatActivity {
 
         //Delete Note Bottom Sheet
         view.findViewById(R.id.bottom_sheet_delete_layout).setOnClickListener(v -> deleteNote());
+        view.findViewById(R.id.properties_copy_note).setOnClickListener(v -> viewModel.copyNote(getApplication(), binding));
+        view.findViewById(R.id.shareNoteToolbar).setOnClickListener(v -> viewModel.shareNote(getApplication(), binding));
 
 
         //GPT Toolbar Button
         BottomSheetDialog dialogGPT = new BottomSheetDialog(NoteDetail.this);
         View viewGPT = LayoutInflater.from(getApplicationContext()).inflate(R.layout.gpt_bottom_sheet_dialog, null);
         dialogGPT.setContentView(viewGPT);
-        binding.shineToolbarGpt.setOnClickListener(v -> {
-            //show
-            dialogGPT.show();
-        });
+        binding.shineToolbarGpt.setOnClickListener(v -> dialogGPT.show());
 
         //Custom layout for ask question
         viewGPT.findViewById(R.id.bottom_sheet_gpt_question_layout).setOnClickListener(this::showAlertDialogButtonClicked);
+
+
+        //Plus Extra Properties Bottom Sheet
+        BottomSheetDialog dialogPlus = new BottomSheetDialog(NoteDetail.this);
+        View viewPlus = LayoutInflater.from(getApplicationContext()).inflate(R.layout.extra_bottom_sheet_layout, null);
+        dialogPlus.setContentView(viewPlus);
+        binding.btnToolbarProperties.setOnClickListener(v -> dialogPlus.show());
+
+        //viewPlus.findViewById(R.id.create_pdf_toolbar).setOnClickListener(v -> generatePDF());
+
+
+        //Pinned Toolbar Top
+        binding.btnDetailPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Pinlenenler ayrı bir listeye eklenecek. Adapter üzerinden gösterim yapılacak.
+            }
+        });
+
+
+    }
+
+
+    public ArrayList<NoteModel> getPinnedList() {
+        return pinnedList;
     }
 
     //Custom GPT Ask Question
@@ -277,14 +303,13 @@ public class NoteDetail extends AppCompatActivity {
                                     pos.getNotOlusturmaTarihi(), false, pos.getColor());
                             removedReference.child(notID).setValue(mNotes);
 
-                            //Intent
-                            Intent intent = new Intent(NoteDetail.this, NotePage.class);
-                            startActivity(intent);
+                            dialog.cancel();
                         }
 
                         //Snackbar Effect (Throws Exception)
-                        int sure = 3000;
-                        Snackbar snackbar = Snackbar.make(v, "Notunuz silindi", sure).setAction("GERİ AL", view -> {
+                        //Set elevation 0f
+                        util.configSnackbar(getApplicationContext(), snackbar);
+                        snackbar.setAction("GERİ AL", view -> {
                             //Geri al dedikten sonra silinenlerden silinip yine eklenen notlara gecmesi
                             removedReference.child(notID).removeValue();
 
@@ -318,6 +343,15 @@ public class NoteDetail extends AppCompatActivity {
                         });
                         snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                         snackbar.show();
+
+                        //Do something after 3500ms
+                        final Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(() -> {
+                            Intent intent = new Intent(NoteDetail.this, NotePage.class);
+                            startActivity(intent);
+                        }, 3500);
+
+
                     }
                 }).addOnFailureListener(e -> util.toastMessage(getApplicationContext(), "Vazgeçildi").show());
 

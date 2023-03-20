@@ -31,9 +31,6 @@ import com.app.edithormobile.view.login.SignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -87,11 +84,9 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         databaseRef();
         fabControl();
 
-        //Google ile hesap verilerinin alınması
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
+
+
     }
 
     @Override
@@ -101,6 +96,24 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         notesEventChangeListener();
         search();
         notesViewRV();
+
+        binding.toolbarSecilenler.setOnClickListener(v1 -> {
+            //todo: verileri siliyoruz, fakat adapter listesi güncellenmiyor.
+            for (NoteModel model : selectedNotes) {
+                String id = model.getNoteID();
+                removeRef.child(id).removeValue();
+            }
+            noteAdapter.listeyiGuncelle(notes);
+            noteAdapter.notifyDataSetChanged();
+
+            selectedNotes.removeAll(selectedNotes);
+            binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
+            binding.toolbarSecilenler.setVisibility(View.GONE);
+            Log.e("secilenler listesi", selectedNotes.toString());
+
+        });
+        noteAdapter.notifyDataSetChanged();
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -109,6 +122,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         binding.addNoteTv.setVisibility(View.GONE);
         binding.addFile.setVisibility(View.GONE);
         binding.addFileTv.setVisibility(View.GONE);
+        binding.notePageFullScreen.setAlpha(1f);
 
         isAllFabsVisible = false;
         //Baslarken kucuk gosterir.
@@ -205,120 +219,43 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
 
             }
 
+
             @Override
             public void onItemLongClick(View v, int position) {
                 String id = notes.get(position).getNoteID();
                 NoteModel pos = notes.get(position);
+                mAuth = FirebaseAuth.getInstance();
+                mUser = mAuth.getCurrentUser();
+                String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
+                removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar")
+                        .child(user_id).child("Notlarim");
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(NotePage.this);
-                builder.setTitle("Emin misiniz?");
-                builder.setMessage("Notu silmek istediğinizden emin misiniz?");
-                builder.setPositiveButton("EVET", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        removeRef.child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    //Silinenler Referansı
-                                    removedReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar")
-                                            .child(user_id).child("Silinen Notlarim");
-                                    //unique getKey()
-                                    NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(),
-                                            pos.getNotOlusturmaTarihi(), false, pos.getColor());
-                                    removedReference.child(id).setValue(mNotes);
-
-                                    //Listeden silinmesi
-                                    notes.remove(notes.get(position));
-                                    noteAdapter.notifyItemRemoved(position);
-                                    noteAdapter.notifyDataSetChanged();
-
-
-                                }
-
-                                //TODO: Silinen notları ayrı bir koleksiyon içinde tutup en son koleksiyonu cagirabiliriz. (Geri al methodu)
-
-                                //Snackbar Effect (Throws Exception)
-                                int sure = 3000;
-                                Snackbar snackbar = Snackbar.make(v, "Notunuz silindi", sure).setAction("GERİ AL", view -> {
-                                    //TODO: Geri alınan notu kendi silinen yerine iade etmek gerekiyor.
-                                    //notes.add(position, pos);
-                                    noteAdapter.notifyItemInserted(position);
-                                    Snackbar(view, "Not geri alındı");
-                                    noteAdapter.notifyDataSetChanged();
-
-                                    //Geri al dedikten sonra silinenlerden silinip yine eklenen notlara gecmesi
-                                    removedReference.child(id).removeValue();
-
-                                    mAuth = FirebaseAuth.getInstance();
-                                    //Veritabanına Canlı Kayıt Etme (Realtime Database)
-                                    String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    mUser = mAuth.getCurrentUser();
-                                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
-                                            .child("Kullanicilar").child(user_id).child("Notlarim");
-
-                                    //yuklenen fotorafin storage adresi
-                                    final String image = pos.getImageUri() != null ? pos.getImageUri() : null;
-                                    //model
-                                    if (image != null) {
-                                        //unique getKey()
-                                        NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(),
-                                                pos.getNotOlusturmaTarihi(), image, false, pos.getColor());
-                                        mDatabase.child(id).setValue(mNotes);
-                                    } else {
-                                        //unique getKey()
-                                        NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(),
-                                                pos.getNotOlusturmaTarihi(), false, pos.getColor());
-                                        mDatabase.child(id).setValue(mNotes);
-                                    }
-
-
-                                    //TODO: 20 adet deneme yapıp en başarılı modeli bulup entegre edilecek.
-                                    //TODO: Modele sonra karar verilecek.
-
-
-                                });
-                                snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
-                                snackbar.show();
-                            }
-                        }).addOnFailureListener(e -> util.toastMessage(getApplicationContext(), "Vazgeçildi"));
-
-                    }
-                });
-                builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        util.toastMessage(getApplicationContext(), "Vazgeçildi");
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
-                alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-                alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
+                //TODO: Toolbar inflate olsun ve seçilen not sayısını yazsın.
+                binding.toolbarTopNotePage.setVisibility(View.GONE);
+                binding.toolbarSecilenler.setVisibility(View.VISIBLE);
 
 
                 //TODO:Seçilim
                 //TODO: Bunun için bir selectedNotes() arraylisti yapıp içerisine id'li bir şekilde atacağız, liste sonradan silinecek.
-/*
                 isSelectedMode = true;
-                if(selectedNotes.contains(notes.get(position))){
-                    v.setBackgroundColor(Color.TRANSPARENT);
-                    selectedNotes.remove(notes.get(position));
-                }else{
-                    v.findViewById(R.id.tvNote).setBackgroundColor(Color.CYAN);
-                    selectedNotes.add(notes.get(position));
+                if (selectedNotes.contains(pos)) {
+                    v.setForeground(null);
+                    selectedNotes.remove(pos);
+                } else {
+                    selectedNotes.add(pos);
+                    v.setForeground(getResources().getDrawable(R.color.button_active_color));
+                    binding.tvToolbarListSize.setText(String.valueOf("Seçilen not sayısı: " + selectedNotes.size()));
                 }
 
-                if(selectedNotes.size() == 0){
+                if (selectedNotes.size() == 0) {
                     isSelectedMode = false;
+                    binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
+                    binding.toolbarSecilenler.setVisibility(View.GONE);
                 }
 
-                Log.e("secilen liste", selectedNotes.toString());
+                binding.tvToolbarListSize.setText(String.valueOf(selectedNotes.size()));
+                Log.e("secilenler listesi", selectedNotes.toString());
 
-
-
- */
             }
         });
         binding.rvNotes.setHasFixedSize(true);
@@ -467,7 +404,9 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                filter(query);
+                noteAdapter.notifyDataSetChanged();
+                return true;
             }
 
             @Override
