@@ -160,14 +160,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/toolbarSecilenler"
-        app:layout_constraintStart_toEndOf="@+id/toolbarSecilenler">
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarSecilenler">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvNotes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="60dp"
             android:layout_marginTop="@dimen/_30sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -200,9 +201,9 @@
         android:alpha="0.5"
         android:src="@drawable/ic_not_found"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/rvNotes"
-        app:layout_constraintEnd_toEndOf="@+id/rvNotes"
-        app:layout_constraintStart_toStartOf="@+id/rvNotes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.493"
         app:tint="@color/bg_color_dark" />

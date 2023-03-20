@@ -72,6 +72,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_detail_back">
 
+            <ImageView
+                android:id="@+id/NoteDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp" />
+
             <EditText
                 android:id="@+id/txt_detail_title"
                 android:layout_width="match_parent"
