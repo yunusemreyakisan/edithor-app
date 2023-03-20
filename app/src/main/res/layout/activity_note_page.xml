@@ -8,6 +8,34 @@
     android:background="@color/bg_color_light"
     tools:context=".view.NotePage">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarSecilenler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_color_light"
+        android:elevation="5dp"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?homeAsUpIndicator"
+        android:visibility="invisible"
+        app:theme="@style/ToolbarTheme">
+
+        <TextView
+            android:id="@+id/tvToolbarListSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/txt_notlarim"
+            android:textColor="@color/bg_color_dark"
+            android:textSize="20sp"
+            android:fontFamily="@font/inter_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.appcompat.widget.Toolbar>
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarTopNotePage"
