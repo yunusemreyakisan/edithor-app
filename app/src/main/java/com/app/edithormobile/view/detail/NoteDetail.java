@@ -14,12 +14,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivityNoteDetailBinding;
@@ -27,27 +29,33 @@ import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.Util;
 import com.app.edithormobile.view.NotePage;
 import com.app.edithormobile.viewmodel.NoteDetailViewModel;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class NoteDetail extends AppCompatActivity {
 
     ActivityNoteDetailBinding binding;
     ArrayList<NoteModel> pinnedList;
     String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
+    String image;
     int notRengi;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    DatabaseReference removeRef, removedReference;
+    DatabaseReference removeRef, removedReference, mDatabase;
     //color picker
     int defaultColor;
     BottomSheetDialog dialog;
@@ -55,6 +63,7 @@ public class NoteDetail extends AppCompatActivity {
     int sure = 3000;
     Util util = new Util();
     Snackbar snackbar;
+    NoteModel position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,8 @@ public class NoteDetail extends AppCompatActivity {
         //TODO: Edittext klavyenin üzerinde görünmeli.
 
         buttonTasks();
+        //Get Adapter Position
+        position = (NoteModel) getIntent().getSerializableExtra("position");
     }
 
     //onStart()
@@ -90,7 +101,12 @@ public class NoteDetail extends AppCompatActivity {
         super.onStart();
         //Button tasks
         buttonTasks();
+        //if image != null get data
+        getNoteImage();
+
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -108,6 +124,65 @@ public class NoteDetail extends AppCompatActivity {
     }
 
 
+    //if image != null get data
+    public void getNoteImage() {
+        mAuth = FirebaseAuth.getInstance();
+        //Veritabanına Canlı Kayıt Etme (Realtime Database)
+        String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        mUser = mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference()
+                .child("Kullanicilar").child(user_id).child("Notlarim").child(position.getNoteID()).child("imageUri");
+
+
+        if (image != null) {
+            Log.e("Image degeri: ", image);
+            binding.NoteDetailImage.setVisibility(View.VISIBLE);
+            mDatabase.addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(
+                                @NonNull DataSnapshot dataSnapshot) {
+                            // getting a DataSnapshot for the
+                            // location at the specified relative
+                            // path and getting in the link variable
+                            String link = dataSnapshot.getValue(
+                                    String.class);
+
+                            // loading that data into rImage
+                            // variable which is ImageView
+                            // Placeholder
+                            CircularProgressDrawable drawable = new CircularProgressDrawable(getApplicationContext());
+                            drawable.setCenterRadius(40f);
+                            drawable.setStrokeWidth(8f);
+                            drawable.start();
+                            // Glide
+                            Glide.with(getApplicationContext())
+                                    .load(link)
+                                    .centerCrop()
+                                    .placeholder(drawable)
+                                    .into(binding.NoteDetailImage);
+                        }
+
+                        // this will called when any problem
+                        // occurs in getting data
+                        @Override
+                        public void onCancelled(
+                                @NonNull DatabaseError databaseError) {
+                            // we are showing that error message in
+                            // toast
+                            Toast
+                                    .makeText(NoteDetail.this,
+                                            "Error Loading Image",
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+
+        } else {
+            binding.NoteDetailImage.setVisibility(View.GONE);
+        }
+    }
+
     //Note Update
     public void notGuncelleme() {
         notID = getIntent().getStringExtra("id");
@@ -116,12 +191,15 @@ public class NoteDetail extends AppCompatActivity {
 
         //Düzenleme tarihi eklenmesi
         binding.tvDetailOlusturmaZamani.setText(olusturma_zamani);
+        String image = position.getImageUri();
+        Log.e("image", image);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("notBaslik", binding.txtDetailTitle.getText().toString());
         map.put("notIcerigi", binding.txtDetailContent.getText().toString());
         map.put("notOlusturmaTarihi", binding.tvDetailOlusturmaZamani.getText().toString());
         map.put("color", notRengi);
+        map.put("imageUri", image);
 
         //db ref
         mAuth = FirebaseAuth.getInstance();
@@ -272,7 +350,6 @@ public class NoteDetail extends AppCompatActivity {
         dialog.show();
     }
 
-
     //Delete Note
     private void deleteNote() {
         View v = binding.getRoot();
@@ -378,6 +455,7 @@ public class NoteDetail extends AppCompatActivity {
         notIcerigi = data.getStringExtra("icerik");
         notOlusturmaZamani = data.getStringExtra("olusturma_zamani");
         notRengi = data.getIntExtra("color", 0);
+        image = data.getStringExtra("image");
     }
 
 
