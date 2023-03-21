@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -30,6 +31,7 @@ import com.app.edithormobile.view.chat_gpt.AskGPT;
 import com.app.edithormobile.view.crud.AddNote;
 import com.app.edithormobile.view.detail.NoteDetail;
 import com.app.edithormobile.view.login.SignIn;
+import com.app.edithormobile.viewmodel.NotePageViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -68,6 +70,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
 
     ActivityNotePageBinding binding;
     Bitmap bmp; // store the image in your bitmap
+    NotePageViewModel viewModel;
 
 
     @Override
@@ -79,16 +82,16 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         View view = binding.getRoot();
         setContentView(view);
 
+        //Todo: Aşağıdaki methodları viewmodele taşı.
+        //ViewModel Binding
+        viewModel = ViewModelProviders.of(this).get(NotePageViewModel.class);
+
 
         binding.noData.setVisibility(View.INVISIBLE);
         binding.notFound.setVisibility(View.INVISIBLE);
         binding.progressBar.setVisibility(View.VISIBLE);
         //Methods
-        databaseRef();
         fabControl();
-
-        //TODO: Dialogplus kullanarak fotograf ve galeri seçimini yaptır.
-
 
     }
 
@@ -121,6 +124,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
             binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
             binding.toolbarSecilenler.setVisibility(View.GONE);
             Log.e("secilenler listesi", selectedNotes.toString());
+            notes.clear();
+            notesEventChangeListener();
 
         });
         noteAdapter.listeyiGuncelle(notes);
@@ -196,14 +201,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     }
 
 
-    //DB Reference
-    private void databaseRef() {
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        String user_id = requireNonNull(mUser).getUid();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
-    }
-
     //Recyclerview
     private void notesViewRV() {
         //Remove reference
@@ -256,7 +253,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                     selectedNotes.remove(pos);
                 } else {
                     selectedNotes.add(pos);
-                    v.setForeground(getResources().getDrawable(R.color.button_active_color));
+                    v.setForeground(getResources().getDrawable(R.drawable.custom_foreground));
                     binding.tvToolbarListSize.setText(String.valueOf("Seçilen not sayısı: " + selectedNotes.size()));
                 }
 

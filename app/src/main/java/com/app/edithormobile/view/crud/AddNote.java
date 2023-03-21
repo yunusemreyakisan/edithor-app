@@ -90,6 +90,8 @@ public class AddNote extends AppCompatActivity implements IToast {
     protected void onStart() {
         super.onStart();
         buttonTask();
+        olusturma_zamani = util.olusturmaZamaniGetir();
+        binding.tvSonDuzenlemeZamaniToolbarAddNote.setText(olusturma_zamani);
 
     }
 

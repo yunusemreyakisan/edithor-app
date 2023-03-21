@@ -28,6 +28,14 @@
             android:src="@drawable/ic_back"
             app:tint="@color/bg_color_dark" />
 
+        <TextView
+            android:id="@+id/tvSonDuzenlemeZamaniToolbarAddNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/bg_color_dark" />
+
     </androidx.appcompat.widget.Toolbar>
 
 
