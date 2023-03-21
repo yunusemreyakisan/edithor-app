@@ -10,12 +10,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.app.edithormobile.databinding.ActivityNoteDetailBinding;
+import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.service.APIService;
+import com.app.edithormobile.util.Util;
+import com.app.edithormobile.view.NotePage;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 
 import org.json.JSONException;
+
+import java.util.HashMap;
 
 
 public class NoteDetailViewModel extends ViewModel {
@@ -79,6 +88,44 @@ public class NoteDetailViewModel extends ViewModel {
         binding.tvDetailOlusturmaZamani.setText(olusturmaZamani);
         binding.tvSonDuzenlemeZamani.setText(olusturmaZamani); //Toolbar üzerinde son düzenleme tarihinin gosterilmesi
         binding.scrollView2.setBackgroundColor(notRengi);
+    }
+
+    //Note Update
+    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani, Util util, Context context) {
+        //Düzenleme tarihi eklenmesi
+        binding.tvDetailOlusturmaZamani.setText(olusturma_zamani);
+       /* String image = position.getImageUri();
+        Log.e("image", image);
+
+        */
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("notBaslik", binding.txtDetailTitle.getText().toString());
+        map.put("notIcerigi", binding.txtDetailContent.getText().toString());
+        map.put("notOlusturmaTarihi", binding.tvDetailOlusturmaZamani.getText().toString());
+        map.put("color", notRengi);
+        // map.put("imageUri", image);
+        mDatabaseReference.child(notID).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    position.setNotBaslik(binding.txtDetailTitle.getText().toString());
+                    position.setNotIcerigi(binding.txtDetailContent.getText().toString());
+                    position.setNotOlusturmaTarihi(olusturma_zamani);
+                    position.setColor(notRengi);
+                    binding.tvSonDuzenlemeZamani.setText(olusturma_zamani);
+
+                    //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
+                    //adapter.notifyDataSetChanged(); //null dönüyor!!!
+
+                    //util.toastMessage(context, "Notunuz güncellendi").show();
+                    Intent intent = new Intent(context, NotePage.class);
+                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            }
+        }).addOnFailureListener(e -> util.toastMessage(context, "Hata oluştu").show());
+
     }
 
 

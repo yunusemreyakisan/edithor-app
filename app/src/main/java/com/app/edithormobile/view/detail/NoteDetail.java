@@ -43,7 +43,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class NoteDetail extends AppCompatActivity {
@@ -55,7 +54,7 @@ public class NoteDetail extends AppCompatActivity {
     int notRengi;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    DatabaseReference removeRef, removedReference, mDatabase;
+    DatabaseReference removeRef, removedReference, mDatabase, mDatabaseReference;
     //color picker
     int defaultColor;
     BottomSheetDialog dialog;
@@ -71,6 +70,12 @@ public class NoteDetail extends AppCompatActivity {
         binding = ActivityNoteDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //Db ref
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+
         //ViewModel Bağlama
         viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
         System.out.println("URL: " + viewModel.getAPIUrl()); //ViewModel Test
@@ -85,6 +90,9 @@ public class NoteDetail extends AppCompatActivity {
         //get intent data
         getIntentData();
         viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi);
+        notID = getIntent().getStringExtra("id");
+        position = (NoteModel) getIntent().getSerializableExtra("position");
+        Log.e("position degeri", String.valueOf(position));
 
 
         //TODO: Textviewler edittexte donusturulup otomatik not kaydedilecek.
@@ -103,8 +111,6 @@ public class NoteDetail extends AppCompatActivity {
         buttonTasks();
         //if image != null get data
         getNoteImage();
-
-
     }
 
 
@@ -113,10 +119,13 @@ public class NoteDetail extends AppCompatActivity {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir();
-            notGuncelleme();
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir();
-            notGuncelleme();
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+        } else if (notRengi != 0) {
+            olusturma_zamani = util.olusturmaZamaniGetir();
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
             startActivity(intent);
@@ -130,103 +139,44 @@ public class NoteDetail extends AppCompatActivity {
         //Veritabanına Canlı Kayıt Etme (Realtime Database)
         String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         mUser = mAuth.getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference()
-                .child("Kullanicilar").child(user_id).child("Notlarim").child(position.getNoteID()).child("imageUri");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(position.getNoteID()).child("imageUri");
 
 
         if (image != null) {
             Log.e("Image degeri: ", image);
             binding.NoteDetailImage.setVisibility(View.VISIBLE);
-            mDatabase.addListenerForSingleValueEvent(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(
-                                @NonNull DataSnapshot dataSnapshot) {
-                            // getting a DataSnapshot for the
-                            // location at the specified relative
-                            // path and getting in the link variable
-                            String link = dataSnapshot.getValue(
-                                    String.class);
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // getting a DataSnapshot for the
+                    // location at the specified relative
+                    // path and getting in the link variable
+                    String link = dataSnapshot.getValue(String.class);
 
-                            // loading that data into rImage
-                            // variable which is ImageView
-                            // Placeholder
-                            CircularProgressDrawable drawable = new CircularProgressDrawable(getApplicationContext());
-                            drawable.setCenterRadius(40f);
-                            drawable.setStrokeWidth(8f);
-                            drawable.start();
-                            // Glide
-                            Glide.with(getApplicationContext())
-                                    .load(link)
-                                    .centerCrop()
-                                    .placeholder(drawable)
-                                    .into(binding.NoteDetailImage);
-                        }
+                    // loading that data into rImage
+                    // variable which is ImageView
+                    // Placeholder
+                    CircularProgressDrawable drawable = new CircularProgressDrawable(getApplicationContext());
+                    drawable.setCenterRadius(40f);
+                    drawable.setStrokeWidth(8f);
+                    drawable.start();
+                    // Glide
+                    Glide.with(getApplicationContext()).load(link).centerCrop().placeholder(drawable).into(binding.NoteDetailImage);
+                }
 
-                        // this will called when any problem
-                        // occurs in getting data
-                        @Override
-                        public void onCancelled(
-                                @NonNull DatabaseError databaseError) {
-                            // we are showing that error message in
-                            // toast
-                            Toast
-                                    .makeText(NoteDetail.this,
-                                            "Error Loading Image",
-                                            Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    });
+                // this will called when any problem
+                // occurs in getting data
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // we are showing that error message in
+                    // toast
+                    Toast.makeText(NoteDetail.this, "Error Loading Image", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         } else {
             binding.NoteDetailImage.setVisibility(View.GONE);
         }
-    }
-
-    //Note Update
-    public void notGuncelleme() {
-        notID = getIntent().getStringExtra("id");
-        NoteModel position = (NoteModel) getIntent().getSerializableExtra("position");
-        Log.e("position degeri", String.valueOf(position));
-
-        //Düzenleme tarihi eklenmesi
-        binding.tvDetailOlusturmaZamani.setText(olusturma_zamani);
-        String image = position.getImageUri();
-        Log.e("image", image);
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("notBaslik", binding.txtDetailTitle.getText().toString());
-        map.put("notIcerigi", binding.txtDetailContent.getText().toString());
-        map.put("notOlusturmaTarihi", binding.tvDetailOlusturmaZamani.getText().toString());
-        map.put("color", notRengi);
-        map.put("imageUri", image);
-
-        //db ref
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        String user_id = requireNonNull(mUser).getUid();
-        FirebaseDatabase.getInstance()
-                .getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(notID).updateChildren(map)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            position.setNotBaslik(binding.txtDetailTitle.getText().toString());
-                            position.setNotIcerigi(binding.txtDetailContent.getText().toString());
-                            position.setNotOlusturmaTarihi(olusturma_zamani);
-                            position.setColor(notRengi);
-                            binding.tvSonDuzenlemeZamani.setText(olusturma_zamani);
-
-                            //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
-                            //adapter.notifyDataSetChanged(); //null dönüyor!!!
-
-                            util.toastMessage(getApplicationContext(), "Notunuz güncellendi").show();
-                            Intent intent = new Intent(NoteDetail.this, NotePage.class);
-                            startActivity(intent);
-                        }
-                    }
-                }).addOnFailureListener(e -> util.toastMessage(this, "Hata oluştu").show());
-
     }
 
 
@@ -237,10 +187,13 @@ public class NoteDetail extends AppCompatActivity {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
-                notGuncelleme();
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
-                notGuncelleme();
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+            } else if (notRengi != 0) {
+                olusturma_zamani = util.olusturmaZamaniGetir();
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
             } else {
                 onBackPressed();
             }
@@ -314,10 +267,6 @@ public class NoteDetail extends AppCompatActivity {
     }
 
 
-    public ArrayList<NoteModel> getPinnedList() {
-        return pinnedList;
-    }
-
     //Custom GPT Ask Question
     public void showAlertDialogButtonClicked(View view) {
         // Create an alert builder
@@ -359,8 +308,7 @@ public class NoteDetail extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
-        removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar")
-                .child(user_id).child("Notlarim");
+        removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(NoteDetail.this);
         builder.setTitle("Emin misiniz?");
@@ -373,11 +321,9 @@ public class NoteDetail extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             //Silinenler Referansı
-                            removedReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar")
-                                    .child(user_id).child("Silinen Notlarim");
+                            removedReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Silinen Notlarim");
                             //unique getKey()
-                            NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(),
-                                    pos.getNotOlusturmaTarihi(), false, pos.getColor());
+                            NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor());
                             removedReference.child(notID).setValue(mNotes);
 
                             dialog.cancel();
@@ -394,21 +340,18 @@ public class NoteDetail extends AppCompatActivity {
                             //Veritabanına Canlı Kayıt Etme (Realtime Database)
                             String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
                             mUser = mAuth.getCurrentUser();
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference()
-                                    .child("Kullanicilar").child(user_id).child("Notlarim");
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
 
                             //yuklenen fotorafin storage adresi
                             final String image = pos.getImageUri() != null ? pos.getImageUri() : null;
                             //model
                             if (image != null) {
                                 //unique getKey()
-                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(),
-                                        pos.getNotOlusturmaTarihi(), image, false, pos.getColor());
+                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), image, false, pos.getColor());
                                 mDatabase.child(notID).setValue(mNotes);
                             } else {
                                 //unique getKey()
-                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(),
-                                        pos.getNotOlusturmaTarihi(), false, pos.getColor());
+                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor());
                                 mDatabase.child(notID).setValue(mNotes);
                             }
 

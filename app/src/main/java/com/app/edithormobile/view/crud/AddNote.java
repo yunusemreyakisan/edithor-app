@@ -10,12 +10,17 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
@@ -24,6 +29,7 @@ import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.IToast;
 import com.app.edithormobile.util.Util;
 import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.viewmodel.NoteDetailViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,7 +69,7 @@ public class AddNote extends AppCompatActivity implements IToast {
     StorageReference ref;
 
     ActivityAddNoteBinding binding;
-
+    NoteDetailViewModel noteDetailViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +79,9 @@ public class AddNote extends AppCompatActivity implements IToast {
         binding = ActivityAddNoteBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        //Viewmodel binding
+        noteDetailViewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
 
         //methods
         notKaydet();
@@ -92,6 +101,7 @@ public class AddNote extends AppCompatActivity implements IToast {
         buttonTask();
         olusturma_zamani = util.olusturmaZamaniGetir();
         binding.tvSonDuzenlemeZamaniToolbarAddNote.setText(olusturma_zamani);
+
 
     }
 
@@ -174,7 +184,49 @@ public class AddNote extends AppCompatActivity implements IToast {
             }
         });
 
+        //GPT Toolbar Button
+        BottomSheetDialog dialogGPT = new BottomSheetDialog(AddNote.this);
+        View viewGPT = LayoutInflater.from(getApplicationContext()).inflate(R.layout.gpt_bottom_sheet_dialog, null);
+        dialogGPT.setContentView(viewGPT);
+        binding.shineToolbarGpt.setOnClickListener(v -> dialogGPT.show());
+
+        //Custom layout for ask question
+        viewGPT.findViewById(R.id.bottom_sheet_gpt_question_layout).setOnClickListener(this::showAlertDialogButtonClicked);
+
     }
+
+    //Custom GPT Ask Question
+    public void showAlertDialogButtonClicked(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_gpt_ask_layout, null);
+        builder.setView(customLayout);
+
+        //Custom layout öğelerine erişim
+        EditText editText = (EditText) customLayout.findViewById(R.id.txtChatAlert);
+        TextView tvResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTAlert);
+        ImageButton sendMessageGPTButton = (ImageButton) customLayout.findViewById(R.id.sendMessageGPTDialog);
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        String ifade = editText.getText().toString();
+        sendMessageGPTButton.setOnClickListener(v -> {
+            tvResponse.setHint("Edithor düşünüyor...");
+            noteDetailViewModel.sendMessageGPT(ifade, tvResponse, getApplicationContext());
+        });
+
+        // add a button
+        builder.setPositiveButton("Kopyala", (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = tvResponse.getText().toString();
+            noteDetailViewModel.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void chooseImage() {
         Intent intent = new Intent();

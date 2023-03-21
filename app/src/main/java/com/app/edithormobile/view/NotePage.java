@@ -10,9 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.SearchView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -38,12 +36,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -82,10 +76,15 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         View view = binding.getRoot();
         setContentView(view);
 
+        //DB Ref
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        String user_id = requireNonNull(mUser).getUid();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+
         //Todo: Aşağıdaki methodları viewmodele taşı.
         //ViewModel Binding
         viewModel = ViewModelProviders.of(this).get(NotePageViewModel.class);
-
 
         binding.noData.setVisibility(View.INVISIBLE);
         binding.notFound.setVisibility(View.INVISIBLE);
@@ -99,37 +98,57 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     protected void onStart() {
         super.onStart();
         //onStart modunda yenilensin.
-        notesEventChangeListener();
-        search();
         notesViewRV();
+        degisikligiBildir();
+        viewModel.search(binding, noteAdapter, notes);
+
 
         //TODO: Swipe yapıldığında liste kapanıp progress bar çıkacak ve liste yenilenecek.
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 binding.swipeRefreshLayout.setRefreshing(false);
-                binding.rvNotes.setAdapter(noteAdapter);
-                noteAdapter.notifyDataSetChanged();
+                notes.clear();
+                degisikligiBildir();
             }
         });
 
-        binding.toolbarSecilenler.setOnClickListener(v1 -> {
-            //todo: verileri siliyoruz, fakat adapter listesi güncellenmiyor.
-            for (NoteModel model : selectedNotes) {
-                String id = model.getNoteID();
-                removeRef.child(id).removeValue();
-            }
-
-            selectedNotes.removeAll(selectedNotes);
+        binding.toolbarSecilenler.setNavigationOnClickListener(v1 -> {
             binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
             binding.toolbarSecilenler.setVisibility(View.GONE);
-            Log.e("secilenler listesi", selectedNotes.toString());
             notes.clear();
-            notesEventChangeListener();
+            degisikligiBildir();
+            noteAdapter.notifyDataSetChanged();
 
         });
+
+        binding.btnDeleteToolbarNotepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo: verileri siliyoruz, fakat adapter listesi güncellenmiyor.
+                for (NoteModel model : selectedNotes) {
+                    String id = model.getNoteID();
+                    removeRef.child(id).removeValue();
+                }
+
+                selectedNotes.removeAll(selectedNotes);
+                binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
+                binding.toolbarSecilenler.setVisibility(View.GONE);
+                Log.e("secilenler listesi", selectedNotes.toString());
+                notes.clear();
+                degisikligiBildir();
+
+            }
+        });
+
+
         noteAdapter.listeyiGuncelle(notes);
 
+    }
+
+    //Degisiklik izleme
+    public void degisikligiBildir() {
+        viewModel.notesEventChangeListener(binding, noteAdapter, mDatabaseReference, notes);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -324,128 +343,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
     }
 
-
-    //Degisiklik izleme
-    private void notesEventChangeListener() {
-        //Child Listener
-        bosKontrolu();
-        binding.progressBar.setVisibility(View.VISIBLE);
-        mDatabaseReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                NoteModel model = dataSnapshot.getValue(NoteModel.class);
-                notes.add(model);
-                noteAdapter.notifyItemInserted(notes.size());
-                noteAdapter.notifyDataSetChanged();
-                bosKontrolu();
-                Log.d("note size", String.valueOf(notes.size()));
-            }
-
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
-                //Update
-                bosKontrolu();
-                noteAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                //Intent
-                bosKontrolu();
-                noteAdapter.notifyItemRemoved(notes.size());
-                noteAdapter.notifyDataSetChanged();
-                Log.d("note size removed", String.valueOf(notes.size()));
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
-                //Updated
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast("Veritabanı hatası!");
-            }
-        });
-    }
-
-
-    //bos kontrolu
-    private void bosKontrolu() {
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        String user_id = requireNonNull(mUser).getUid();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
-
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get NoteModel object
-                NoteModel model = dataSnapshot.getValue(NoteModel.class);
-
-                if (model != null) {
-                    binding.progressBar.setVisibility(View.GONE);
-                    noteAdapter.notifyDataSetChanged();
-                } else {
-                    binding.noData.setVisibility(View.VISIBLE);
-                    binding.notFound.setVisibility(View.VISIBLE);
-                    binding.progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                //Handle-Error
-            }
-
-        };
-        mDatabaseReference.addValueEventListener(postListener);
-
-    }
-
-
-    //Menu (Search)
-    private void search() {
-        //arama islemi
-        binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                filter(query);
-                noteAdapter.notifyDataSetChanged();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filter(newText);
-                noteAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });
-    }
-
-    //TODO: Issue -> Filtreleme sırasında notu bulduktan sonra bir önceki liste pozisyonunu alıyor.
-    private void filter(String text) {
-        ArrayList<NoteModel> filteredlist = new ArrayList<>();
-
-        for (NoteModel item : notes) {
-            // checking if the entered string matched with any item of our recycler view.
-            if (item.getNotBaslik().toLowerCase().contains(text.toLowerCase())
-                    || item.getNotIcerigi().toLowerCase().contains(text.toLowerCase())) {
-                filteredlist.add(item);
-            }
-        }
-        if (filteredlist.isEmpty()) {
-            //Toast("Eşleşen not yok");
-        } else {
-            noteAdapter.filterList(filteredlist);
-            noteAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public void Toast(String message) {
