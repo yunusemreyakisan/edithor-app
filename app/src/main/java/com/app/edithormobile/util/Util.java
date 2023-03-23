@@ -1,5 +1,9 @@
 package com.app.edithormobile.util;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -97,12 +101,21 @@ public class Util {
     //Bos Kontrollu deger donduren method
     public String bosKontrolluDeger(String deger) {
         if (TextUtils.isEmpty(deger)) {
-            deger = "Başlık yok";
+            deger = "İçerik yok";
         } else {
             return deger;
         }
 
         return deger;
+    }
+
+    //İçeriği kopyala
+    public void getCopiedObject(Context context, String icerik) {
+        // ClipboardManager nesnesini al
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        // Metin değerini kopyala
+        ClipData clip = ClipData.newPlainText("label", icerik);
+        clipboard.setPrimaryClip(clip);
     }
 
 

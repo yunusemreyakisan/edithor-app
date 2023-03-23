@@ -1,9 +1,14 @@
 package com.app.edithormobile.view.crud;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -12,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +49,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,14 +73,19 @@ public class AddNote extends AppCompatActivity implements IToast {
     private Uri imageUri;
     String imageURL;
     private final int PICK_IMAGE_REQUEST = 71;
+    private static final int PERMISSION_CODE = 1000;
+    private static final int IMAGE_CAPTURE_CODE = 1001;
     NoteAdapter adapter;
     ArrayList<NoteModel> notes;
     String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
     int notRengi;
     StorageReference ref;
-
+    String currentPhotoPath;
     ActivityAddNoteBinding binding;
     NoteDetailViewModel noteDetailViewModel;
+    ImageView ivOCR;
+    TextView tvResponse;
+    Bitmap capturedImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +108,7 @@ public class AddNote extends AppCompatActivity implements IToast {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         ref = storageReference.child("harici/" + UUID.randomUUID().toString());
+
 
     }//eof onCreate
 
@@ -168,6 +185,7 @@ public class AddNote extends AppCompatActivity implements IToast {
             dialogPlus.show();
         });
 
+        //Take Photo
         viewPlus.findViewById(R.id.takePhotoToolbar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,11 +194,21 @@ public class AddNote extends AppCompatActivity implements IToast {
             }
         });
 
+        //Choose Photo
         viewPlus.findViewById(R.id.choosePhotoToolbar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Choose Photo", "Fotograf seçmeye tıklanıldı");
                 chooseImage();
+            }
+        });
+
+        //OCR
+        viewPlus.findViewById(R.id.create_ocr_toolbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOCRDialog();
+                //TODO: OCR için ayrıca hocaya sor. Tasarımı ve işleyişi ile alakalı.
             }
         });
 
@@ -194,6 +222,56 @@ public class AddNote extends AppCompatActivity implements IToast {
         viewGPT.findViewById(R.id.bottom_sheet_gpt_question_layout).setOnClickListener(this::showAlertDialogButtonClicked);
 
     }
+
+    public void showOCRDialog() {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_ocr_dialog, null);
+        builder.setView(customLayout);
+
+        //Custom layout öğelerine erişim
+        tvResponse = (TextView) customLayout.findViewById(R.id.tvOCRResponse);
+        ivOCR = (ImageView) customLayout.findViewById(R.id.ivOCRToolbar);
+
+        ivOCR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // İzin isteği gösterme
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
+                            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                        String[] permission = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permission, PERMISSION_CODE);
+                    } else {
+                        // İzinler zaten verilmiş
+                        Log.e("Permission", "Kameraya izin verildi");
+                        openCamera();
+                    }
+                } else {
+                    // Android 6.0'dan önceki sürümlerde izinler zaten verilmiştir
+                    openCamera();
+                }
+            }
+        });
+
+        // add a button
+        builder.setPositiveButton("Kopyala", (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = "Merhaba";
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
+    }
+
 
     //Custom GPT Ask Question
     public void showAlertDialogButtonClicked(View view) {
@@ -227,6 +305,40 @@ public class AddNote extends AppCompatActivity implements IToast {
         dialog.show();
     }
 
+    //Recognizer
+    private void recognizeText() {
+        InputImage image = InputImage.fromBitmap(capturedImage, 0);
+        TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+        Task<Text> result = recognizer.process(image).addOnSuccessListener(new OnSuccessListener<Text>() {
+            @Override
+            public void onSuccess(Text text) {
+                StringBuilder result = new StringBuilder();
+                for (Text.TextBlock block : text.getTextBlocks()) {
+                    String blockText = block.getText();
+                    Point[] blockCornerPoint = block.getCornerPoints();
+                    Rect blockFrame = block.getBoundingBox();
+                    for (Text.Line line : block.getLines()) {
+                        String lineText = line.getText();
+                        Point[] lineCornerPoint = line.getCornerPoints();
+                        Rect lineRect = line.getBoundingBox();
+                        for (Text.Element element : line.getElements()) {
+                            String elementText = element.getText();
+                            result.append(elementText);
+                        }
+                        tvResponse.setText(blockText);
+                    }
+
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast("Fotoğraftan okuma başarısız oldu");
+                Log.e("Detect Image", "Fotoğraftan okuma başarısız oldu" + e.getMessage());
+            }
+        });
+    }
+
 
     private void chooseImage() {
         Intent intent = new Intent();
@@ -248,6 +360,9 @@ public class AddNote extends AppCompatActivity implements IToast {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
+            capturedImage = (Bitmap) data.getExtras().get("data");
+            ivOCR.setImageBitmap(capturedImage);
         }
     }
 

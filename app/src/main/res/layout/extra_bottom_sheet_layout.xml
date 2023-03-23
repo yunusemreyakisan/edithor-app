@@ -59,6 +59,33 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/create_ocr_toolbar"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_bottom_sheet_ocr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_ocr" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/inter_medium"
+            android:text="OCR"
+            android:layout_marginHorizontal="15dp"
+            android:textSize="18sp"
+            android:textColor="@color/bg_color_dark"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/create_pdf_toolbar"
         android:layout_width="match_parent"
         android:orientation="horizontal"

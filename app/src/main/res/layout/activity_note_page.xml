@@ -157,7 +157,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.5"
-        android:text="GPT'ye sor"
+        android:text="Edithor'a sor"
         android:fontFamily="@font/inter_regular"
         android:textColor="@color/bg_color_dark"
         app:layout_constraintBottom_toTopOf="@+id/add_note"

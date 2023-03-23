@@ -325,7 +325,6 @@ public class NoteDetail extends AppCompatActivity {
                             //unique getKey()
                             NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor());
                             removedReference.child(notID).setValue(mNotes);
-
                             dialog.cancel();
                         }
 

@@ -116,10 +116,9 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         binding.toolbarSecilenler.setNavigationOnClickListener(v1 -> {
             binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
             binding.toolbarSecilenler.setVisibility(View.GONE);
+            selectedNotes.clear();
             notes.clear();
             degisikligiBildir();
-            noteAdapter.notifyDataSetChanged();
-
         });
 
         binding.btnDeleteToolbarNotepage.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +173,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 binding.addFileTv.setVisibility(View.VISIBLE);
                 //fab genislesin
                 binding.extendedFab.extend();
+                // binding.notePageFullScreen.setForeground(getResources().getDrawable(R.drawable.custom_foreground));
 
                 //TODO: FAB açıldığında arkaplanın solması gerekiyor.
 
@@ -183,7 +183,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 binding.addFile.hide();
                 binding.addNoteTv.setVisibility(View.GONE);
                 binding.addFileTv.setVisibility(View.GONE);
-
+                //binding.notePageFullScreen.setForeground(null);
                 //fab kucultme
                 binding.extendedFab.shrink();
 
