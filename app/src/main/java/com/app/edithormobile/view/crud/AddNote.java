@@ -298,7 +298,7 @@ public class AddNote extends AppCompatActivity implements IToast {
         builder.setPositiveButton("Kopyala", (dialog, which) -> {
             // send data from the AlertDialog to the Activity
             String gptResponse = tvResponse.getText().toString();
-            noteDetailViewModel.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
         });
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
