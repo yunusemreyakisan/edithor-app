@@ -1,11 +1,8 @@
 package com.app.edithormobile.viewmodel;
 
-import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.app.Application;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.TextView;
@@ -28,6 +25,7 @@ import java.util.HashMap;
 
 
 public class NoteDetailViewModel extends ViewModel {
+    Util util = new Util();
     String url = "https://api.openai.com/v1/chat/completions";
 
 
@@ -47,14 +45,6 @@ public class NoteDetailViewModel extends ViewModel {
         }
     }
 
-    //İçeriği kopyala
-    public void getCopiedObject(Context context, String icerik) {
-        // ClipboardManager nesnesini al
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-        // Metin değerini kopyala
-        ClipData clip = ClipData.newPlainText("label", icerik);
-        clipboard.setPrimaryClip(clip);
-    }
 
     //Notu paylaş
     public void shareNote(Application app, ActivityNoteDetailBinding binding) {
@@ -78,7 +68,7 @@ public class NoteDetailViewModel extends ViewModel {
         String icerik = binding.txtDetailContent.getText().toString().trim();
         //Set copied text
         String deger = "Not başlığı: " + baslik + "\nNot içeriği: " + icerik;
-        getCopiedObject(app, deger);
+        util.getCopiedObject(app, deger);
     }
 
     //assign data

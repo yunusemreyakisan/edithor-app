@@ -292,7 +292,7 @@ public class NoteDetail extends AppCompatActivity {
         builder.setPositiveButton("Kopyala", (dialog, which) -> {
             // send data from the AlertDialog to the Activity
             String gptResponse = tvResponse.getText().toString();
-            viewModel.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
         });
         // create and show the alert dialog
         AlertDialog dialog = builder.create();

@@ -40,6 +40,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author yunusemreyakisan
@@ -288,7 +290,16 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
             }
         });
         binding.rvNotes.setHasFixedSize(true);
-        binding.rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager sgm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        binding.rvNotes.setLayoutManager(sgm);
+        Collections.sort(notes, new Comparator<NoteModel>() {
+            @Override
+            public int compare(NoteModel o1, NoteModel o2) {
+                //o1.getNotOlusturmaTarihi() > o2.getNotOlusturmaTarihi()
+                //todo: Not olusturma tarihlerini int degere ceviren metod yaz.
+                return 0;
+            }
+        });
         binding.rvNotes.setAdapter(noteAdapter);
     }
 
