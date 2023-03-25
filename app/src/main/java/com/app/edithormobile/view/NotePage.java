@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +35,7 @@ import com.app.edithormobile.viewmodel.NotePageViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -66,6 +69,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     ActivityNotePageBinding binding;
     Bitmap bmp; // store the image in your bitmap
     NotePageViewModel viewModel;
+    View filterView;
+    BottomSheetDialog filterDialog;
 
 
     @Override
@@ -93,7 +98,13 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         //Methods
         viewModel.fabControl(binding, getApplicationContext());
 
+        //Filter Color
+        filterDialog = new BottomSheetDialog(NotePage.this);
+        filterView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.custom_color_filter_layout, null);
+        filterDialog.setContentView(filterView);
+
     }
+
 
     @Override
     protected void onStart() {
@@ -103,14 +114,15 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         degisikligiBildir();
         //Search Func.
         viewModel.search(binding, noteAdapter, notes);
-
         //Swipe Listener Func.
         viewModel.swipeListener(binding, noteAdapter, mDatabaseReference, notes);
         //Selected Notes Toolbar Func.
         selectedNotesRemove();
-
+        //Filter Color
+        viewModel.filterColor(binding, filterDialog);
+        //Filter Color Actions
+        viewModel.filterColorActions(filterView, getApplicationContext());
     }
-
 
 
     //Selected Notes Toolbar Func.
