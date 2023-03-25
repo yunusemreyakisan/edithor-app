@@ -1,5 +1,8 @@
 package com.app.edithormobile.viewmodel;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
@@ -10,6 +13,9 @@ import androidx.lifecycle.ViewModel;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.model.NoteModel;
+import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.view.chat_gpt.AskGPT;
+import com.app.edithormobile.view.crud.AddNote;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class NotePageViewModel extends ViewModel {
+    Boolean isAllFabsVisible;
 
     //bos kontrolu
     public void bosKontrolu(ActivityNotePageBinding binding, NoteAdapter noteAdapter, DatabaseReference mDatabaseReference) {
@@ -133,6 +140,88 @@ public class NotePageViewModel extends ViewModel {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("Veritabanı Hatası:", "Veritabanı hatası! " + databaseError.getMessage());
             }
+        });
+    }
+
+    //FAB Control
+    @SuppressLint("ClickableViewAccessibility")
+    public void fabControl(ActivityNotePageBinding binding, Context context) {
+        binding.addNote.setVisibility(View.GONE);
+        binding.addNoteTv.setVisibility(View.GONE);
+        binding.addFile.setVisibility(View.GONE);
+        binding.addFileTv.setVisibility(View.GONE);
+        binding.notePageFullScreen.setAlpha(1f);
+
+        isAllFabsVisible = false;
+        //Baslarken kucuk gosterir.
+        binding.extendedFab.shrink();
+        //extendable click listener
+        binding.extendedFab.setOnClickListener(view -> {
+            if (!isAllFabsVisible) {
+                binding.addNoteTv.bringToFront();
+                binding.addFileTv.bringToFront();
+                //fab icerigi goster.
+                binding.addNote.show();
+                binding.addFile.show();
+                binding.addNoteTv.setVisibility(View.VISIBLE);
+                binding.addFileTv.setVisibility(View.VISIBLE);
+                //fab genislesin
+                binding.extendedFab.extend();
+                // binding.notePageFullScreen.setForeground(getResources().getDrawable(R.drawable.custom_foreground));
+
+                //TODO: FAB açıldığında arkaplanın solması gerekiyor.
+
+                isAllFabsVisible = true;
+            } else {
+                binding.addNote.hide();
+                binding.addFile.hide();
+                binding.addNoteTv.setVisibility(View.GONE);
+                binding.addFileTv.setVisibility(View.GONE);
+                //binding.notePageFullScreen.setForeground(null);
+                //fab kucultme
+                binding.extendedFab.shrink();
+
+                isAllFabsVisible = false;
+            }
+        });
+
+        //fab shrink anywhere in screen
+        binding.rvNotes.setOnTouchListener((view, motionEvent) -> {
+            binding.addNote.setVisibility(View.GONE);
+            binding.addNoteTv.setVisibility(View.GONE);
+            binding.addFile.setVisibility(View.GONE);
+            binding.addFileTv.setVisibility(View.GONE);
+
+            isAllFabsVisible = false;
+            binding.extendedFab.shrink();
+            return false;
+        });
+
+
+        //Not ekleme FAB
+        binding.addNote.setOnClickListener(view -> {
+            Intent intent = new Intent(context, AddNote.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        });
+
+        //ChatGPT
+        binding.addFile.setOnClickListener(view -> {
+            Intent intent = new Intent(context, AskGPT.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        });
+
+
+    }
+
+    //Swipe Listener Func.
+    public void swipeListener(ActivityNotePageBinding binding, NoteAdapter noteAdapter, DatabaseReference mDatabaseReference, ArrayList<NoteModel> notes) {
+        //TODO: Swipe yapıldığında liste kapanıp progress bar çıkacak ve liste yenilenecek.
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            binding.swipeRefreshLayout.setRefreshing(false);
+            notes.clear();
+            notesEventChangeListener(binding, noteAdapter, mDatabaseReference, notes);
         });
     }
 
