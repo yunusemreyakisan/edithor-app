@@ -136,15 +136,15 @@
             android:src="@drawable/ic_add"
             app:tint="@color/bg_color_dark" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageButton
             android:id="@+id/shine_toolbar_gpt"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
             android:layout_gravity="center_vertical"
-            android:scaleType="centerCrop"
-            app:lottie_url="https://assets4.lottiefiles.com/packages/lf20_WqfuQg.json" />
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_gpt_bot"
+            app:tint="@color/bg_color_dark" />
 
         <ImageButton
             android:id="@+id/btn_toolbar_color_empty_addNote"
@@ -153,6 +153,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/bg_color_dark"
             android:src="@drawable/ic_not" />
 
         <ImageButton

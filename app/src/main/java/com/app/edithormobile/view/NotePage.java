@@ -147,8 +147,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         viewModel.notesEventChangeListener(binding, noteAdapter, mDatabaseReference, notes);
     }
 
-
-
     //Recyclerview
     private void notesViewRV() {
         //Remove reference

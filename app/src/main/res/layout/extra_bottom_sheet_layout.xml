@@ -1,7 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/bg_color_light"
     android:padding="10dp">
 
 
@@ -17,7 +19,8 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_take_picture" />
+            android:src="@drawable/ic_take_picture"
+            app:tint="@color/bg_color_dark" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,7 +47,8 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_galeri" />
+            android:src="@drawable/ic_galeri"
+            app:tint="@color/bg_color_dark" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,6 +72,7 @@
             android:id="@+id/btn_bottom_sheet_ocr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:tint="@color/bg_color_dark"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
@@ -94,6 +99,7 @@
         <ImageButton
             android:id="@+id/btn_bottom_sheet_bot"
             android:layout_width="wrap_content"
+            app:tint="@color/bg_color_dark"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"

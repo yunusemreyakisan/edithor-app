@@ -1,7 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/bg_color_light"
     android:padding="10dp">
 
 
@@ -27,6 +29,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/bg_color_dark"
             android:src="@drawable/ic_quote" />
 
         <TextView
@@ -54,6 +57,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/bg_color_dark"
             android:src="@drawable/ic_brainstorm" />
 
         <TextView
@@ -81,6 +85,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/bg_color_dark"
             android:src="@drawable/ic_translate" />
 
         <TextView
@@ -108,6 +113,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/bg_color_dark"
             android:src="@drawable/ic_gpt_bot" />
 
         <TextView
