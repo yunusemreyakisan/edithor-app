@@ -58,7 +58,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     DatabaseReference removeRef, removedReference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    Boolean isAllFabsVisible;
     private GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
 
@@ -73,7 +72,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
-
+        //ViewBinding
         binding = ActivityNotePageBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -92,7 +91,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         binding.notFound.setVisibility(View.INVISIBLE);
         binding.progressBar.setVisibility(View.VISIBLE);
         //Methods
-        fabControl();
+        viewModel.fabControl(binding, getApplicationContext());
 
     }
 
@@ -102,19 +101,20 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         //onStart modunda yenilensin.
         notesViewRV();
         degisikligiBildir();
+        //Search Func.
         viewModel.search(binding, noteAdapter, notes);
 
+        //Swipe Listener Func.
+        viewModel.swipeListener(binding, noteAdapter, mDatabaseReference, notes);
+        //Selected Notes Toolbar Func.
+        selectedNotesRemove();
 
-        //TODO: Swipe yapıldığında liste kapanıp progress bar çıkacak ve liste yenilenecek.
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                binding.swipeRefreshLayout.setRefreshing(false);
-                notes.clear();
-                degisikligiBildir();
-            }
-        });
+    }
 
+
+
+    //Selected Notes Toolbar Func.
+    public void selectedNotesRemove(){
         binding.toolbarSecilenler.setNavigationOnClickListener(v1 -> {
             binding.toolbarTopNotePage.setVisibility(View.VISIBLE);
             binding.toolbarSecilenler.setVisibility(View.GONE);
@@ -138,13 +138,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 Log.e("secilenler listesi", selectedNotes.toString());
                 notes.clear();
                 degisikligiBildir();
-
             }
         });
-
-
-        noteAdapter.listeyiGuncelle(notes);
-
     }
 
     //Degisiklik izleme
@@ -152,74 +147,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         viewModel.notesEventChangeListener(binding, noteAdapter, mDatabaseReference, notes);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private void fabControl() {
-        binding.addNote.setVisibility(View.GONE);
-        binding.addNoteTv.setVisibility(View.GONE);
-        binding.addFile.setVisibility(View.GONE);
-        binding.addFileTv.setVisibility(View.GONE);
-        binding.notePageFullScreen.setAlpha(1f);
-
-        isAllFabsVisible = false;
-        //Baslarken kucuk gosterir.
-        binding.extendedFab.shrink();
-        //extendable click listener
-        binding.extendedFab.setOnClickListener(view -> {
-            if (!isAllFabsVisible) {
-                binding.addNoteTv.bringToFront();
-                binding.addFileTv.bringToFront();
-                //fab icerigi goster.
-                binding.addNote.show();
-                binding.addFile.show();
-                binding.addNoteTv.setVisibility(View.VISIBLE);
-                binding.addFileTv.setVisibility(View.VISIBLE);
-                //fab genislesin
-                binding.extendedFab.extend();
-                // binding.notePageFullScreen.setForeground(getResources().getDrawable(R.drawable.custom_foreground));
-
-                //TODO: FAB açıldığında arkaplanın solması gerekiyor.
-
-                isAllFabsVisible = true;
-            } else {
-                binding.addNote.hide();
-                binding.addFile.hide();
-                binding.addNoteTv.setVisibility(View.GONE);
-                binding.addFileTv.setVisibility(View.GONE);
-                //binding.notePageFullScreen.setForeground(null);
-                //fab kucultme
-                binding.extendedFab.shrink();
-
-                isAllFabsVisible = false;
-            }
-        });
-
-        //fab shrink anywhere in screen
-        binding.rvNotes.setOnTouchListener((view, motionEvent) -> {
-            binding.addNote.setVisibility(View.GONE);
-            binding.addNoteTv.setVisibility(View.GONE);
-            binding.addFile.setVisibility(View.GONE);
-            binding.addFileTv.setVisibility(View.GONE);
-
-            isAllFabsVisible = false;
-            binding.extendedFab.shrink();
-            return false;
-        });
-
-
-        //Not ekleme FAB
-        binding.addNote.setOnClickListener(view -> {
-            Intent intent = new Intent(NotePage.this, AddNote.class);
-            startActivity(intent);
-        });
-
-        //ChatGPT
-        binding.addFile.setOnClickListener(view -> {
-            Intent intent = new Intent(NotePage.this, AskGPT.class);
-            startActivity(intent);
-        });
-
-
-    }
 
 
     //Recyclerview
@@ -267,7 +194,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
 
 
                 //TODO:Seçilim
-                //TODO: Bunun için bir selectedNotes() arraylisti yapıp içerisine id'li bir şekilde atacağız, liste sonradan silinecek.
                 isSelectedMode = true;
                 if (selectedNotes.contains(pos)) {
                     v.setForeground(null);
