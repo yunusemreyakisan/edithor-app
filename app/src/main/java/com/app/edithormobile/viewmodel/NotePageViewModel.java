@@ -6,16 +6,19 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
+import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.view.NotePage;
 import com.app.edithormobile.view.chat_gpt.AskGPT;
 import com.app.edithormobile.view.crud.AddNote;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,7 +57,6 @@ public class NotePageViewModel extends ViewModel {
         mDatabaseReference.addValueEventListener(postListener);
 
     }
-
 
     //Menu (Search)
     public void search(ActivityNotePageBinding binding, NoteAdapter noteAdapter, ArrayList<NoteModel> notes) {
@@ -223,6 +225,44 @@ public class NotePageViewModel extends ViewModel {
             notes.clear();
             notesEventChangeListener(binding, noteAdapter, mDatabaseReference, notes);
         });
+    }
+
+    //Filter color note
+    public void filterColor(ActivityNotePageBinding binding, BottomSheetDialog filterDialog){
+        binding.btnFilterColorNote.setOnClickListener(v -> filterDialog.show());
+    }
+
+
+    //TODO: Renklere göre not filtreleme işleminin gerçekleştirilmesi
+    public void filterColorActions(View filterView, Context context){
+        //Blue Filter Button
+        filterView.findViewById(R.id.btn_filter_color_blue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Maviye tıklanıldı
+                Toast.makeText(context, "Maviye tıklanıldı", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Green Filter Button
+        filterView.findViewById(R.id.btn_filter_color_green).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Yeşile tıklanıldı
+                Toast.makeText(context, "Yeşile tıklanıldı", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Red Filter Button
+        filterView.findViewById(R.id.btn_filter_color_red).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Kırmızıya tıklanıldı
+                Toast.makeText(context, "Kırmızıya tıklanıldı", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
 }
