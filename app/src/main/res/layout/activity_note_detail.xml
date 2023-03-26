@@ -91,7 +91,7 @@
                 android:autofillHints=""
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/inter_bold"
-                android:hint="Başlık"
+                android:hint="@string/baslik"
                 android:inputType="textMultiLine"
                 android:textColor="@color/bg_color_dark"
                 android:textColorHint="@color/bg_color_dark"
@@ -127,7 +127,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/inter_medium"
-                android:hint="Bir şeyler yazın..."
+                android:hint="@string/type_something"
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
                 android:paddingBottom="100dp"
@@ -224,7 +224,8 @@
             android:padding="8dp"
             android:layout_marginHorizontal="10dp"
             android:src="@drawable/ic_extra"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/bg_color_dark"
+            android:contentDescription="btn_toolbar_share" />
 
 
     </androidx.appcompat.widget.Toolbar>

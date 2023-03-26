@@ -21,9 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
             android:alpha="0.7"
             android:fontFamily="@font/inter_medium"
-            android:text="Not rengine göre filtrele"
+            android:text="@string/not_rengine_gore_filtrele"
             android:textColor="@color/bg_color_dark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

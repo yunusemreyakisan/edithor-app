@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="LightTheme.EdithorMobile" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/bg_color_dark</item>
+        <item name="colorPrimaryDark">@color/bg_color_light</item>
+        <item name="colorAccent">@color/button_active_color</item>
+        <item name="android:navigationBarColor">@color/bg_color_light</item>
+    </style>
+
+
+</resources>

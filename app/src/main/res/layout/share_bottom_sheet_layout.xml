@@ -28,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="15dp"
             android:fontFamily="@font/inter_medium"
-            android:text="Sil"
+            android:text="@string/sil"
             android:textColor="@color/bg_color_dark"
             android:textSize="18sp" />
 
@@ -56,7 +56,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="15dp"
             android:fontFamily="@font/inter_medium"
-            android:text="Kopyala"
+            android:text="@string/kopyala"
             android:textColor="@color/bg_color_dark"
             android:textSize="18sp" />
 
@@ -84,7 +84,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="15dp"
             android:fontFamily="@font/inter_medium"
-            android:text="Paylaş"
+            android:text="@string/paylas"
             android:textColor="@color/bg_color_dark"
             android:textSize="18sp" />
 

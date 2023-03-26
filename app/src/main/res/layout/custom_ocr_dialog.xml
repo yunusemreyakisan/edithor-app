@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/inter_regular"
-                android:hint="Edithor ekleyeceğin fotoğrafı bekliyor..."
+                android:hint="@string/edithor_ekleyecegin_fotografi_bekliyor"
                 android:minHeight="50dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="0dp"
@@ -62,7 +62,5 @@
                 android:textColorHint="@color/bg_color_dark" />
 
         </ScrollView>
-
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>

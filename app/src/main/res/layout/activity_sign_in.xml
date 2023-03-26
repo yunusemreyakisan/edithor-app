@@ -21,7 +21,7 @@
             android:text="@string/tekrar_hosgeldniz"
             android:textColor="@color/bg_color_dark"
             android:textSize="@dimen/_40ssp"
-            android:textStyle="bold"
+            android:fontFamily="@font/inter_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/cardview_date_color"
-                android:text="Hesabın yok mu?"
+                android:text="@string/hesabin_yok_mu"
                 android:textSize="@dimen/_14sdp" />
 
             <TextView
@@ -162,7 +162,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="Kayıt ol"
+                android:text="@string/kayit_ol"
                 android:textColor="@color/button_active_color"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold" />
@@ -174,7 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="ya da"
+            android:text="@string/ya_da"
             android:textColor="@color/cardview_date_color"
             android:textSize="@dimen/_10sdp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout3"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <color name="black">#FF000000</color>
+        <color name="white">#FFFFFFFF</color>
+        <color name="bg_color_dark">#252525</color>
+        <color name="bg_color_light">#FFFFFF</color>
+        <color name="google_button_color">#0066FF</color>
+        <color name="button_active_color">#00d27b</color>
+        <color name="cardview_color">#DADADA</color>
+        <color name="input_text_color">#000000</color>
+        <color name="cardview_date_color">#777777</color>
+        <color name="text_hint_color">#616161</color>
+        <color name="ya_da_text_color">#757575</color>
+        <color name="fab_color">#000000</color>
+
+        <!--Chat App Colors -->
+        <color name="button_color">@color/black</color>
+        <color name="colorPrimary">@color/black</color>
+        <color name="chat_screen_bg">#E5E5E5</color>
+
+        <!-- Note Colors -->
+        <color name="blue_circle">#4D96FF</color>
+        <color name="red_circle">#DF2E38</color>
+        <color name="green_circle">#6BCB77</color>
+        <color name="empty_color">?attr/colorOnPrimary</color>
+    
+    <!--
+    <color name="button_active_color">#00d27b</color>
+    -->
+</resources>

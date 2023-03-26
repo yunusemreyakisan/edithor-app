@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/inter_black"
-            android:text="ChatGPT"
+            android:text="@string/chatgpt"
             android:textColor="@color/bg_color_dark" />
 
         <ImageView
@@ -49,7 +49,7 @@
             android:layout_gravity="end"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:fontFamily="@font/inter_thin"
-            android:text="online"
+            android:text="@string/online"
             android:textColor="@color/bg_color_dark"
             android:textSize="@dimen/_15sdp" />
     </androidx.appcompat.widget.Toolbar>
@@ -91,7 +91,7 @@
             android:background="@android:color/transparent"
             android:backgroundTint="@color/chat_screen_bg"
             android:fontFamily="@font/inter_regular"
-            android:hint="GPT'ye sor"
+            android:hint="@string/edithor_a_sor"
             android:inputType="text"
             android:paddingHorizontal="10dp"
             android:minHeight="50dp"
