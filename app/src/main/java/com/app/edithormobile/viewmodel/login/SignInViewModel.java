@@ -15,6 +15,8 @@ import com.app.edithormobile.databinding.ActivitySignInBinding;
 import com.app.edithormobile.view.NotePage;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.w3c.dom.Text;
+
 import java.util.Objects;
 
 public class SignInViewModel extends ViewModel {
@@ -44,26 +46,28 @@ public class SignInViewModel extends ViewModel {
             setToastMessage(app, "Lütfen şifrenizi giriniz");
         }
 
-        binding.pBarGiris.setVisibility(View.VISIBLE);
-        // Kayıtlı Kullanıcı Girişi
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                binding.pBarGiris.setVisibility(View.GONE);
-                // Eğer giriş bilgileri doğruysa:
-                // Anasayfaya geç.
-                Intent intent = new Intent(app, NotePage.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                app.startActivity(intent);
-                //girisSonuc = true;
-                setToastMessage(app, successMessage);
-            } else {
-                binding.pBarGiris.setVisibility(View.GONE);
-                // Giriş hatalı ise:
-                setToastMessage(app, errorMessage);
+        if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+            binding.pBarGiris.setVisibility(View.VISIBLE);
+            // Kayıtlı Kullanıcı Girişi
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    binding.pBarGiris.setVisibility(View.GONE);
+                    // Eğer giriş bilgileri doğruysa:
+                    // Anasayfaya geç.
+                    Intent intent = new Intent(app, NotePage.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    app.startActivity(intent);
+                    //girisSonuc = true;
+                    setToastMessage(app, successMessage);
+                } else {
+                    binding.pBarGiris.setVisibility(View.GONE);
+                    // Giriş hatalı ise:
+                    setToastMessage(app, errorMessage);
 
-                // girisSonuc = false;
-            }
-        });
+                    // girisSonuc = false;
+                }
+            });
+        }
     }
 
     //Shared Preferences (Beni Hatırla)
