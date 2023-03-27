@@ -2,10 +2,12 @@ package com.app.edithormobile.model;
 
 
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Objects;
 
-public class NoteModel implements Serializable {
+public class NoteModel implements Serializable, Comparable<NoteModel> {
 
-    String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri;
+    String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri, date;
     boolean isSelected = false;
     int color;
 
@@ -14,7 +16,7 @@ public class NoteModel implements Serializable {
     }
 
     //with images
-    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color) {
+    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color, String date) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
@@ -22,20 +24,31 @@ public class NoteModel implements Serializable {
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
         this.color = color;
+        this.date = date;
     }
 
     //without images
-    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, Boolean isSelected, int color) {
+    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, Boolean isSelected, int color, String date) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
         this.notBaslik = notBaslik;
         this.notOlusturmaTarihi = notOlusturmaTarihi;
         this.color = color;
+        this.date = date;
     }
+
 
     public NoteModel(String noteID) {
         this.noteID = noteID;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getColor() {
@@ -95,16 +108,22 @@ public class NoteModel implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-
-        NoteModel itemCompare = (NoteModel) obj;
-        if (itemCompare.getNoteID().equals(this.getNoteID()))
-            return true;
-
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NoteModel noteModel = (NoteModel) o;
+        return isSelected == noteModel.isSelected && color == noteModel.color && Objects.equals(notIcerigi, noteModel.notIcerigi) && Objects.equals(notBaslik, noteModel.notBaslik) && Objects.equals(notOlusturmaTarihi, noteModel.notOlusturmaTarihi) && Objects.equals(noteID, noteModel.noteID) && Objects.equals(imageUri, noteModel.imageUri) && Objects.equals(date, noteModel.date);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri, date, isSelected, color);
+    }
+
+    //En yeniden en eskiye sıralama
+    @Override
+    public int compareTo(NoteModel o) {
+        return o.date.compareTo(this.date);
+    }
 }
 

@@ -2,7 +2,6 @@ package com.app.edithormobile.view;
 
 import static java.util.Objects.requireNonNull;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,14 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
@@ -27,8 +24,6 @@ import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.ISnackbar;
 import com.app.edithormobile.util.IToast;
 import com.app.edithormobile.util.Util;
-import com.app.edithormobile.view.chat_gpt.AskGPT;
-import com.app.edithormobile.view.crud.AddNote;
 import com.app.edithormobile.view.detail.NoteDetail;
 import com.app.edithormobile.view.login.SignIn;
 import com.app.edithormobile.viewmodel.NotePageViewModel;
@@ -44,7 +39,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * @author yunusemreyakisan
@@ -71,6 +65,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     NotePageViewModel viewModel;
     View filterView;
     BottomSheetDialog filterDialog;
+
 
 
     @Override
@@ -122,6 +117,10 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         viewModel.filterColor(binding, filterDialog);
         //Filter Color Actions
         viewModel.filterColorActions(filterView, getApplicationContext());
+        //Sorting
+        Collections.sort(notes);
+        noteAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -228,17 +227,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         binding.rvNotes.setHasFixedSize(true);
         StaggeredGridLayoutManager sgm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         binding.rvNotes.setLayoutManager(sgm);
-        Collections.sort(notes, new Comparator<NoteModel>() {
-            @Override
-            public int compare(NoteModel o1, NoteModel o2) {
-                //o1.getNotOlusturmaTarihi() > o2.getNotOlusturmaTarihi()
-                //todo: Not olusturma tarihlerini int degere ceviren metod yaz.
-                return 0;
-            }
-        });
         binding.rvNotes.setAdapter(noteAdapter);
     }
-
 
     //Back Pressed
     @Override

@@ -94,6 +94,7 @@ public class NoteDetailViewModel extends ViewModel {
         map.put("notIcerigi", binding.txtDetailContent.getText().toString());
         map.put("notOlusturmaTarihi", binding.tvDetailOlusturmaZamani.getText().toString());
         map.put("color", notRengi);
+        map.put("date", util.getDateAnotherPattern());
         // map.put("imageUri", image);
         mDatabaseReference.child(notID).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -103,6 +104,7 @@ public class NoteDetailViewModel extends ViewModel {
                     position.setNotIcerigi(binding.txtDetailContent.getText().toString());
                     position.setNotOlusturmaTarihi(olusturma_zamani);
                     position.setColor(notRengi);
+                    position.setDate(util.getDateAnotherPattern());
                     binding.tvSonDuzenlemeZamani.setText(olusturma_zamani);
 
                     //TODO: Position nesnesi ile o pozisyona ait object alınıyor.

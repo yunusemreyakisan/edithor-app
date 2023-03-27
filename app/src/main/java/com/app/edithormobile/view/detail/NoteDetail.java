@@ -323,7 +323,7 @@ public class NoteDetail extends AppCompatActivity {
                             //Silinenler Referansı
                             removedReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Silinen Notlarim");
                             //unique getKey()
-                            NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor());
+                            NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor(), util.getDateAnotherPattern());
                             removedReference.child(notID).setValue(mNotes);
                             dialog.cancel();
                         }
@@ -346,11 +346,11 @@ public class NoteDetail extends AppCompatActivity {
                             //model
                             if (image != null) {
                                 //unique getKey()
-                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), image, false, pos.getColor());
+                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), image, false, pos.getColor(), util.getDateAnotherPattern());
                                 mDatabase.child(notID).setValue(mNotes);
                             } else {
                                 //unique getKey()
-                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor());
+                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor(), util.getDateAnotherPattern());
                                 mDatabase.child(notID).setValue(mNotes);
                             }
 

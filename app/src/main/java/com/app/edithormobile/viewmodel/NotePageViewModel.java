@@ -15,7 +15,7 @@ import com.app.edithormobile.R;
 import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.model.NoteModel;
-import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.util.Util;
 import com.app.edithormobile.view.chat_gpt.AskGPT;
 import com.app.edithormobile.view.crud.AddNote;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -26,9 +26,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NotePageViewModel extends ViewModel {
     Boolean isAllFabsVisible;
+    Util util = new Util();
 
     //bos kontrolu
     public void bosKontrolu(ActivityNotePageBinding binding, NoteAdapter noteAdapter, DatabaseReference mDatabaseReference) {
@@ -102,12 +104,14 @@ public class NotePageViewModel extends ViewModel {
         //Child Listener
         bosKontrolu(binding, noteAdapter, mDatabaseReference);
         binding.progressBar.setVisibility(View.VISIBLE);
+        Collections.sort(notes);
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                 NoteModel model = dataSnapshot.getValue(NoteModel.class);
                 notes.add(model);
                 noteAdapter.notifyItemInserted(notes.size());
+                Collections.sort(notes);
                 noteAdapter.notifyDataSetChanged();
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
                 Log.d("note size", String.valueOf(notes.size()));
@@ -118,6 +122,7 @@ public class NotePageViewModel extends ViewModel {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
                 //Update
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
+                Collections.sort(notes);
                 noteAdapter.notifyDataSetChanged();
 
             }
@@ -127,6 +132,7 @@ public class NotePageViewModel extends ViewModel {
                 //Intent
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
                 noteAdapter.notifyItemRemoved(notes.size());
+                Collections.sort(notes);
                 noteAdapter.notifyDataSetChanged();
                 Log.d("note size removed", String.valueOf(notes.size()));
 
@@ -135,7 +141,8 @@ public class NotePageViewModel extends ViewModel {
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
                 //Updated
-
+                Collections.sort(notes);
+                noteAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -264,5 +271,7 @@ public class NotePageViewModel extends ViewModel {
 
 
     }
+
+
 
 }
