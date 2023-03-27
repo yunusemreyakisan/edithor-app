@@ -10,10 +10,14 @@ import android.widget.Toast;
 
 import androidx.core.view.ViewCompat;
 
+import com.app.edithormobile.model.NoteModel;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class Util {
     //Olusturma zamani al
@@ -21,7 +25,7 @@ public class Util {
         //Olusturma zamanini al.
         Calendar calendar = new GregorianCalendar();
         int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
-        int hours = calendar.get(Calendar.HOUR);
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         String time = String.format("%02d:%02d", hours, minutes);
         String ay = null;
@@ -80,6 +84,25 @@ public class Util {
         String notOlusturmaTarihi = ayinGunu + " " + ay + " " + time;
 
         return notOlusturmaTarihi;
+    }
+
+    //Zamanı farklı pattern ile alır.
+    public String getDateAnotherPattern(){
+        //Olusturma zamanini al.
+        Calendar cal = Calendar.getInstance(); // Anlık tarihi alır
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1; // 0-11 arası bir değer döndürür, bu yüzden 1 ekliyoruz
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY); // 24 saatlik format için HOUR_OF_DAY kullanıyoruz
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+        String date = null;
+        if(month < 9){
+            date = day + " / " +"0"+ month + " / " + year + "   " + hour + ":" +  minute + ":" + second;
+        }else{
+            date = day + " / " + month + " / " + year + "   " + hour + ":" +  minute + ":" + second;
+        }
+        return date;
     }
 
     //Toast mesaji goster
