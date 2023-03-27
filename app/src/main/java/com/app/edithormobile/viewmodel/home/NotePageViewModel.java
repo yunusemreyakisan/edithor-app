@@ -1,4 +1,4 @@
-package com.app.edithormobile.viewmodel;
+package com.app.edithormobile.viewmodel.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,8 +16,8 @@ import com.app.edithormobile.adapters.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.Util;
-import com.app.edithormobile.view.chat_gpt.AskGPT;
-import com.app.edithormobile.view.crud.AddNote;
+import com.app.edithormobile.view.gpt.AskGPT;
+import com.app.edithormobile.view.create.AddNote;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -105,6 +105,7 @@ public class NotePageViewModel extends ViewModel {
         bosKontrolu(binding, noteAdapter, mDatabaseReference);
         binding.progressBar.setVisibility(View.VISIBLE);
         Collections.sort(notes);
+
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
@@ -116,7 +117,6 @@ public class NotePageViewModel extends ViewModel {
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
                 Log.d("note size", String.valueOf(notes.size()));
             }
-
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
@@ -151,6 +151,7 @@ public class NotePageViewModel extends ViewModel {
             }
         });
     }
+
 
     //FAB Control
     @SuppressLint("ClickableViewAccessibility")

@@ -6,7 +6,7 @@
     android:id="@+id/gpt_root_view"
     android:layout_height="match_parent"
     android:background="@color/bg_color_light"
-    tools:context=".view.chat_gpt.AskGPT">
+    tools:context=".view.gpt.AskGPT">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

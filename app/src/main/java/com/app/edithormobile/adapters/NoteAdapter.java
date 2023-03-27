@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     Context context;
@@ -43,6 +44,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         this.context = context;
         this.notes = notes;
         NoteAdapter.clickListener = clickListener;
+    }
+
+    public NoteAdapter(ArrayList<NoteModel> notes) {
+        this.notes = notes;
     }
 
 
@@ -184,6 +189,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     public void listeyiGuncelle(ArrayList<NoteModel> list) {
         this.notes = list;
         notifyDataSetChanged();
+    }
+
+    //Listeyi al
+    public ArrayList<NoteModel> getNotes(){
+        return notes;
     }
 
 

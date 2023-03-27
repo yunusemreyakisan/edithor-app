@@ -1,4 +1,4 @@
-package com.app.edithormobile.viewmodel;
+package com.app.edithormobile.viewmodel.detail;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -14,7 +14,7 @@ import com.app.edithormobile.databinding.ActivityNoteDetailBinding;
 import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.service.APIService;
 import com.app.edithormobile.util.Util;
-import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.view.home.NotePage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;

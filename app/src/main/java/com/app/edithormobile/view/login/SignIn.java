@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.app.edithormobile.databinding.ActivitySignInBinding;
 import com.app.edithormobile.util.IToast;
 import com.app.edithormobile.util.Util;
-import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.view.home.NotePage;
 import com.app.edithormobile.viewmodel.login.SignInViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;

@@ -12,10 +12,8 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 
 import com.app.edithormobile.databinding.ActivitySignInBinding;
-import com.app.edithormobile.view.NotePage;
+import com.app.edithormobile.view.home.NotePage;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 import java.util.Objects;
 

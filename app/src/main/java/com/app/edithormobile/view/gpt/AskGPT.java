@@ -1,4 +1,4 @@
-package com.app.edithormobile.view.chat_gpt;
+package com.app.edithormobile.view.gpt;
 
 import android.app.Activity;
 import android.content.Context;

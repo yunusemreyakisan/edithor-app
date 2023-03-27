@@ -1,4 +1,4 @@
-package com.app.edithormobile.view.crud;
+package com.app.edithormobile.view.create;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -34,8 +34,8 @@ import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.IToast;
 import com.app.edithormobile.util.Util;
-import com.app.edithormobile.view.NotePage;
-import com.app.edithormobile.viewmodel.NoteDetailViewModel;
+import com.app.edithormobile.view.home.NotePage;
+import com.app.edithormobile.viewmodel.detail.NoteDetailViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

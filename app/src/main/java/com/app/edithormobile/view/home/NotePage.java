@@ -1,4 +1,4 @@
-package com.app.edithormobile.view;
+package com.app.edithormobile.view.home;
 
 import static java.util.Objects.requireNonNull;
 
@@ -26,7 +26,7 @@ import com.app.edithormobile.util.IToast;
 import com.app.edithormobile.util.Util;
 import com.app.edithormobile.view.detail.NoteDetail;
 import com.app.edithormobile.view.login.SignIn;
-import com.app.edithormobile.viewmodel.NotePageViewModel;
+import com.app.edithormobile.viewmodel.home.NotePageViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -290,6 +290,9 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     public void Snackbar(View v, String message) {
         Snackbar.make(v, message, Snackbar.LENGTH_SHORT).show();
     }
+
+
+
 
 
 }

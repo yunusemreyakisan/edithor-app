@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/notePageFullScreen"
     android:background="@color/bg_color_light"
-    tools:context=".view.NotePage">
+    tools:context=".view.home.NotePage">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarSecilenler"
