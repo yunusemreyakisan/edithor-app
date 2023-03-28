@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.app.edithormobile.R;
-import com.app.edithormobile.adapters.NoteAdapter;
+import com.app.edithormobile.adapter.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityNotePageBinding;
 import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.ISnackbar;

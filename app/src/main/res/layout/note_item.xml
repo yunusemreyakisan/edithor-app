@@ -24,7 +24,7 @@
         android:orientation="vertical"
         android:weightSum="2">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/imageContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,18 +36,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/black"
-                android:visibility="gone" />
+                android:indeterminateTint="@color/bg_color_dark"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/imageUri"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageUri"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:contentDescription="TODO"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <LinearLayout

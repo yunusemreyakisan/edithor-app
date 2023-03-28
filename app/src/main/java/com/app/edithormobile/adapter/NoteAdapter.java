@@ -1,4 +1,4 @@
-package com.app.edithormobile.adapters;
+package com.app.edithormobile.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     Context context;

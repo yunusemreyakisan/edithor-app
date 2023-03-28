@@ -29,7 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.app.edithormobile.R;
-import com.app.edithormobile.adapters.NoteAdapter;
+import com.app.edithormobile.adapter.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.IToast;

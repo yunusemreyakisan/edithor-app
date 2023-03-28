@@ -1,4 +1,4 @@
-package com.app.edithormobile.adapters;
+package com.app.edithormobile.adapter;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 

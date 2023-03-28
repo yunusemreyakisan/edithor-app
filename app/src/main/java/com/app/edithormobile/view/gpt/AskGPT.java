@@ -21,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.edithormobile.R;
-import com.app.edithormobile.adapters.MessageAdapter;
+import com.app.edithormobile.adapter.MessageAdapter;
 import com.app.edithormobile.databinding.ActivityChatGptBinding;
 import com.app.edithormobile.model.GPTModel;
 import com.app.edithormobile.viewmodel.gpt.GPTViewModel;
