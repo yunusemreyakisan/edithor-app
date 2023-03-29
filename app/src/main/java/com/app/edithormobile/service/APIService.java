@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class APIService {
     //URL -> https://api.openai.com/v1/chat/completions
-    private String BASE_URL = "https://api.openai.com/v1/chat/completions";
+    private final String BASE_URL = "https://api.openai.com/v1/chat/completions";
 
     //Response (GPT-3.5-Turbo)
     public void getResponse(String question, TextView text, Context context) throws JSONException {
