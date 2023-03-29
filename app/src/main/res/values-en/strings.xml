@@ -43,4 +43,19 @@
     <string name="sil">Remove</string>
     <string name="kopyala">Copy</string>
     <string name="paylas">Share</string>
+    <string name="edithor_gunun_sozunu_soyluyor">The word of the day is</string>
+    <string name="gunun_sozu">The word of the day</string>
+    <string name="bana_hobi_fikri_ver">Give me a hobby idea</string>
+    <string name="ngilizce">English</string>
+    <string name="turkce">Turkish</string>
+    <string name="edithor_cevirilecek_yaziyi_bekliyor">Edithor awaits testimony...</string>
+    <string name="ingilizce_turkce_ceviri">English - Turkish Translation</string>
+    <string name="cevir">Translate</string>
+    <string name="yukarida_bulunan_cevir_alanina_cevirilecek_ifadeyi_girin">*Enter the phrase to be translated into the Translate field above.</string>
+    <string name="ingilizceiseturkceye_turkceiseingilizceyecevir">Yazacağım ifade eğer İngilizce ise Türkçeye, Türkçe ise İngilizceye çevir : </string>
+    <string name="fikir_makinesi">Idea Machine</string>
+    <string name="edithor_fikir_dusunuyor">Edithor thinks of an idea...</string>
+    <string name="edithor_dusunuyor">Edithor thinks...</string>
+    <string name="edithor_gunun_sozunu_dusunuyor">Edithor ponders the word of the day...</string>
+    <string name="edithor_ceviriyi_yapiyor">Edithor doing the translation...</string>
 </resources>
