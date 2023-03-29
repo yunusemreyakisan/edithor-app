@@ -2,6 +2,7 @@ package com.app.edithormobile.view.create;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,16 +27,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.app.edithormobile.R;
 import com.app.edithormobile.adapter.NoteAdapter;
 import com.app.edithormobile.databinding.ActivityAddNoteBinding;
 import com.app.edithormobile.model.NoteModel;
+import com.app.edithormobile.service.APIService;
 import com.app.edithormobile.util.IToast;
 import com.app.edithormobile.util.Util;
 import com.app.edithormobile.view.home.NotePage;
-import com.app.edithormobile.viewmodel.detail.NoteDetailViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,6 +54,8 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,7 +84,6 @@ public class AddNote extends AppCompatActivity implements IToast {
     StorageReference ref;
     String currentPhotoPath;
     ActivityAddNoteBinding binding;
-    NoteDetailViewModel noteDetailViewModel;
     ImageView ivOCR;
     TextView tvResponse;
     Bitmap capturedImage;
@@ -95,9 +96,6 @@ public class AddNote extends AppCompatActivity implements IToast {
         binding = ActivityAddNoteBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        //Viewmodel binding
-        noteDetailViewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
 
         //methods
         notKaydet();
@@ -220,8 +218,14 @@ public class AddNote extends AppCompatActivity implements IToast {
 
         //Custom layout for ask question
         viewGPT.findViewById(R.id.bottom_sheet_gpt_question_layout).setOnClickListener(this::showAlertDialogButtonClicked);
-
+        //Daily Quote
+        viewGPT.findViewById(R.id.bottom_sheet_gunun_sozu_layout).setOnClickListener(this::showAlertDialogForDailyQuote);
+        //Brainstorming
+        viewGPT.findViewById(R.id.bottom_sheet_brain_storming_layout).setOnClickListener(this::showAlertDialogForBrainStorming);
+        //Translate Turkish-English
+        viewGPT.findViewById(R.id.bottom_sheet_translate_layout).setOnClickListener(this::showAlertDialogForTranslate);
     }
+
 
     public void showOCRDialog() {
         // Create an alert builder
@@ -272,30 +276,124 @@ public class AddNote extends AppCompatActivity implements IToast {
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE);
     }
 
+    //TODO: Bu ifadeleri NOTEDETAİL sayfası için yerleştir.
+    //Translate
+    private void showAlertDialogForTranslate(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_translate_dialog, null);
+        //Custom layout öğelerine erişim
+        EditText txtCevirilecekIfade = (EditText) customLayout.findViewById(R.id.txtChatTranslate);
+        ImageButton sendMessageGPTButton = (ImageButton) customLayout.findViewById(R.id.sendMessageGPTDialogTranslate);
+
+        TextView translateResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponseTranslate);
+        builder.setView(customLayout);
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        sendMessageGPTButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                translateResponse.setHint(getString(R.string.edithor_ceviriyi_yapiyor));
+                //İfadelerin alınması
+                String ifade = txtCevirilecekIfade.getText().toString();
+                String gonderilecekIfade = getString(R.string.ingilizceiseturkceye_turkceiseingilizceyecevir) + ifade;
+                sendMessageGPT(gonderilecekIfade, translateResponse, getApplicationContext());
+
+            }
+        });
+
+
+        // add a button
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = translateResponse.getText().toString();
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //Brainstorming
+    public void showAlertDialogForBrainStorming(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_get_gpt_response, null);
+        //Custom layout öğelerine erişim
+        TextView brainStormingResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponse);
+        TextView brainStormingTextView = (TextView) customLayout.findViewById(R.id.tvOzellikAdi);
+        builder.setView(customLayout);
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        brainStormingTextView.setText(getString(R.string.fikir_makinesi));
+        String ifade = getString(R.string.bana_hobi_fikri_ver);
+        brainStormingResponse.setHint(getString(R.string.edithor_fikir_dusunuyor));
+        sendMessageGPT(ifade, brainStormingResponse, getApplicationContext());
+
+        // add a button
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = brainStormingResponse.getText().toString();
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //Daily Quote
+    public void showAlertDialogForDailyQuote(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_get_gpt_response, null);
+        //Custom layout öğelerine erişim
+        TextView gununSozuResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponse);
+        TextView gununSozuTextView = (TextView) customLayout.findViewById(R.id.tvOzellikAdi);
+        builder.setView(customLayout);
+
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        gununSozuTextView.setText(getString(R.string.gunun_sozu));
+        String ifade = getString(R.string.bana_gunun_sozunu_soyle);
+        gununSozuResponse.setHint(getString(R.string.edithor_gunun_sozunu_dusunuyor));
+        sendMessageGPT(ifade, gununSozuResponse, getApplicationContext());
+
+        // add a button
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = gununSozuResponse.getText().toString();
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     //Custom GPT Ask Question
     public void showAlertDialogButtonClicked(View view) {
         // Create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         // set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.custom_gpt_ask_layout, null);
-        builder.setView(customLayout);
-
         //Custom layout öğelerine erişim
         EditText editText = (EditText) customLayout.findViewById(R.id.txtChatAlert);
         TextView tvResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTAlert);
         ImageButton sendMessageGPTButton = (ImageButton) customLayout.findViewById(R.id.sendMessageGPTDialog);
+        builder.setView(customLayout);
+
 
         //Sorulan sorunun alınması ve methoda yerlestirilmesi
-        String ifade = editText.getText().toString();
         sendMessageGPTButton.setOnClickListener(v -> {
-            tvResponse.setHint("Edithor düşünüyor...");
-            noteDetailViewModel.sendMessageGPT(ifade, tvResponse, getApplicationContext());
+            String ifade = editText.getText().toString();
+            tvResponse.setHint(getString(R.string.edithor_dusunuyor));
+            sendMessageGPT(ifade, tvResponse, getApplicationContext());
         });
 
         // add a button
-        builder.setPositiveButton("Kopyala", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
             // send data from the AlertDialog to the Activity
             String gptResponse = tvResponse.getText().toString();
             util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
@@ -303,6 +401,23 @@ public class AddNote extends AppCompatActivity implements IToast {
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    //Send Message
+    public void sendMessageGPT(String ifade, TextView text, Context context) {
+        APIService service = new APIService();
+        try {
+            if (!Objects.equals(ifade, "")) {
+                service.getResponse(ifade, text, context);
+                Log.e("Girilen ifade: ", ifade);
+            } else {
+                Log.e("Girilen ifade: ", "İfade bos geliyor");
+
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //Recognizer
