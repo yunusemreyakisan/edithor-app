@@ -11,11 +11,11 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:strokeWidth="2dp"
-    app:strokeColor="@color/cardview_color"
     app:cardBackgroundColor="@color/cardview_color"
     app:cardCornerRadius="10dp"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    app:strokeColor="@color/cardview_color"
+    app:strokeWidth="2dp">
 
 
     <LinearLayout
@@ -61,16 +61,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
                 android:background="@android:color/transparent"
                 android:gravity="start"
                 android:padding="8dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/ic_pin"
+                android:src="@drawable/ic_bookmark_true"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/bg_color_dark" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,10 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/inter_medium"
+                android:maxLength="100"
+                android:maxLines="5"
                 android:paddingHorizontal="15dp"
                 android:paddingTop="10dp"
-                android:maxLines="5"
-                android:maxLength="100"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -104,9 +103,9 @@
                 android:id="@+id/tvNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="5"
-                android:maxLength="100"
                 android:fontFamily="@font/inter_regular"
+                android:maxLength="100"
+                android:maxLines="5"
                 android:paddingHorizontal="15dp"
                 android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />

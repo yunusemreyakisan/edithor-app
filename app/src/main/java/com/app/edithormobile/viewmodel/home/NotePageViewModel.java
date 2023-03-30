@@ -18,6 +18,7 @@ import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.Util;
 import com.app.edithormobile.view.gpt.AskGPT;
 import com.app.edithormobile.view.create.AddNote;
+import com.app.edithormobile.view.home.NotePage;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -116,6 +117,7 @@ public class NotePageViewModel extends ViewModel {
                 noteAdapter.notifyDataSetChanged();
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
                 Log.d("note size", String.valueOf(notes.size()));
+                Log.e("Notes: ", noteAdapter.getNotes().toString());
             }
 
             @Override

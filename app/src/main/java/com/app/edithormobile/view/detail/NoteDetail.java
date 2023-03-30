@@ -109,7 +109,13 @@ public class NoteDetail extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        pin = position.isPinned();
         //Button tasks
+        if (pin) {
+            binding.btnDetailPin.setImageResource(R.drawable.ic_bookmark_true);
+        } else {
+            binding.btnDetailPin.setImageResource(R.drawable.ic_pin);
+        }
         buttonTasks();
         //if image != null get data
         getNoteImage();
@@ -196,7 +202,7 @@ public class NoteDetail extends AppCompatActivity {
             } else if (notRengi != 0) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
-            } else if (position.isPinned()) {
+            } else if (position.isPinned() != pin) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else {
@@ -263,14 +269,16 @@ public class NoteDetail extends AppCompatActivity {
         binding.btnDetailPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pin){
+                if (pin) {
                     pin = false;
                     position.setPinned(pin);
-                    binding.btnDetailPin.setBackgroundColor(Color.TRANSPARENT);
-                }else {
+                    //binding.btnDetailPin.setColorFilter(null);
+                    binding.btnDetailPin.setImageResource(R.drawable.ic_pin);
+                } else {
                     pin = true;
                     position.setPinned(pin);
-                    binding.btnDetailPin.setBackgroundColor(Color.CYAN);
+                    //binding.btnDetailPin.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.button_active_color));
+                    binding.btnDetailPin.setImageResource(R.drawable.ic_bookmark_true);
                 }
 
                 //TODO: Pinlenenler ayrı bir listeye eklenecek. Adapter üzerinden gösterim yapılacak.
