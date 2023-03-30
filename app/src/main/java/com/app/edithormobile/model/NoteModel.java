@@ -9,6 +9,7 @@ public class NoteModel implements Serializable, Comparable<NoteModel> {
 
     String notIcerigi, notBaslik, notOlusturmaTarihi, noteID, imageUri, date;
     boolean isSelected = false;
+    boolean isPinned;
     int color;
 
 
@@ -16,7 +17,7 @@ public class NoteModel implements Serializable, Comparable<NoteModel> {
     }
 
     //with images
-    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color, String date) {
+    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, String imageUri, Boolean isSelected, int color, String date, Boolean isPinned) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
@@ -25,10 +26,11 @@ public class NoteModel implements Serializable, Comparable<NoteModel> {
         this.notOlusturmaTarihi = notOlusturmaTarihi;
         this.color = color;
         this.date = date;
+        this.isPinned = isPinned;
     }
 
     //without images
-    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, Boolean isSelected, int color, String date) {
+    public NoteModel(String noteID, String notIcerigi, String notBaslik, String notOlusturmaTarihi, Boolean isSelected, int color, String date, Boolean isPinned) {
         this.notIcerigi = notIcerigi;
         this.isSelected = isSelected;
         this.noteID = noteID;
@@ -36,8 +38,16 @@ public class NoteModel implements Serializable, Comparable<NoteModel> {
         this.notOlusturmaTarihi = notOlusturmaTarihi;
         this.color = color;
         this.date = date;
+        this.isPinned = isPinned;
     }
 
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        isPinned = pinned;
+    }
 
     public NoteModel(String noteID) {
         this.noteID = noteID;
