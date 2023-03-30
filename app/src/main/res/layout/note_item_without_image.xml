@@ -26,6 +26,21 @@
         android:gravity="top"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/btn_note_pin_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:padding="8dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_pin"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/bg_color_dark" />
+
 
         <TextView
             android:id="@+id/tvTitle"
@@ -34,8 +49,8 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/inter_medium"
             android:paddingHorizontal="15dp"
-            android:paddingTop="10dp"
             android:maxLines="5"
+            android:paddingTop="5dp"
             android:maxLength="100"
             android:textColor="@color/bg_color_dark"
             android:textSize="20sp"
