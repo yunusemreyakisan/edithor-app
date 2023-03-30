@@ -565,7 +565,7 @@ public class AddNote extends AppCompatActivity implements IToast {
                 //unique getKey()
                 String id = mDatabase.push().getKey();
                 assert id != null;
-                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, imageURL, false, notRengi, util.getDateAnotherPattern());
+                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, imageURL, false, notRengi, util.getDateAnotherPattern(), false);
                 mDatabase.child(id).setValue(mNotes);
 
                 //intent
@@ -579,7 +579,7 @@ public class AddNote extends AppCompatActivity implements IToast {
                 //unique getKey()
                 String id = mDatabase.push().getKey();
                 assert id != null;
-                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, notRengi, util.getDateAnotherPattern());
+                NoteModel mNotes = new NoteModel(id, notIcerigi, notBaslik, notOlusturmaTarihi, false, notRengi, util.getDateAnotherPattern(), false);
                 mDatabase.child(id).setValue(mNotes);
 
 
