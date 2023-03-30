@@ -5,6 +5,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -72,22 +74,28 @@ public class NoteDetailViewModel extends ViewModel {
     }
 
     //assign data
-    public void assignData(ActivityNoteDetailBinding binding, String baslik, String icerik, String olusturmaZamani, int notRengi) {
+    public void assignData(ActivityNoteDetailBinding binding, String baslik, String icerik, String olusturmaZamani, int notRengi, boolean pin) {
         binding.txtDetailTitle.setText(baslik);
         binding.txtDetailContent.setText(icerik);
         binding.tvDetailOlusturmaZamani.setText(olusturmaZamani);
         binding.tvSonDuzenlemeZamani.setText(olusturmaZamani); //Toolbar üzerinde son düzenleme tarihinin gosterilmesi
         binding.scrollView2.setBackgroundColor(notRengi);
+        if(pin){
+            binding.btnDetailPin.setBackgroundColor(Color.CYAN);
+        }else{
+            binding.btnDetailPin.setBackgroundColor(Color.TRANSPARENT);
+        }
     }
 
     //Note Update
-    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani, Util util, Context context) {
+    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani,Boolean pinned,  Util util, Context context) {
         //Düzenleme tarihi eklenmesi
         binding.tvDetailOlusturmaZamani.setText(olusturma_zamani);
-       /* String image = position.getImageUri();
+        /*String image = position.getImageUri();
         Log.e("image", image);
 
-        */
+         */
+
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("notBaslik", binding.txtDetailTitle.getText().toString());
@@ -95,7 +103,8 @@ public class NoteDetailViewModel extends ViewModel {
         map.put("notOlusturmaTarihi", binding.tvDetailOlusturmaZamani.getText().toString());
         map.put("color", notRengi);
         map.put("date", util.getDateAnotherPattern());
-        // map.put("imageUri", image);
+        map.put("pinned", pinned);
+        //map.put("imageUri", image);
         mDatabaseReference.child(notID).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -106,7 +115,7 @@ public class NoteDetailViewModel extends ViewModel {
                     position.setColor(notRengi);
                     position.setDate(util.getDateAnotherPattern());
                     binding.tvSonDuzenlemeZamani.setText(olusturma_zamani);
-
+                    position.setPinned(pinned);
                     //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
                     //adapter.notifyDataSetChanged(); //null dönüyor!!!
 

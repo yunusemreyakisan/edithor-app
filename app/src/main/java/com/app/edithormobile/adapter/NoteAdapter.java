@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
@@ -18,22 +20,17 @@ import com.app.edithormobile.model.NoteModel;
 import com.app.edithormobile.util.Util;
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     Context context;
-    ArrayList<NoteModel> notes;
-    DatabaseReference removeRef;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
+    ArrayList<NoteModel> notes ,pinnedList;
     Util util = new Util();
 
     static ClickListener clickListener;
 
+    private static final int TYPE_PINNED = 0;
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_TEXT = 2;
 
@@ -81,27 +78,29 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
                     .centerCrop()
                     .placeholder(drawable)
                     .into(holder.imageUri);
-
-
-            //holder.color.setBackgroundColor(mNote.getColor());
-            // holder.card.setBackgroundColor(mNote.getColor());
             holder.card.setStrokeColor(mNote.getColor());
 
-
-            //TODO:Talha hocaya sor. (Referans alma ile alakalı)
-            //TODO: Fotoğrafın referansı cihazın kendi depolama alanıyla sınırlı. Storage üzerinden URL alıp göstermeli.
+            //Pin Control
+            if(mNote.isPinned()){
+                holder.pinImage.setVisibility(View.VISIBLE);
+            }else{
+                holder.pinImage.setVisibility(View.GONE);
+            }
 
 
         } else {
+            //Pin Control
+            if(mNote.isPinned()){
+                holder.pin.setVisibility(View.VISIBLE);
+            }else{
+                holder.pin.setVisibility(View.GONE);
+            }
+
             holder.tvTitle.setText(util.bosKontrolluDeger(mNote.getNotBaslik()));
             //TODO: Eger icerik boyutu 30'dan buyukse sonuna uc nokta koyulmalı.
             holder.tvNote.setText(util.bosKontrolluDeger(mNote.getNotIcerigi()));
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
-            // holder.color.setBackgroundColor(mNote.getColor());
-            //holder.card_layout.setBackgroundColor(mNote.getColor());
-            //TODO: Eger boyle yaparsak notların arkaplanı değiştirilecek ve mantık aynı olacak.
             holder.card.setStrokeColor(mNote.getColor());
-
         }
 
     }
@@ -114,10 +113,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         ImageView imageUri;
         LinearLayout card_layout;
         public ProgressBar bar;
+        ImageButton pin, pinImage;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
-            //TODO: İki farklı kart düzenimiz var, düzenlerin long click methodunda hata var, çözülecek.
             card = itemView.findViewById(R.id.card);
             tvNote = itemView.findViewById(R.id.tvNote);
             tvTitle = itemView.findViewById(R.id.tvTitle);
@@ -125,6 +124,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             imageUri = itemView.findViewById(R.id.imageUri);
             card_layout = itemView.findViewById(R.id.card_layout);
             bar = itemView.findViewById(R.id.progressForImage);
+            pin = itemView.findViewById(R.id.btn_note_pin_visibility);
+            pinImage = itemView.findViewById(R.id.btn_note_pin_visibilityImage);
 
             //click
             itemView.setOnClickListener(this);
@@ -191,7 +192,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     }
 
     //Listeyi al
-    public ArrayList<NoteModel> getNotes(){
+    public ArrayList<NoteModel> getNotes() {
         return notes;
     }
 

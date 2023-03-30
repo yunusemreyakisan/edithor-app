@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,6 +52,7 @@ public class NoteDetail extends AppCompatActivity {
     ArrayList<NoteModel> pinnedList;
     String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
     String image;
+    Boolean pin;
     int notRengi;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
@@ -89,7 +91,7 @@ public class NoteDetail extends AppCompatActivity {
 
         //get intent data
         getIntentData();
-        viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi);
+        viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi, pin);
         notID = getIntent().getStringExtra("id");
         position = (NoteModel) getIntent().getSerializableExtra("position");
         Log.e("position degeri", String.valueOf(position));
@@ -119,13 +121,13 @@ public class NoteDetail extends AppCompatActivity {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir();
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir();
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (notRengi != 0) {
             olusturma_zamani = util.olusturmaZamaniGetir();
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
             startActivity(intent);
@@ -187,13 +189,16 @@ public class NoteDetail extends AppCompatActivity {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (notRengi != 0) {
                 olusturma_zamani = util.olusturmaZamaniGetir();
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+            } else if (position.isPinned()) {
+                olusturma_zamani = util.olusturmaZamaniGetir();
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else {
                 onBackPressed();
             }
@@ -254,15 +259,25 @@ public class NoteDetail extends AppCompatActivity {
 
         //viewPlus.findViewById(R.id.create_pdf_toolbar).setOnClickListener(v -> generatePDF());
 
-
         //Pinned Toolbar Top
         binding.btnDetailPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(pin){
+                    pin = false;
+                    position.setPinned(pin);
+                    binding.btnDetailPin.setBackgroundColor(Color.TRANSPARENT);
+                }else {
+                    pin = true;
+                    position.setPinned(pin);
+                    binding.btnDetailPin.setBackgroundColor(Color.CYAN);
+                }
+
                 //TODO: Pinlenenler ayrı bir listeye eklenecek. Adapter üzerinden gösterim yapılacak.
+                Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
+
             }
         });
-
 
     }
 
@@ -323,7 +338,7 @@ public class NoteDetail extends AppCompatActivity {
                             //Silinenler Referansı
                             removedReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Silinen Notlarim");
                             //unique getKey()
-                            NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor(), util.getDateAnotherPattern());
+                            NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor(), util.getDateAnotherPattern(), pos.isPinned());
                             removedReference.child(notID).setValue(mNotes);
                             dialog.cancel();
                         }
@@ -346,11 +361,11 @@ public class NoteDetail extends AppCompatActivity {
                             //model
                             if (image != null) {
                                 //unique getKey()
-                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), image, false, pos.getColor(), util.getDateAnotherPattern());
+                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), image, pos.isSelected(), pos.getColor(), util.getDateAnotherPattern(), pos.isPinned());
                                 mDatabase.child(notID).setValue(mNotes);
                             } else {
                                 //unique getKey()
-                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), false, pos.getColor(), util.getDateAnotherPattern());
+                                NoteModel mNotes = new NoteModel(pos.getNoteID(), pos.getNotIcerigi(), pos.getNotBaslik(), pos.getNotOlusturmaTarihi(), pos.isSelected(), pos.getColor(), util.getDateAnotherPattern(), pos.isPinned());
                                 mDatabase.child(notID).setValue(mNotes);
                             }
 
@@ -398,6 +413,7 @@ public class NoteDetail extends AppCompatActivity {
         notOlusturmaZamani = data.getStringExtra("olusturma_zamani");
         notRengi = data.getIntExtra("color", 0);
         image = data.getStringExtra("image");
+        pin = Boolean.valueOf(data.getStringExtra("pinned"));
     }
 
 

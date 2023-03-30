@@ -49,7 +49,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     ArrayList<NoteModel> selectedNotes = new ArrayList<>();
     Util util = new Util();
     boolean isSelectedMode = false;
-    ArrayList<NoteModel> notes;
+    ArrayList<NoteModel> notes, pinnedNotes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
     DatabaseReference removeRef, removedReference;
@@ -98,6 +98,9 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         filterView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.custom_color_filter_layout, null);
         filterDialog.setContentView(filterView);
 
+
+
+
     }
 
 
@@ -120,7 +123,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         //Sorting
         Collections.sort(notes);
         noteAdapter.notifyDataSetChanged();
-
     }
 
 
@@ -156,6 +158,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     //Degisiklik izleme
     public void degisikligiBildir() {
         viewModel.notesEventChangeListener(binding, noteAdapter, mDatabaseReference, notes);
+        noteAdapter.notifyDataSetChanged();
     }
 
     //Recyclerview
@@ -181,6 +184,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 intent.putExtra("color", notes.get(position).getColor());
                 intent.putExtra("position", model);
                 intent.putExtra("image", notes.get(position).getImageUri());
+                intent.putExtra("pinned", notes.get(position).isPinned());
 
                 startActivity(intent);
 
@@ -196,6 +200,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
                 removeRef = FirebaseDatabase.getInstance().getReference().child("Kullanicilar")
                         .child(user_id).child("Notlarim");
+
+
 
                 //TODO: Toolbar inflate olsun ve seçilen not sayısını yazsın.
                 binding.toolbarTopNotePage.setVisibility(View.GONE);
