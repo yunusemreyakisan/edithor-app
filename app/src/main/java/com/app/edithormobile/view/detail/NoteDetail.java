@@ -126,13 +126,13 @@ public class NoteDetail extends AppCompatActivity {
     public void onBackPressed() {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (notRengi != 0) {
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
@@ -194,16 +194,16 @@ public class NoteDetail extends AppCompatActivity {
         binding.btnDetailBack.setOnClickListener(v -> {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (notRengi != 0) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (position.isPinned() != pin) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else {
                 onBackPressed();
@@ -282,7 +282,7 @@ public class NoteDetail extends AppCompatActivity {
                 }
 
                 //TODO: Pinlenenler ayrı bir listeye eklenecek. Adapter üzerinden gösterim yapılacak.
-                Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
+               //Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
 
             }
         });

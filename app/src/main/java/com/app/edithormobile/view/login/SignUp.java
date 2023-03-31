@@ -88,7 +88,7 @@ public class SignUp extends AppCompatActivity implements IToast {
                                             .child(user_id)
                                             .child("Kullanıcı Bilgileri");
 
-                                    String notOlusturmaTarihi = util.olusturmaZamaniGetir();
+                                    String notOlusturmaTarihi = util.olusturmaZamaniGetir(getApplicationContext());
 
                                     HashMap<String, String> mData = new HashMap<>();
                                     mData.put("mail", email);

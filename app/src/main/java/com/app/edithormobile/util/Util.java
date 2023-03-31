@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.core.view.ViewCompat;
 
+import com.app.edithormobile.R;
 import com.app.edithormobile.model.NoteModel;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -20,8 +21,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Util {
+
     //Olusturma zamani al
-    public String olusturmaZamaniGetir() {
+    public String olusturmaZamaniGetir(Context context) {
         //Olusturma zamanini al.
         Calendar calendar = new GregorianCalendar();
         int month = calendar.get(Calendar.MONTH) + 1; //0 ile basladigi icin 1 eklendi.
@@ -43,41 +45,41 @@ public class Util {
         //Ay
         switch (month) {
             case 1:
-                ay = "Ocak";
+                ay = context.getResources().getString(R.string.Ocak);
                 break;
             case 2:
-                ay = "Şubat";
+                ay = context.getResources().getString(R.string.Subat);
                 break;
             case 3:
-                ay = "Mart";
+                ay = context.getResources().getString(R.string.Mart);
                 break;
 
             case 4:
-                ay = "Nisan";
+                ay = context.getResources().getString(R.string.Nisan);
                 break;
             case 5:
-                ay = "Mayıs";
+                ay = context.getResources().getString(R.string.Mayis);
                 break;
             case 6:
-                ay = "Haziran";
+                ay = context.getResources().getString(R.string.Haziran);
                 break;
             case 7:
-                ay = "Temmuz";
+                ay = context.getResources().getString(R.string.Temmuz);
                 break;
             case 8:
-                ay = "Ağustos";
+                ay = context.getResources().getString(R.string.Agustos);
                 break;
             case 9:
-                ay = "Eylül";
+                ay = context.getResources().getString(R.string.Eylul);
                 break;
             case 10:
-                ay = "Ekim";
+                ay = context.getResources().getString(R.string.Ekim);
                 break;
             case 11:
-                ay = "Kasım";
+                ay = context.getResources().getString(R.string.Kasim);
                 break;
             case 12:
-                ay = "Aralık";
+                ay = context.getResources().getString(R.string.Aralik);
                 break;
         }
 
