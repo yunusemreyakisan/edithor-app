@@ -114,7 +114,7 @@ public class AddNote extends AppCompatActivity implements IToast {
     protected void onStart() {
         super.onStart();
         buttonTask();
-        olusturma_zamani = util.olusturmaZamaniGetir();
+        olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
         binding.tvSonDuzenlemeZamaniToolbarAddNote.setText(olusturma_zamani);
 
 
@@ -531,7 +531,7 @@ public class AddNote extends AppCompatActivity implements IToast {
     private void notKaydet() {
         binding.btnBack.setOnClickListener(v -> {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             notKaydetmeIslevi();
         });
     }
@@ -556,7 +556,7 @@ public class AddNote extends AppCompatActivity implements IToast {
             startActivity(intent);
         } else {
 
-            String notOlusturmaTarihi = util.olusturmaZamaniGetir();
+            String notOlusturmaTarihi = util.olusturmaZamaniGetir(getApplicationContext());
             //yuklenen fotorafin storage adresi
             //final String image = imageUri != null ? imageUri.toString() : null;
 

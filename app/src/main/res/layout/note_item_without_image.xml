@@ -35,8 +35,8 @@
             android:gravity="start"
             android:padding="8dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_pin"
-            android:visibility="visible"
+            android:src="@drawable/ic_bookmark_true"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/bg_color_dark" />

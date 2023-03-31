@@ -1,6 +1,7 @@
 package com.app.edithormobile.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
@@ -83,6 +85,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             //Pin Control
             if(mNote.isPinned()){
                 holder.pinImage.setVisibility(View.VISIBLE);
+
             }else{
                 holder.pinImage.setVisibility(View.GONE);
             }

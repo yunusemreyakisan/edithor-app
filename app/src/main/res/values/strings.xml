@@ -58,4 +58,16 @@
     <string name="ingilizce_turkce_ceviri">İngilizce - Türkçe Çeviri</string>
     <string name="cevir">Çevir</string>
     <string name="yukarida_bulunan_cevir_alanina_cevirilecek_ifadeyi_girin">*Yukarıda bulunan Çevir alanına çevirilecek ifadeyi girin.</string>
+    <string name="Ocak">Ocak</string>
+    <string name="Subat">Şubat</string>
+    <string name="Mayis">Mayıs</string>
+    <string name="Mart">Mart</string>
+    <string name="Nisan">Nisan</string>
+    <string name="Haziran">Haziran</string>
+    <string name="Temmuz">Temmuz</string>
+    <string name="Agustos">Ağustos</string>
+    <string name="Eylul">Eylül</string>
+    <string name="Ekim">Ekim</string>
+    <string name="Kasim">Kasım</string>
+    <string name="Aralik">Aralık</string>
 </resources>

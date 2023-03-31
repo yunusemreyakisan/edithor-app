@@ -109,7 +109,13 @@ public class NoteDetail extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        pin = position.isPinned();
         //Button tasks
+        if (pin) {
+            binding.btnDetailPin.setImageResource(R.drawable.ic_bookmark_true);
+        } else {
+            binding.btnDetailPin.setImageResource(R.drawable.ic_pin);
+        }
         buttonTasks();
         //if image != null get data
         getNoteImage();
@@ -120,13 +126,13 @@ public class NoteDetail extends AppCompatActivity {
     public void onBackPressed() {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (notRengi != 0) {
-            olusturma_zamani = util.olusturmaZamaniGetir();
+            olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
@@ -188,16 +194,16 @@ public class NoteDetail extends AppCompatActivity {
         binding.btnDetailBack.setOnClickListener(v -> {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (notRengi != 0) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
-            } else if (position.isPinned()) {
-                olusturma_zamani = util.olusturmaZamaniGetir();
+            } else if (position.isPinned() != pin) {
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else {
                 onBackPressed();
@@ -263,18 +269,20 @@ public class NoteDetail extends AppCompatActivity {
         binding.btnDetailPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pin){
+                if (pin) {
                     pin = false;
                     position.setPinned(pin);
-                    binding.btnDetailPin.setBackgroundColor(Color.TRANSPARENT);
-                }else {
+                    //binding.btnDetailPin.setColorFilter(null);
+                    binding.btnDetailPin.setImageResource(R.drawable.ic_pin);
+                } else {
                     pin = true;
                     position.setPinned(pin);
-                    binding.btnDetailPin.setBackgroundColor(Color.CYAN);
+                    //binding.btnDetailPin.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.button_active_color));
+                    binding.btnDetailPin.setImageResource(R.drawable.ic_bookmark_true);
                 }
 
                 //TODO: Pinlenenler ayrı bir listeye eklenecek. Adapter üzerinden gösterim yapılacak.
-                Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
+               //Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
 
             }
         });

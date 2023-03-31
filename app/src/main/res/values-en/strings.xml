@@ -58,4 +58,16 @@
     <string name="edithor_dusunuyor">Edithor thinks...</string>
     <string name="edithor_gunun_sozunu_dusunuyor">Edithor ponders the word of the day...</string>
     <string name="edithor_ceviriyi_yapiyor">Edithor doing the translation...</string>
+    <string name="Ocak">January</string>
+    <string name="Subat">February</string>
+    <string name="Mayis">May</string>
+    <string name="Mart">March</string>
+    <string name="Nisan">April</string>
+    <string name="Haziran">June</string>
+    <string name="Temmuz">July</string>
+    <string name="Agustos">August</string>
+    <string name="Eylul">September</string>
+    <string name="Ekim">October</string>
+    <string name="Kasim">November</string>
+    <string name="Aralik">December</string>
 </resources>
