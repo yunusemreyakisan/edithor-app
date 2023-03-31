@@ -51,10 +51,9 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     Util util = new Util();
     boolean isSelectedMode = false;
     ArrayList<NoteModel> notes;
-    Set<NoteModel> pinnedNotes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
-    DatabaseReference removeRef, removedReference;
+    DatabaseReference removeRef;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     private GoogleSignInClient mGoogleSignInClient;

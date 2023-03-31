@@ -85,7 +85,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             //Pin Control
             if(mNote.isPinned()){
                 holder.pinImage.setVisibility(View.VISIBLE);
-
             }else{
                 holder.pinImage.setVisibility(View.GONE);
             }
