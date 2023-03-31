@@ -39,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author yunusemreyakisan
@@ -49,7 +50,8 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     ArrayList<NoteModel> selectedNotes = new ArrayList<>();
     Util util = new Util();
     boolean isSelectedMode = false;
-    ArrayList<NoteModel> notes, pinnedNotes;
+    ArrayList<NoteModel> notes;
+    Set<NoteModel> pinnedNotes;
     NoteAdapter noteAdapter;
     DatabaseReference mDatabaseReference;
     DatabaseReference removeRef, removedReference;
@@ -97,9 +99,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         filterDialog = new BottomSheetDialog(NotePage.this);
         filterView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.custom_color_filter_layout, null);
         filterDialog.setContentView(filterView);
-
-
-
 
     }
 
