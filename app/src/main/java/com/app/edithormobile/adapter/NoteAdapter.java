@@ -24,10 +24,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     Context context;
-    ArrayList<NoteModel> notes ,pinnedList;
+    ArrayList<NoteModel> notes;
+    ArrayList<NoteModel> pinnedList;
     Util util = new Util();
 
     static ClickListener clickListener;
@@ -83,18 +85,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             holder.card.setStrokeColor(mNote.getColor());
 
             //Pin Control
-            if(mNote.isPinned()){
+            if (mNote.isPinned()) {
                 holder.pinImage.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.pinImage.setVisibility(View.GONE);
             }
 
 
         } else {
             //Pin Control
-            if(mNote.isPinned()){
+            if (mNote.isPinned()) {
                 holder.pin.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.pin.setVisibility(View.GONE);
             }
 
