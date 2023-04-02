@@ -87,15 +87,13 @@ public class NoteDetailViewModel extends ViewModel {
         }
     }
 
+    //TODO: NOT DETAYDAN GERİYE GELİNCE KAYIT EDERKEN İMAGE SİLİNMESİ
     //Note Update
-    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani,Boolean pinned,  Util util, Context context) {
+    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani,Boolean pinned, String imageUri, Util util, Context context) {
         //Düzenleme tarihi eklenmesi
         binding.tvDetailOlusturmaZamani.setText(olusturma_zamani);
-        /*String image = position.getImageUri();
-        Log.e("image", image);
-
-         */
-
+        String image = position.getImageUri();
+        Log.e("İmage update note", image);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("notBaslik", binding.txtDetailTitle.getText().toString());
@@ -104,7 +102,7 @@ public class NoteDetailViewModel extends ViewModel {
         map.put("color", notRengi);
         map.put("date", util.getDateAnotherPattern());
         map.put("pinned", pinned);
-        //map.put("imageUri", image);
+        map.put("imageUri", imageUri);
         mDatabaseReference.child(notID).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -114,6 +112,7 @@ public class NoteDetailViewModel extends ViewModel {
                     position.setNotOlusturmaTarihi(olusturma_zamani);
                     position.setColor(notRengi);
                     position.setDate(util.getDateAnotherPattern());
+                    position.setImageUri(imageUri);
                     binding.tvSonDuzenlemeZamani.setText(olusturma_zamani);
                     position.setPinned(pinned);
                     //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
@@ -128,6 +127,5 @@ public class NoteDetailViewModel extends ViewModel {
         }).addOnFailureListener(e -> util.toastMessage(context, "Hata oluştu").show());
 
     }
-
 
 }

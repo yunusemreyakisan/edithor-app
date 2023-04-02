@@ -2,18 +2,24 @@ package com.app.edithormobile.view.detail;
 
 import static java.util.Objects.requireNonNull;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +33,15 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.app.edithormobile.R;
 import com.app.edithormobile.databinding.ActivityNoteDetailBinding;
 import com.app.edithormobile.model.NoteModel;
+import com.app.edithormobile.service.APIService;
 import com.app.edithormobile.util.Util;
+import com.app.edithormobile.view.create.AddNote;
 import com.app.edithormobile.view.home.NotePage;
 import com.app.edithormobile.viewmodel.detail.NoteDetailViewModel;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -42,9 +52,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class NoteDetail extends AppCompatActivity {
 
@@ -53,9 +71,18 @@ public class NoteDetail extends AppCompatActivity {
     String notBasligi, notIcerigi, notOlusturmaZamani, notID, olusturma_zamani;
     String image;
     Boolean pin;
+    String imageURL;
+    private Uri imageUri;
     int notRengi;
     FirebaseAuth mAuth;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private static final int PERMISSION_CODE = 1000;
+    private static final int IMAGE_CAPTURE_CODE = 1001;
+    ImageView ivOCR;
+    Bitmap capturedImage;
     FirebaseUser mUser;
+    FirebaseStorage storage;
+    StorageReference storageReference, ref;
     DatabaseReference removeRef, removedReference, mDatabase, mDatabaseReference;
     //color picker
     int defaultColor;
@@ -77,6 +104,11 @@ public class NoteDetail extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         String user_id = requireNonNull(mAuth.getCurrentUser()).getUid();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim");
+
+        //Storage
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        ref = storageReference.child("harici/" + UUID.randomUUID().toString());
 
         //ViewModel Bağlama
         viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
@@ -127,13 +159,13 @@ public class NoteDetail extends AppCompatActivity {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
         } else if (notRengi != 0) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
             startActivity(intent);
@@ -192,19 +224,27 @@ public class NoteDetail extends AppCompatActivity {
     public void buttonTasks() {
         //Button Back
         binding.btnDetailBack.setOnClickListener(v -> {
+            if (imageURL == null) {
+
+                Toast.makeText(this, "Image url bos", Toast.LENGTH_SHORT).show();
+            }
+
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
             } else if (notRengi != 0) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
             } else if (position.isPinned() != pin) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL,util, getApplicationContext());
+            } else if (position.getImageUri() != null) {
+                olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL,util, getApplicationContext());
             } else {
                 onBackPressed();
             }
@@ -255,6 +295,12 @@ public class NoteDetail extends AppCompatActivity {
 
         //Custom layout for ask question
         viewGPT.findViewById(R.id.bottom_sheet_gpt_question_layout).setOnClickListener(this::showAlertDialogButtonClicked);
+        //Daily Quote
+        viewGPT.findViewById(R.id.bottom_sheet_gunun_sozu_layout).setOnClickListener(this::showAlertDialogForDailyQuote);
+        //Brainstorming
+        viewGPT.findViewById(R.id.bottom_sheet_brain_storming_layout).setOnClickListener(this::showAlertDialogForBrainStorming);
+        //Translate Turkish-English
+        viewGPT.findViewById(R.id.bottom_sheet_translate_layout).setOnClickListener(this::showAlertDialogForTranslate);
 
 
         //Plus Extra Properties Bottom Sheet
@@ -264,6 +310,16 @@ public class NoteDetail extends AppCompatActivity {
         binding.btnToolbarProperties.setOnClickListener(v -> dialogPlus.show());
 
         //viewPlus.findViewById(R.id.create_pdf_toolbar).setOnClickListener(v -> generatePDF());
+        //Choose Photo
+        viewPlus.findViewById(R.id.choosePhotoToolbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Choose Photo", "Fotograf seçmeye tıklanıldı");
+                chooseImage();
+            }
+        });
+
+
 
         //Pinned Toolbar Top
         binding.btnDetailPin.setOnClickListener(new View.OnClickListener() {
@@ -320,6 +376,192 @@ public class NoteDetail extends AppCompatActivity {
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    //Translate
+    private void showAlertDialogForTranslate(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_translate_dialog, null);
+        //Custom layout öğelerine erişim
+        EditText txtCevirilecekIfade = (EditText) customLayout.findViewById(R.id.txtChatTranslate);
+        ImageButton sendMessageGPTButton = (ImageButton) customLayout.findViewById(R.id.sendMessageGPTDialogTranslate);
+
+        TextView translateResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponseTranslate);
+        builder.setView(customLayout);
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        sendMessageGPTButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                translateResponse.setHint(getString(R.string.edithor_ceviriyi_yapiyor));
+                //İfadelerin alınması
+                String ifade = txtCevirilecekIfade.getText().toString();
+                String gonderilecekIfade = getString(R.string.ingilizceiseturkceye_turkceiseingilizceyecevir) + ifade;
+                sendMessageGPT(gonderilecekIfade, translateResponse, getApplicationContext());
+
+            }
+        });
+
+
+        // add a button
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = translateResponse.getText().toString();
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //Brainstorming
+    public void showAlertDialogForBrainStorming(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_get_gpt_response, null);
+        //Custom layout öğelerine erişim
+        TextView brainStormingResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponse);
+        TextView brainStormingTextView = (TextView) customLayout.findViewById(R.id.tvOzellikAdi);
+        builder.setView(customLayout);
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        brainStormingTextView.setText(getString(R.string.fikir_makinesi));
+        String ifade = getString(R.string.bana_hobi_fikri_ver);
+        brainStormingResponse.setHint(getString(R.string.edithor_fikir_dusunuyor));
+        sendMessageGPT(ifade, brainStormingResponse, getApplicationContext());
+
+        // add a button
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = brainStormingResponse.getText().toString();
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //Daily Quote
+    public void showAlertDialogForDailyQuote(View view) {
+        // Create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.custom_get_gpt_response, null);
+        //Custom layout öğelerine erişim
+        TextView gununSozuResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponse);
+        TextView gununSozuTextView = (TextView) customLayout.findViewById(R.id.tvOzellikAdi);
+        builder.setView(customLayout);
+
+
+        //Sorulan sorunun alınması ve methoda yerlestirilmesi
+        gununSozuTextView.setText(getString(R.string.gunun_sozu));
+        String ifade = getString(R.string.bana_gunun_sozunu_soyle);
+        gununSozuResponse.setHint(getString(R.string.edithor_gunun_sozunu_dusunuyor));
+        sendMessageGPT(ifade, gununSozuResponse, getApplicationContext());
+
+        // add a button
+        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
+            // send data from the AlertDialog to the Activity
+            String gptResponse = gununSozuResponse.getText().toString();
+            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+        });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    //Send Message
+    public void sendMessageGPT(String ifade, TextView text, Context context) {
+        APIService service = new APIService();
+        try {
+            if (!Objects.equals(ifade, "")) {
+                service.getResponse(ifade, text, context);
+                Log.e("Girilen ifade: ", ifade);
+            } else {
+                Log.e("Girilen ifade: ", "İfade bos geliyor");
+
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            try {
+                binding.NoteDetailImage.setImageBitmap(null);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                binding.NoteDetailImage.setImageBitmap(bitmap);
+                uploadImage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK) {
+            capturedImage = (Bitmap) data.getExtras().get("data");
+            ivOCR.setImageBitmap(capturedImage);
+        }
+    }
+
+    //TODO: Storage üzerinden dowloadURL alıp firebase realtime db kayıt etmeli
+    private void uploadImage() {
+        if (imageUri != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Lütfen bekleyin...");
+            progressDialog.show();
+
+            ref.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            binding.NoteDetailImage.setVisibility(View.VISIBLE);
+                            Toast.makeText(NoteDetail.this, "Yüklendi", Toast.LENGTH_SHORT).show();
+                            // Log.e("Image URL", taskSnapshot.toString());
+                            //Image Download link
+                            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    imageURL = task.getResult().toString();
+                                    Log.i("URL", imageURL);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(NoteDetail.this, "Başarısız " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+
+                            progressDialog.setMessage("Yükleniyor  " + (int) progress + "%");
+
+                        }
+                    });
+        }
     }
 
     //Delete Note
