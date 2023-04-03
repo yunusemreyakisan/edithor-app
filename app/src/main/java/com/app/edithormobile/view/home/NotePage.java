@@ -59,8 +59,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
     private GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
 
-    NoteAdapter.ClickListener clickListener;
-
     ActivityNotePageBinding binding;
     Bitmap bmp; // store the image in your bitmap
     NotePageViewModel viewModel;
