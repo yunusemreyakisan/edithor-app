@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -179,7 +180,10 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 intent.putExtra("olusturma_zamani", notes.get(position).getNotOlusturmaTarihi());
                 intent.putExtra("color", notes.get(position).getColor());
                 intent.putExtra("position", model);
-                intent.putExtra("image", notes.get(position).getImageUri());
+                if(notes.get(position).getImageUri() != null){
+                    intent.putExtra("image", notes.get(position).getImageUri());
+                    Toast.makeText(NotePage.this, "Gonderilen image: " + notes.get(position).getImageUri(), Toast.LENGTH_SHORT).show();
+                }
                 intent.putExtra("pinned", notes.get(position).isPinned());
                 startActivity(intent);
             }

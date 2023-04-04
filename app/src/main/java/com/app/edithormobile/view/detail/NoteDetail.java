@@ -123,7 +123,7 @@ public class NoteDetail extends AppCompatActivity {
 
         //get intent data
         getIntentData();
-        viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi, pin);
+        viewModel.assignData(binding, notBasligi, notIcerigi, notOlusturmaZamani, notRengi);
         notID = getIntent().getStringExtra("id");
         position = (NoteModel) getIntent().getSerializableExtra("position");
         Log.e("position degeri", String.valueOf(position));
@@ -159,13 +159,13 @@ public class NoteDetail extends AppCompatActivity {
         //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
         if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,  util, getApplicationContext());
         } else if (notRengi != 0) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,  util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
             startActivity(intent);
@@ -181,21 +181,13 @@ public class NoteDetail extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Kullanicilar").child(user_id).child("Notlarim").child(position.getNoteID()).child("imageUri");
 
-
         if (image != null) {
             Log.e("Image degeri: ", image);
             binding.NoteDetailImage.setVisibility(View.VISIBLE);
             mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    // getting a DataSnapshot for the
-                    // location at the specified relative
-                    // path and getting in the link variable
                     String link = dataSnapshot.getValue(String.class);
-
-                    // loading that data into rImage
-                    // variable which is ImageView
-                    // Placeholder
                     CircularProgressDrawable drawable = new CircularProgressDrawable(getApplicationContext());
                     drawable.setCenterRadius(40f);
                     drawable.setStrokeWidth(8f);
@@ -204,12 +196,8 @@ public class NoteDetail extends AppCompatActivity {
                     Glide.with(getApplicationContext()).load(link).centerCrop().placeholder(drawable).into(binding.NoteDetailImage);
                 }
 
-                // this will called when any problem
-                // occurs in getting data
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // we are showing that error message in
-                    // toast
                     Toast.makeText(NoteDetail.this, "Error Loading Image", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -232,19 +220,19 @@ public class NoteDetail extends AppCompatActivity {
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
-            } else if (notRengi != 0) {
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
+            } else if (notRengi != 1) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL, util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (position.isPinned() != pin) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL,util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,util, getApplicationContext());
             } else if (position.getImageUri() != null) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, imageURL,util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,util, getApplicationContext());
             } else {
                 onBackPressed();
             }
@@ -505,7 +493,7 @@ public class NoteDetail extends AppCompatActivity {
                 && data != null && data.getData() != null) {
             imageUri = data.getData();
             try {
-                binding.NoteDetailImage.setImageBitmap(null);
+                //binding.NoteDetailImage.setImageBitmap(null);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 binding.NoteDetailImage.setImageBitmap(bitmap);
                 uploadImage();

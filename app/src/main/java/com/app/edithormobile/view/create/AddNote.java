@@ -481,7 +481,7 @@ public class AddNote extends AppCompatActivity implements IToast {
         }
     }
 
-    //TODO: Storage üzerinden dowloadURL alıp firebase realtime db kayıt etmeli
+    //DB Record
     private void uploadImage() {
         if (imageUri != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);

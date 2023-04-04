@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -37,7 +39,6 @@ public class NoteDetailViewModel extends ViewModel {
     }
 
     //Custom dialog send message button listener
-    //TODO: Chat sisteminde response Türkçe gelirken custom dialog üzerinde ingilizce geliyor. Çözmeliyiz.
     public void sendMessageGPT(String ifade, TextView text, Context context) {
         APIService service = new APIService();
         try {
@@ -74,26 +75,20 @@ public class NoteDetailViewModel extends ViewModel {
     }
 
     //assign data
-    public void assignData(ActivityNoteDetailBinding binding, String baslik, String icerik, String olusturmaZamani, int notRengi, boolean pin) {
+    public void assignData(ActivityNoteDetailBinding binding, String baslik, String icerik, String olusturmaZamani, int notRengi) {
         binding.txtDetailTitle.setText(baslik);
         binding.txtDetailContent.setText(icerik);
         binding.tvDetailOlusturmaZamani.setText(olusturmaZamani);
         binding.tvSonDuzenlemeZamani.setText(olusturmaZamani); //Toolbar üzerinde son düzenleme tarihinin gosterilmesi
         binding.scrollView2.setBackgroundColor(notRengi);
-        if(pin){
-            binding.btnDetailPin.setBackgroundColor(Color.CYAN);
-        }else{
-            binding.btnDetailPin.setBackgroundColor(Color.TRANSPARENT);
-        }
     }
 
     //TODO: NOT DETAYDAN GERİYE GELİNCE KAYIT EDERKEN İMAGE SİLİNMESİ
     //Note Update
-    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani,Boolean pinned, String imageUri, Util util, Context context) {
+    public void updateNote(ActivityNoteDetailBinding binding, DatabaseReference mDatabaseReference, NoteModel position, String notID, int notRengi, String olusturma_zamani, Boolean pinned, Util util, Context context) {
         //Düzenleme tarihi eklenmesi
         binding.tvDetailOlusturmaZamani.setText(olusturma_zamani);
-        String image = position.getImageUri();
-        Log.e("İmage update note", image);
+        Log.e("posiiton detay", position.getNoteID());
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("notBaslik", binding.txtDetailTitle.getText().toString());
@@ -102,7 +97,7 @@ public class NoteDetailViewModel extends ViewModel {
         map.put("color", notRengi);
         map.put("date", util.getDateAnotherPattern());
         map.put("pinned", pinned);
-        map.put("imageUri", imageUri);
+        //map.put("imageUri", image);
         mDatabaseReference.child(notID).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -112,13 +107,14 @@ public class NoteDetailViewModel extends ViewModel {
                     position.setNotOlusturmaTarihi(olusturma_zamani);
                     position.setColor(notRengi);
                     position.setDate(util.getDateAnotherPattern());
-                    position.setImageUri(imageUri);
+                    //position.setImageUri(image);
+                    //binding.NoteDetailImage.setVisibility(View.VISIBLE);
+
                     binding.tvSonDuzenlemeZamani.setText(olusturma_zamani);
                     position.setPinned(pinned);
                     //TODO: Position nesnesi ile o pozisyona ait object alınıyor.
                     //adapter.notifyDataSetChanged(); //null dönüyor!!!
 
-                    //util.toastMessage(context, "Notunuz güncellendi").show();
                     Intent intent = new Intent(context, NotePage.class);
                     intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
