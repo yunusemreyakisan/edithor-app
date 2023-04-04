@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 
 public class NotePageViewModel extends ViewModel {
@@ -109,13 +110,16 @@ public class NotePageViewModel extends ViewModel {
         binding.progressBar.setVisibility(View.VISIBLE);
         Collections.sort(notes);
         Set<NoteModel> pinnedNotes = new ArraySet<>();;
+
+        notes.addAll(0, pinnedNotes);
         mDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                 NoteModel model = dataSnapshot.getValue(NoteModel.class);
                 notes.add(model);
                 noteAdapter.notifyItemInserted(notes.size());
-                Collections.sort(notes);
+                Comparator<NoteModel> tersSiralama = Collections.reverseOrder();
+                Collections.sort(notes, tersSiralama);
                 noteAdapter.notifyDataSetChanged();
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
                 Log.d("note size", String.valueOf(notes.size()));
@@ -133,8 +137,10 @@ public class NotePageViewModel extends ViewModel {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
                 //Update
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
-                Collections.sort(notes);
+                Comparator<NoteModel> tersSiralama = Collections.reverseOrder();
+                Collections.sort(notes, tersSiralama);
                 noteAdapter.notifyDataSetChanged();
+                Log.e("Pinned notes: ", pinnedNotes.toString());
 
             }
 
@@ -143,16 +149,19 @@ public class NotePageViewModel extends ViewModel {
                 //Intent
                 bosKontrolu(binding, noteAdapter, mDatabaseReference);
                 noteAdapter.notifyItemRemoved(notes.size());
-                Collections.sort(notes);
+                Comparator<NoteModel> tersSiralama = Collections.reverseOrder();
+                Collections.sort(notes, tersSiralama);
                 noteAdapter.notifyDataSetChanged();
                 Log.d("note size removed", String.valueOf(notes.size()));
+                Log.e("Pinned notes: ", pinnedNotes.toString());
 
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
                 //Updated
-                Collections.sort(notes);
+                Comparator<NoteModel> tersSiralama = Collections.reverseOrder();
+                Collections.sort(notes, tersSiralama);
                 noteAdapter.notifyDataSetChanged();
             }
 

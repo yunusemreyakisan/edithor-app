@@ -212,11 +212,6 @@ public class NoteDetail extends AppCompatActivity {
     public void buttonTasks() {
         //Button Back
         binding.btnDetailBack.setOnClickListener(v -> {
-            if (imageURL == null) {
-
-                Toast.makeText(this, "Image url bos", Toast.LENGTH_SHORT).show();
-            }
-
             //Eğer not aynı kaldıysa olusturma zamanını guncellemesin.
             if (!notBasligi.equals(binding.txtDetailTitle.getText().toString())) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
@@ -520,7 +515,7 @@ public class NoteDetail extends AppCompatActivity {
                             progressDialog.dismiss();
                             binding.NoteDetailImage.setVisibility(View.VISIBLE);
                             Toast.makeText(NoteDetail.this, "Yüklendi", Toast.LENGTH_SHORT).show();
-                            // Log.e("Image URL", taskSnapshot.toString());
+                            //Log.e("Image URL", taskSnapshot.toString());
                             //Image Download link
                             ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override

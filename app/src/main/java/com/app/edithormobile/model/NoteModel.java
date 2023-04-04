@@ -133,7 +133,13 @@ public class NoteModel implements Serializable, Comparable<NoteModel> {
     //En yeniden en eskiye sıralama
     @Override
     public int compareTo(NoteModel o) {
-        return o.date.compareTo(this.date);
+        if (this.isPinned == o.isPinned) {
+            return 0;
+        } else if (this.isPinned) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }
 
