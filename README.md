@@ -22,9 +22,10 @@
 and many more Android libraries.
 
 ## Screenshots
-| **Description**           | **Screenshot**                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Firebase for Database, Images, Auth | [Screenshot_20230405_170348](https://user-images.githubusercontent.com/116274664/230105152-01dd9547-393f-407b-b49f-50861457ef8e.png)|
+| **Sign in**  | **Sign up** | **Description** |
+| ------------ | ----------- | ----------------|
+<img src="https://user-images.githubusercontent.com/116274664/230105152-01dd9547-393f-407b-b49f-50861457ef8e.png" width="260">| <img src="https://user-images.githubusercontent.com/116274664/230130809-3c11bd1c-42f1-47e8-9939-5a4223392cd5.png" width="260">| <img src="https://user-images.githubusercontent.com/116274664/230105152-01dd9547-393f-407b-b49f-50861457ef8e.png" width="260"> |
+
 <!-- If you have screenshots you'd like to share, include them here. -->
 
 ## Contact
