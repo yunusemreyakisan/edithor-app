@@ -66,7 +66,7 @@ public class APIService {
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
-                params.put("Authorization", "Bearer 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");
+                params.put("Authorization", "Bearer YOUR_API_KEY");
                 return params;
             }
         };
