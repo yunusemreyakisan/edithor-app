@@ -22,7 +22,9 @@
 and many more Android libraries.
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+| **Description**           | **Screenshot**                                                                |
+| ----------------- | ------------------------------------------------------------------ |
+| Firebase for Database, Images, Auth | [Screenshot_20230405_170348](https://user-images.githubusercontent.com/116274664/230105152-01dd9547-393f-407b-b49f-50861457ef8e.png)|
 <!-- If you have screenshots you'd like to share, include them here. -->
 
 ## Contact
