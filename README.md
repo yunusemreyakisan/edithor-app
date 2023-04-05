@@ -4,7 +4,6 @@
 
 ## 📄 Table of Contents
 * [Technologies Used](#technologies-used)
-* [Features](#features)
 * [Screenshots](#screenshots)
 * [Project Status](#project-status)
 * [Contact](#contact)
@@ -27,11 +26,6 @@
 | Lottie for Animation |  implementation "com.airbnb.android:lottie:$lottieVersion" |
 
 and many more Android libraries.
-
-## Features
-> List the ready features here:  
-— Chat with ChatGPT 3.5 Turbo, customize your notes as you wish and digitize and share your photos with OCR technology.
-
 
 ## Screenshots
 ![Example screenshot](./img/screenshot.png)
