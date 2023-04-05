@@ -1,74 +1,52 @@
 
-## Projeyi Başlatma
+# 📱 Edithor AI Powered & OCR Note Editor App
+> Edithor is an AI-supported note editor that enables you to take more effective notes. Edithor uses the ChatGPT 3.5 Turbo model to take your creativity to the next level, while the OCR technology allows you to digitize text from photos and images. Edithor offers features such as note sharing, note content copying, English-Turkish translation, and note pinning. 
 
-**Note:** Başlamadan önce bilgisayarınızın güvenli bir yerinde klasör oluşturun ve klasörü kullandığınız IDE (Android Studio vs.) üzerinde açın.
-***
-
-Projeyi klonlayın (Bir sefer yapmanız yeterli)
-
-```bash
-  git clone https://kullaniciadiniz@github.com/edithor-app/edithor.git
-```
-
-Proje dizinine gidin
-
-```bash
-  cd edithor
-```
-## Branch oluşturma ve isimlendirme
-
-Proje üzerinde branch oluşturma (local)
-```bash
-  git checkout -b branchadiniz
-  ornegin: git checkout -b issue#1-add-splashscreen
-```
-
- ## Commit atmadan önce !
-
-Git'e kendinizi tanıtın
-
-```bash
-  git config --global user.email "youruseremail"
-  git config --global user.name "yourname"
-```
-
-Git'i başlatın
-
-```bash
-  git init
-```
+## 📄 Table of Contents
+* [Technologies Used](#technologies-used)
+* [Features](#features)
+* [Screenshots](#screenshots)
+* [Project Status](#project-status)
+* [Contact](#contact)
+<!-- * [License](#license) -->
 
 
-Yaptığınız değişiklikleri git'e ekleyin (Eklemek istediğiniz dosyayı ekler)
+## 🪄 Technologies Used
+| **Libraries**           | **Implementation**                                                                |
+| ----------------- | ------------------------------------------------------------------ |
+| Firebase for Database, Images, Auth | implementation 'com.google.firebase:firebase-database:$firebaseVersion' |
+| ML Kit for OCR | implementation 'com.google.android.gms:play-services-mlkit-text-recognition:$recogVersion' |
+| Firebase for Analytics | implementation 'com.google.firebase:firebase-crashlytics:$crashVersion' |
+| ML Vision for OCR | implementation 'com.google.firebase:firebase-ml-vision:$mlVersion' |
+| SSP for Text Size | implementation 'com.intuit.ssp:ssp-android:$sspVersion' |
+| SDP for Container Size | implementation 'com.intuit.sdp:sdp-android:$sdpVersion' |
+| Glide for Images |  implementation 'com.github.bumptech.glide:glide:$glideVersion' |
+| Okhttp for API | implementation 'com.squareup.okhttp3:okhttp:$okVersion' |
+| Ext for Lifecycle |  implementation 'androidx.lifecycle:lifecycle-extensions:$viewModelVersion' |
+| Volley for API | implementation 'com.android.volley:volley:$volleyVersion' |
+| Lottie for Animation |  implementation "com.airbnb.android:lottie:$lottieVersion" |
 
-```bash
-  git add dosyaadi
-```
+and many more Android libraries.
+
+## Features
+> List the ready features here:  
+— Chat with ChatGPT 3.5 Turbo, customize your notes as you wish and digitize and share your photos with OCR technology.
 
 
-Yaptığınız değişiklikleri git'e ekleyin (Hepsini ekler)
-
-```bash
-  git add .
-```
-
-Yaptığınız değişikliğe yorum ekleyin ve commitleyin
-
-```bash
-  git commit -m "degisiklikyorumun"
-```
+## Screenshots
+![Example screenshot](./img/screenshot.png)
+<!-- If you have screenshots you'd like to share, include them here. -->
 
 
-Kendinizi uzak sunucuya tanıtın.
+## Project Status
+https://badgen.net/badge/status/progress/blue
 
-```bash
- git remote add origin https://github.com/yunusemreyakisan/edithor-app.git
-```
+## Contact
+Created by [@yunusemreyakisan](https://www.yunusemreyakisan.com/) - feel free to contact me!
 
-  Yaptığınız değişikliği uzak sunucuya gönderin.
 
-```bash
- git push -u origin branchadiniz
-```
+<!-- Optional -->
+<!-- ## License -->
+<!-- This project is open source and available under the [... License](). -->
 
--- Herhangi bir hata alırsanız repository sahibiyle iletişime geçiniz. 
+<!-- You don't have to include all sections - just the one's relevant to your project --> 
