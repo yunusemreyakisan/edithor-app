@@ -1,3 +1,4 @@
+![mockup](https://user-images.githubusercontent.com/116274664/230145092-797e4435-5e79-40c4-9a7a-2acfad5e8052.png)
 
 # 📱 Edithor AI Powered & OCR Note Editor App
 > Edithor is an AI-supported note editor that enables you to take more effective notes. Edithor uses the ChatGPT 3.5 Turbo model to take your creativity to the next level, while the OCR technology allows you to digitize text from photos and images. Edithor offers features such as note sharing, note content copying, English-Turkish translation, and note pinning.  
