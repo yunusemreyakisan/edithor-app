@@ -92,7 +92,7 @@ public final class AskGPT extends AppCompatActivity {
                 }));
             }
         });
-    } //eof oncreate
+    }
 
     @Override
     protected void onStart() {
