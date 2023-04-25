@@ -3,7 +3,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/bg_color_light"
     android:padding="10dp">
 
 
@@ -15,7 +14,7 @@
         android:layout_marginHorizontal="8dp"
         android:fontFamily="@font/inter_bold"
         android:layout_marginVertical="10dp"
-        android:textColor="@color/bg_color_dark" />
+        />
 
     <LinearLayout
         android:id="@+id/bottom_sheet_gunun_sozu_layout"
@@ -29,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            app:tint="@color/bg_color_dark"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_quote" />
 
         <TextView
@@ -39,7 +38,6 @@
             android:text="@string/bana_gunun_sozunu_soyle"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -57,7 +55,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            app:tint="@color/bg_color_dark"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_brainstorm" />
 
         <TextView
@@ -67,7 +65,6 @@
             android:text="@string/bana_fikir_ver"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -85,7 +82,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            app:tint="@color/bg_color_dark"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_translate" />
 
         <TextView
@@ -95,7 +92,6 @@
             android:text="@string/yabanc_dile_cevir"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -113,7 +109,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            app:tint="@color/bg_color_dark"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_gpt_bot" />
 
         <TextView
@@ -123,7 +119,6 @@
             android:text="@string/baska_bir_sey_istiyorum"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -136,8 +131,8 @@
         android:text="@string/edithor_a_sorarak_cesitli_konularda_yazilari_notlariniza_ekleyebilirsiniz"
         android:padding="8dp"
         android:alpha="0.8"
+        app:tint="@color/md_theme_light_primary"
         android:textSize="11sp"
-        android:textColor="@color/bg_color_dark"
         android:layout_height="wrap_content" />
 
 

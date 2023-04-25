@@ -11,8 +11,6 @@
     android:clickable="true"
     android:focusable="true"
     app:strokeWidth="2dp"
-    app:strokeColor="@color/cardview_color"
-    app:cardBackgroundColor="@color/cardview_color"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp">
 
@@ -22,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/cardview_color"
         android:gravity="top"
         android:orientation="vertical">
 
@@ -38,8 +35,7 @@
             android:src="@drawable/ic_bookmark_true"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/bg_color_dark" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -52,7 +48,6 @@
             android:maxLines="5"
             android:paddingTop="5dp"
             android:maxLength="100"
-            android:textColor="@color/bg_color_dark"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -65,7 +60,6 @@
             android:maxLength="100"
             android:fontFamily="@font/inter_regular"
             android:paddingHorizontal="15dp"
-            android:textColor="@color/bg_color_dark"
             android:textSize="15sp" />
 
 
@@ -82,7 +76,6 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/inter_regular"
                 android:paddingHorizontal="15dp"
-                android:textColor="@color/cardview_date_color"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

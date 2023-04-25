@@ -5,14 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/notePageFullScreen"
-    android:background="@color/bg_color_light"
     tools:context=".view.home.NotePage">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarSecilenler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_color_light"
         android:elevation="5dp"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/txt_notlarim"
-            android:textColor="@color/bg_color_dark"
             android:textSize="20sp"
             android:fontFamily="@font/inter_bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +40,7 @@
             android:background="@android:color/transparent"
             android:padding="8dp"
             android:src="@drawable/ic_delete"
-            app:tint="@color/bg_color_dark" />
+            />
 
 
     </androidx.appcompat.widget.Toolbar>
@@ -53,7 +50,6 @@
         android:id="@+id/toolbarTopNotePage"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/bg_color_light"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@string/txt_notlarim"
-            android:textColor="@color/bg_color_dark"
             android:textSize="@dimen/_30ssp"
             android:fontFamily="@font/inter_bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,13 +79,13 @@
                 android:background="@android:color/transparent"
                 android:padding="8dp"
                 android:src="@drawable/ic_filter"
+                app:tint="@color/md_theme_light_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/search_bar"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/bg_color_dark" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-            <android.widget.SearchView
+            <SearchView
                 android:id="@+id/search_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,12 +117,9 @@
         android:layout_gravity="end"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/fab_color"
         android:text="@string/islemler"
         android:textAllCaps="false"
-        android:textColor="@color/bg_color_light"
         app:icon="@drawable/ic_pen"
-        app:iconTint="@color/bg_color_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -139,14 +131,13 @@
         android:layout_gravity="end"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:backgroundTint="@color/fab_color"
         android:contentDescription="@string/add_fab_button"
         android:src="@drawable/ic_plus"
         app:borderWidth="0dp"
         app:fabSize="normal"
         app:layout_constraintBottom_toTopOf="@+id/extended_fab"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/bg_color_light" />
+        />
 
 
     <TextView
@@ -157,7 +148,6 @@
         android:alpha="0.5"
         android:text="@string/not_ekle"
         android:fontFamily="@font/inter_regular"
-        android:textColor="@color/bg_color_dark"
         app:layout_constraintBottom_toTopOf="@+id/extended_fab"
         app:layout_constraintEnd_toStartOf="@+id/add_note"
         app:layout_constraintHorizontal_bias="1.0"
@@ -172,14 +162,12 @@
         android:layout_gravity="end"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:backgroundTint="@color/fab_color"
         android:contentDescription="@string/add_fab_button"
         android:src="@drawable/ic_ai"
         app:borderWidth="0dp"
         app:fabSize="normal"
         app:layout_constraintBottom_toTopOf="@+id/add_note"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/bg_color_light" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/add_file_tv"
@@ -188,7 +176,6 @@
         android:alpha="0.5"
         android:text="@string/edithor_a_sor"
         android:fontFamily="@font/inter_regular"
-        android:textColor="@color/bg_color_dark"
         app:layout_constraintBottom_toTopOf="@+id/add_note"
         app:layout_constraintEnd_toStartOf="@+id/add_file"
         app:layout_constraintHorizontal_bias="0.976"
@@ -225,7 +212,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
-        android:indeterminateTint="@color/bg_color_dark"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -247,7 +233,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.493"
-        app:tint="@color/bg_color_dark" />
+        />
 
     <TextView
         android:id="@+id/no_data"
@@ -255,7 +241,6 @@
         android:layout_height="wrap_content"
         android:alpha="0.5"
         android:text="@string/not_eklemek_icin_butona_tikla"
-        android:textColor="@color/bg_color_dark"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

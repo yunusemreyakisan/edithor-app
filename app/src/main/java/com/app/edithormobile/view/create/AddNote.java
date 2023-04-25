@@ -170,8 +170,8 @@ public class AddNote extends AppCompatActivity implements IToast {
 
         //TODO: Light temada herhangi bir renk seçmediğimizde sorun yok, dark theme de seçince light moda dönüşte yazılar görünmüyor.
         binding.btnToolbarColorEmptyAddNote.setOnClickListener(v -> {
-            notRengi = getColor(R.color.bg_color_light);
-            binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.bg_color_light));
+            notRengi = getColor(R.color.md_theme_light_background);
+            binding.addNoteBG.setBackgroundColor(getResources().getColor(R.color.md_theme_light_background));
         });
 
         //Plus Extra Properties Bottom Sheet

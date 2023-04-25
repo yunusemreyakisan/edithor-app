@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/bg_color_light"
     android:padding="10dp">
 
 
@@ -19,8 +18,8 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_take_picture"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/md_theme_light_primary"
+            android:src="@drawable/ic_take_picture" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +28,6 @@
             android:text="@string/fotograf_cek"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -47,8 +45,9 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_galeri"
-            app:tint="@color/bg_color_dark" />
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +56,6 @@
             android:text="@string/galeriden_sec"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -72,10 +70,10 @@
             android:id="@+id/btn_bottom_sheet_ocr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tint="@color/bg_color_dark"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_ocr" />
 
         <TextView
@@ -85,7 +83,6 @@
             android:text="@string/ocr"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -99,12 +96,12 @@
         <ImageButton
             android:id="@+id/btn_bottom_sheet_bot"
             android:layout_width="wrap_content"
-            app:tint="@color/bg_color_dark"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_pdf" />
+            android:src="@drawable/ic_pdf"
+            app:tint="@color/md_theme_light_primary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,7 +110,6 @@
             android:text="@string/pdf_e_aktar"
             android:layout_marginHorizontal="15dp"
             android:textSize="18sp"
-            android:textColor="@color/bg_color_dark"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

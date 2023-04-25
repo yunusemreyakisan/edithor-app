@@ -2,7 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bg_color_light"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -19,8 +18,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_delete"
-            app:tint="@color/bg_color_dark" />
+            android:src="@drawable/ic_delete" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +27,6 @@
             android:layout_marginHorizontal="15dp"
             android:fontFamily="@font/inter_medium"
             android:text="@string/sil"
-            android:textColor="@color/bg_color_dark"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -47,8 +44,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_copy_link"
-            app:tint="@color/bg_color_dark" />
+            android:src="@drawable/ic_copy_link" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +53,6 @@
             android:layout_marginHorizontal="15dp"
             android:fontFamily="@font/inter_medium"
             android:text="@string/kopyala"
-            android:textColor="@color/bg_color_dark"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -76,7 +71,7 @@
             android:background="@android:color/transparent"
             android:padding="8dp"
             android:src="@drawable/ic_share"
-            app:tint="@color/bg_color_dark" />
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,7 +80,6 @@
             android:layout_marginHorizontal="15dp"
             android:fontFamily="@font/inter_medium"
             android:text="@string/paylas"
-            android:textColor="@color/bg_color_dark"
             android:textSize="18sp" />
 
     </LinearLayout>

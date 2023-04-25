@@ -55,9 +55,9 @@ public final class AskGPT extends AppCompatActivity {
 
         //Status bar color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary, this.getTheme()));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.md_theme_light_background, this.getTheme()));
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.md_theme_light_background));
         }
 
         //init rv
@@ -152,7 +152,7 @@ public final class AskGPT extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
-                params.put("Authorization", "Bearer YOUR_API_KEY");
+                params.put("Authorization", "Bearer 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");
                 return params;
             }
         };

@@ -117,8 +117,8 @@ public class NoteDetail extends AppCompatActivity {
         //init snackbar
         snackbar = Snackbar.make(binding.getRoot(), "Notunuz silindi", sure);
         //Window nesnesi alma
-        if (Build.VERSION.SDK_INT >= 26) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.bg_color_light));
+        if (Build.VERSION.SDK_INT >= 26 ) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_theme_light_background));
         }
 
         //get intent data
@@ -251,8 +251,8 @@ public class NoteDetail extends AppCompatActivity {
 
         //TODO: Light temada herhangi bir renk seçmediğimizde sorun yok, dark theme de seçince light moda dönüşte yazılar görünmüyor.
         binding.btnToolbarEmptyColor.setOnClickListener(v -> {
-            notRengi = getColor(R.color.bg_color_light);
-            binding.scrollView2.setBackgroundColor(getResources().getColor(R.color.bg_color_light));
+            notRengi = getColor(R.color.md_theme_light_background);
+            binding.scrollView2.setBackgroundColor(getResources().getColor(R.color.md_theme_light_background));
         });
 
         //Share Toolbar Button
@@ -608,7 +608,6 @@ public class NoteDetail extends AppCompatActivity {
 
 
                         });
-                        snackbar.setActionTextColor(getResources().getColor(R.color.button_active_color));
                         snackbar.show();
 
                         //Do something after 3500ms
@@ -632,9 +631,6 @@ public class NoteDetail extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
-        alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-        alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
     }
 
     //Intent data

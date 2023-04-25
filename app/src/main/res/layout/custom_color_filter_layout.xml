@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:layout_margin="10dp"
     android:elevation="@dimen/_10sdp"
-    android:background="@color/bg_color_light"
     android:padding="10dp">
 
 
@@ -25,7 +24,6 @@
             android:alpha="0.7"
             android:fontFamily="@font/inter_medium"
             android:text="@string/not_rengine_gore_filtrele"
-            android:textColor="@color/bg_color_dark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

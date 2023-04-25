@@ -279,9 +279,6 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
         builder.setNegativeButton("HAYIR", alertDialogClickListener);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.button_active_color));
-        alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.button_active_color));
-        alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
     }
 
 

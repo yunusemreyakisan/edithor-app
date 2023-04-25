@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color_light"
     tools:context=".view.detail.NoteDetail">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarTop"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/bg_color_light"
         android:elevation="1dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,8 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="15sp"
-            android:textColor="@color/bg_color_dark" />
+            android:textSize="15sp" />
 
         <ImageButton
             android:id="@+id/btn_detail_back"
@@ -35,7 +32,8 @@
             android:gravity="start"
             android:padding="8dp"
             android:src="@drawable/ic_back"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/md_theme_light_primary"
+            />
 
 
         <ImageButton
@@ -46,8 +44,8 @@
             android:layout_marginHorizontal="10dp"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_pin"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/md_theme_light_primary"
+            android:src="@drawable/ic_pin" />
     </androidx.appcompat.widget.Toolbar>
 
 
@@ -93,8 +91,6 @@
                 android:fontFamily="@font/inter_bold"
                 android:hint="@string/baslik"
                 android:inputType="textMultiLine"
-                android:textColor="@color/bg_color_dark"
-                android:textColorHint="@color/bg_color_dark"
                 android:textSize="@dimen/_20sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,8 +105,6 @@
                 android:text="May 21, 2020"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/bg_color_dark"
-                android:textColorHint="@color/bg_color_dark"
                 android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_detail_title" />
@@ -131,8 +125,6 @@
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
                 android:paddingBottom="100dp"
-                android:textColor="@color/bg_color_dark"
-                android:textColorHint="@color/bg_color_dark"
                 app:layout_constraintBottom_toTopOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -148,7 +140,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/bg_color_light"
         android:elevation="5dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -164,7 +155,8 @@
             android:background="@android:color/transparent"
             android:padding="8dp"
             android:src="@drawable/ic_add"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/md_theme_light_primary"
+            />
 
 
         <ImageButton
@@ -174,8 +166,8 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_gpt_bot"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/md_theme_light_primary"
+            android:src="@drawable/ic_gpt_bot" />
 
         <ImageButton
             android:id="@+id/btn_toolbar_empty_color"
@@ -184,8 +176,8 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_not"
-            app:tint="@color/bg_color_dark" />
+            app:tint="@color/md_theme_light_primary"
+            android:src="@drawable/ic_not" />
 
         <ImageButton
             android:id="@+id/btn_toolbar_color_red"
@@ -224,8 +216,8 @@
             android:padding="8dp"
             android:layout_marginHorizontal="10dp"
             android:src="@drawable/ic_extra"
-            app:tint="@color/bg_color_dark"
-            android:contentDescription="btn_toolbar_share" />
+            android:contentDescription="@string/btn_toolbar_share"
+            app:tint="@color/md_theme_light_primary" />
 
 
     </androidx.appcompat.widget.Toolbar>

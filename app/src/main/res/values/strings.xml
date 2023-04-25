@@ -70,4 +70,5 @@
     <string name="Ekim">Ekim</string>
     <string name="Kasim">Kasım</string>
     <string name="Aralik">Aralık</string>
+    <string name="btn_toolbar_share">btn_toolbar_share</string>
 </resources>

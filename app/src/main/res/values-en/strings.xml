@@ -70,4 +70,5 @@
     <string name="Ekim">October</string>
     <string name="Kasim">November</string>
     <string name="Aralik">December</string>
+    <string name="btn_toolbar_share">btn_toolbar_share</string>
 </resources>

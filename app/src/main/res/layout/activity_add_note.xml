@@ -3,15 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/addNoteBG"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_color_light">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarTopNotePage"
         android:layout_width="match_parent"
         android:elevation="1dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/bg_color_light"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +23,9 @@
             android:background="@android:color/transparent"
             android:gravity="start"
             android:padding="8dp"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_back"
-            app:tint="@color/bg_color_dark" />
+           />
 
         <TextView
             android:id="@+id/tvSonDuzenlemeZamaniToolbarAddNote"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="15sp"
-            android:textColor="@color/bg_color_dark" />
+             />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -79,7 +78,6 @@
                 android:fontFamily="@font/inter_bold"
                 android:hint="@string/baslik"
                 android:inputType="textMultiLine"
-                android:textColor="@color/bg_color_dark"
                 android:textColorHint="#b1b1b1"
                 android:textSize="@dimen/_20sdp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +101,6 @@
                 android:inputType="textMultiLine"
                 android:isScrollContainer="true"
                 android:paddingBottom="150dp"
-                android:textColor="@color/bg_color_dark"
                 android:textColorHint="#b1b1b1"
                 app:layout_constraintBottom_toTopOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +115,6 @@
         android:id="@+id/toolbarAddNote"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/bg_color_light"
         android:elevation="5dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -133,8 +129,9 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_add"
-            app:tint="@color/bg_color_dark" />
+            />
 
         <ImageButton
             android:id="@+id/shine_toolbar_gpt"
@@ -143,8 +140,9 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_gpt_bot"
-            app:tint="@color/bg_color_dark" />
+             />
 
         <ImageButton
             android:id="@+id/btn_toolbar_color_empty_addNote"
@@ -153,7 +151,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            app:tint="@color/bg_color_dark"
+            app:tint="@color/md_theme_light_primary"
             android:src="@drawable/ic_not" />
 
         <ImageButton

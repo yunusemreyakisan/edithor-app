@@ -11,10 +11,8 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="@color/cardview_color"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
-    app:strokeColor="@color/cardview_color"
     app:strokeWidth="2dp">
 
 
@@ -37,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/bg_color_dark"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageUri"
@@ -69,7 +66,7 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/bg_color_dark" />
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -79,7 +76,6 @@
             android:id="@+id/card_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cardview_color"
             android:gravity="top"
             android:orientation="vertical">
 
@@ -94,7 +90,6 @@
                 android:maxLines="5"
                 android:paddingHorizontal="15dp"
                 android:paddingTop="10dp"
-                android:textColor="@color/bg_color_dark"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -107,7 +102,6 @@
                 android:maxLength="100"
                 android:maxLines="5"
                 android:paddingHorizontal="15dp"
-                android:textColor="@color/bg_color_dark"
                 android:textSize="15sp" />
 
 
@@ -124,7 +118,6 @@
                     android:layout_marginBottom="5dp"
                     android:fontFamily="@font/inter_regular"
                     android:paddingHorizontal="15dp"
-                    android:textColor="@color/cardview_date_color"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

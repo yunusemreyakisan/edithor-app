@@ -23,7 +23,6 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/inter_medium"
             android:text="GPT"
-            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +34,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/copy_chatgpt_response"
@@ -51,8 +49,7 @@
             android:background="@android:color/transparent"
             android:src="@drawable/ic_copy_link"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -63,7 +60,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="80dp"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="@color/button_active_color"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -73,7 +69,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_medium"
             android:text="Kullanıcı"
-            android:textColor="@color/white"
             android:textSize="12sp" />
 
 
@@ -81,7 +76,6 @@
             android:id="@+id/right_chat_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
 
