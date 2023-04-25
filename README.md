@@ -22,6 +22,7 @@
 
 and many more Android libraries.
 
+
 ## 📸 Screenshots
 | **Sign in**  | **Sign up** | **Home** |
 | ------------ | ----------- | ----------------|
@@ -38,3 +39,11 @@ and many more Android libraries.
 | **GPT Chat**  | **GPT Chat — Copy Message** | **Bonus — Dark Theme & Lang. Sup.** |
 | ------------ | ----------- | ----------------|
 <img src="https://user-images.githubusercontent.com/116274664/230139243-887f220d-e250-40e3-a094-0e18b10b266b.png" width="260">| <img src="https://user-images.githubusercontent.com/116274664/230139262-951715b8-7f5d-4783-8cf3-ea4b6e0f334f.png" width="260">| <img src="https://user-images.githubusercontent.com/116274664/230140036-1589fac6-adbd-4c02-997d-8287056d4c7d.png" width="260"> |
+
+| **M3 Update (Theme)** |
+| --------------------- |
+<img src="https://user-images.githubusercontent.com/116274664/234329767-b156d7ef-0cd2-4e3b-9cd7-62bc9320a1f8.png" width="260">|
+
+
+
+
