@@ -152,7 +152,7 @@ public final class AskGPT extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
-                params.put("Authorization", "Bearer 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");
+                params.put("Authorization", "Bearer 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");
                 return params;
             }
         };

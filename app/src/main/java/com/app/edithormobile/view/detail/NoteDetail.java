@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -117,7 +118,7 @@ public class NoteDetail extends AppCompatActivity {
         //init snackbar
         snackbar = Snackbar.make(binding.getRoot(), "Notunuz silindi", sure);
         //Window nesnesi alma
-        if (Build.VERSION.SDK_INT >= 26 ) {
+        if (Build.VERSION.SDK_INT >= 26) {
             getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_theme_light_background));
         }
 
@@ -162,10 +163,10 @@ public class NoteDetail extends AppCompatActivity {
             viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (!notIcerigi.equals(binding.txtDetailContent.getText().toString())) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,  util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else if (notRengi != 0) {
             olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,  util, getApplicationContext());
+            viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
         } else {
             Intent intent = new Intent(NoteDetail.this, NotePage.class);
             startActivity(intent);
@@ -224,10 +225,10 @@ public class NoteDetail extends AppCompatActivity {
                 viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (position.isPinned() != pin) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else if (position.getImageUri() != null) {
                 olusturma_zamani = util.olusturmaZamaniGetir(getApplicationContext());
-                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin,util, getApplicationContext());
+                viewModel.updateNote(binding, mDatabaseReference, position, notID, notRengi, olusturma_zamani, pin, util, getApplicationContext());
             } else {
                 onBackPressed();
             }
@@ -303,7 +304,6 @@ public class NoteDetail extends AppCompatActivity {
         });
 
 
-
         //Pinned Toolbar Top
         binding.btnDetailPin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,7 +321,7 @@ public class NoteDetail extends AppCompatActivity {
                 }
 
                 //TODO: Pinlenenler ayrı bir listeye eklenecek. Adapter üzerinden gösterim yapılacak.
-               //Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NoteDetail.this, "Pinlendi " + pin, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -363,8 +363,7 @@ public class NoteDetail extends AppCompatActivity {
 
     //Translate
     private void showAlertDialogForTranslate(View view) {
-        // Create an alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         // set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.custom_translate_dialog, null);
         //Custom layout öğelerine erişim
@@ -373,6 +372,19 @@ public class NoteDetail extends AppCompatActivity {
 
         TextView translateResponse = (TextView) customLayout.findViewById(R.id.tvChatGPTResponseTranslate);
         builder.setView(customLayout);
+
+        builder.setTitle("Translate");
+        builder.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // send data from the AlertDialog to the Activity
+                String gptResponse = translateResponse.getText().toString();
+                util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
+            }
+        });
+
+        //TODO: Proje için AlertDialog Util yaz.
+
 
         //Sorulan sorunun alınması ve methoda yerlestirilmesi
         sendMessageGPTButton.setOnClickListener(new View.OnClickListener() {
@@ -386,17 +398,14 @@ public class NoteDetail extends AppCompatActivity {
 
             }
         });
+        builder.setNegativeButton("Hayır", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
+                    }
+                })
+                .show();
 
-        // add a button
-        builder.setPositiveButton(getString(R.string.kopyala), (dialog, which) -> {
-            // send data from the AlertDialog to the Activity
-            String gptResponse = translateResponse.getText().toString();
-            util.getCopiedObject(getApplicationContext(), gptResponse); //Kopyalama islemi
-        });
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     //Brainstorming

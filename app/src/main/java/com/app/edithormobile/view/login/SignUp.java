@@ -65,7 +65,6 @@ public class SignUp extends AppCompatActivity implements IToast {
             //E-Mail Validation
             String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(password)) {
                 Toast("Boş bırakılamaz");
             } else if (password.length() < 6) {
@@ -75,41 +74,38 @@ public class SignUp extends AppCompatActivity implements IToast {
                 Toast("Geçersiz E-Posta");
             } else {
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    binding.pBar.setVisibility(View.VISIBLE);
-                                    //Veritabanına Canlı Kayıt Etme (Realtime Database)
-                                    String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    mUser = mAuth.getCurrentUser();
-                                    mDatabase = FirebaseDatabase.getInstance().getReference()
-                                            .child("Kullanicilar")
-                                            .child(user_id)
-                                            .child("Kullanıcı Bilgileri");
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                binding.pBar.setVisibility(View.VISIBLE);
+                                //Veritabanına Canlı Kayıt Etme (Realtime Database)
+                                String user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                                mUser = mAuth.getCurrentUser();
+                                mDatabase = FirebaseDatabase.getInstance().getReference()
+                                        .child("Kullanicilar")
+                                        .child(user_id)
+                                        .child("Kullanıcı Bilgileri");
 
-                                    String notOlusturmaTarihi = util.olusturmaZamaniGetir(getApplicationContext());
+                                String notOlusturmaTarihi = util.olusturmaZamaniGetir(getApplicationContext());
 
-                                    HashMap<String, String> mData = new HashMap<>();
-                                    mData.put("mail", email);
-                                    mData.put("password", password);
-                                    mData.put("name", name);
-                                    mData.put("id", user_id);
-                                    mData.put("olusturma_tarihi", notOlusturmaTarihi);
+                                HashMap<String, String> mData = new HashMap<>();
+                                mData.put("mail", email);
+                                mData.put("password", password);
+                                mData.put("name", name);
+                                mData.put("id", user_id);
+                                mData.put("olusturma_tarihi", notOlusturmaTarihi);
 
-                                    //Realtime Database
-                                    mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-                                            binding.pBar.setVisibility(View.GONE);
-                                            Intent intent = new Intent(SignUp.this, SignIn.class);
-                                            startActivity(intent);
-                                            Toast("Hesap oluşturuldu");
-                                        } else {
-                                            binding.pBar.setVisibility(View.GONE);
-                                            Toast("Hesap oluşturulamadı, yeniden deneyin");
-                                        }
-                                    });
-                                }
+                                //Realtime Database
+                                mDatabase.setValue(mData).addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        binding.pBar.setVisibility(View.GONE);
+                                        Intent intent = new Intent(SignUp.this, SignIn.class);
+                                        startActivity(intent);
+                                        Toast("Hesap oluşturuldu");
+                                    } else {
+                                        binding.pBar.setVisibility(View.GONE);
+                                        Toast("Hesap oluşturulamadı, yeniden deneyin");
+                                    }
+                                });
                             }
                         });
             }

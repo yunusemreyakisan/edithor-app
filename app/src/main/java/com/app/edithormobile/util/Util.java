@@ -8,6 +8,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.ViewCompat;
 
 import com.app.edithormobile.R;
