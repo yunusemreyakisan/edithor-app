@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.3.0'
     implementation 'com.google.firebase:firebase-database:20.2.0'
     implementation 'com.google.firebase:firebase-storage:20.1.0'
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.0'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
@@ -67,8 +67,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.compose.material:material:1.4.2'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.compose.material:material:1.4.3'
     implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     implementation 'androidx.constraintlayout:constraintlayout-solver:2.0.4'
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
@@ -90,7 +90,7 @@ dependencies {
 
     //text recognation
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:18.0.0'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0'
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
     implementation "com.google.firebase:firebase-ml-vision:24.1.0"
     implementation "com.google.firebase:firebase-core:21.1.1"
