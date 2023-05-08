@@ -75,15 +75,13 @@ public final class MessageAdapter extends RecyclerView.Adapter {
         }
 
 
-        //click listener (TODO: GPT mesajına tıkladıgında kopyalanacak.)
+        //click listener
         ((VH) holder).kopyala.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCopiedObject(v.getContext(), ((VH) holder).leftTextView.getText().toString());
             }
         });
-
-        //TODO: Click listener için interface oluştur, viewmodel üzerinden kopyalanan içeriği notlara kaydet.
 
     }
 
