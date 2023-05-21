@@ -183,7 +183,7 @@ public class NotePage extends AppCompatActivity implements IToast, ISnackbar {
                 intent.putExtra("position", model);
                 if(notes.get(position).getImageUri() != null){
                     intent.putExtra("image", notes.get(position).getImageUri());
-                    Toast.makeText(NotePage.this, "Gonderilen image: " + notes.get(position).getImageUri(), Toast.LENGTH_SHORT).show();
+                    Log.e("Gonderilen image:",notes.get(position).getImageUri());
                 }
                 intent.putExtra("pinned", notes.get(position).isPinned());
                 startActivity(intent);

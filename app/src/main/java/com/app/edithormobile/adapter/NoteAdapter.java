@@ -29,12 +29,9 @@ import java.util.Set;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
     Context context;
     ArrayList<NoteModel> notes;
-    ArrayList<NoteModel> pinnedList;
     Util util = new Util();
 
     static ClickListener clickListener;
-
-    private static final int TYPE_PINNED = 0;
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_TEXT = 2;
 

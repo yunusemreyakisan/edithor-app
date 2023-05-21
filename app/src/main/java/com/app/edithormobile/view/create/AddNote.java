@@ -251,11 +251,11 @@ public class AddNote extends AppCompatActivity implements IToast {
                     } else {
                         // İzinler zaten verilmiş
                         Log.e("Permission", "Kameraya izin verildi");
-                        openCamera();
+                        chooseImage();
                     }
                 } else {
                     // Android 6.0'dan önceki sürümlerde izinler zaten verilmiştir
-                    openCamera();
+                    chooseImage();
                 }
             }
         });
@@ -600,4 +600,6 @@ public class AddNote extends AppCompatActivity implements IToast {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
+
+
 
