@@ -98,7 +98,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             }
 
             holder.tvTitle.setText(util.bosKontrolluDeger(mNote.getNotBaslik()));
-            //TODO: Eger icerik boyutu 30'dan buyukse sonuna uc nokta koyulmalı.
             holder.tvNote.setText(util.bosKontrolluDeger(mNote.getNotIcerigi()));
             holder.tvOlusturmaTarihi.setText(mNote.getNotOlusturmaTarihi());
             holder.card.setStrokeColor(mNote.getColor());

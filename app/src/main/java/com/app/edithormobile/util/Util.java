@@ -34,15 +34,6 @@ public class Util {
         String ay = null;
         int ayinGunu = calendar.get(Calendar.DAY_OF_MONTH);
 
-        /*
-        if (calendar.get(Calendar.DAY_OF_MONTH) < 9) {
-            ayinGunu = "0" + calendar.get(Calendar.DAY_OF_MONTH);
-        } else {
-            ayinGunu = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        }
-
-         */
-
         //Ay
         switch (month) {
             case 1:
